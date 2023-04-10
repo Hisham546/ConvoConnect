@@ -9,24 +9,42 @@ TextInput}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Contacts from 'react-native-contacts';
-
+import CardView from 'react-native-cardview'
 
  export default function Chats({navigation}){
 
   const [contacts, setContacts] = useState([]);
   const DATA = [
     {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'First Item',
+      id: 1,
+      title: 'Alan',
+
     },
     {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Second Item',
+      id: 2,
+      title: 'Jagan',
+
     },
     {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
+      id: 3,
+      title: 'Ancy',
+
     },
+      {
+        id: 4,
+        title: 'Johann',
+
+      },
+      {
+        id: 5,
+        title: 'Vishnu',
+
+      },
+      {
+        id: 6,
+        title: 'Rakhil',
+
+      },
   ];
  {/*useEffect(() => {
     Contacts.getAll().then(contacts => {
@@ -41,18 +59,30 @@ import Contacts from 'react-native-contacts';
     };*/}
  return(
 
+          <View style={styles.emptyView}>
+               <FlatList
+                  data={DATA}
+                  renderItem={({item}) =>
+                <CardView
+                  cardElevation={2}
+                  cardMaxElevation={2}
 
-  <View style={styles.emptyView}>
-        <Text style={styles.text}>Hi</Text>
- <FlatList
-        data={DATA}
-        renderItem={({item}) =>
+                  style={styles.chatCard}>
+                     <View style={styles.userChatBox}>
+                  <Image resizeMode="cover"
+                          style={styles.tinyLogo}
+                          source={require('../../assets/profile.jpg')}
+                        />
+                    <Text style={styles.name}>{item.title}</Text>
+                    </View>
+                 </CardView>}
+                   keyExtractor={item => item.id}
+                />
 
-         <Text style={styles.text}>{item.title}</Text>
 
-        }
-        keyExtractor={item => item.id}
-      />
+
+
+
 
         </View>
 
@@ -73,17 +103,37 @@ import Contacts from 'react-native-contacts';
      flex : 1,
     width:wp('100'),
     height:hp('100'),
-     backgroundColor:'gray',
-     alignItems:'center',
-     justifyContent:'center'
-
+     backgroundColor:'white',
 
 
   },
      text:{
       color:'black'
 
+     },
+  chatCard:{
+  width:wp('100'),
+  height:hp('10'),
+  backgroundColor:'white'
 
-     }
+  },
+  tinyLogo:{
+    height: hp('5%'),
+      width: wp('10%'),
+      borderRadius: wp('5%'),
+      marginLeft:wp('5')
+  },
+  userChatBox:{
+  width:wp('50'),
+  height:hp('8'),
+  flexDirection:'row',
+  alignItems:'center'
+
+  },
+  name:{
+  marginLeft:wp('5'),
+  marginBottom:hp('3')
+
+  }
 
 })

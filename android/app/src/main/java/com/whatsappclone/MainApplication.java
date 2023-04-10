@@ -1,5 +1,5 @@
 package com.whatsappclone;
-
+import com.kishanjvaghela.cardview.RNCardViewPackage;
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;

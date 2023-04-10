@@ -16,7 +16,7 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 
 
   <View style={styles.emptyView}>
-   <Text style={styles.text}>Hi</Text>
+   <Text style={styles.text}>Status</Text>
 
 
         </View>
