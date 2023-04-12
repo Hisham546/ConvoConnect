@@ -22,7 +22,10 @@ const Tab = createMaterialTopTabNavigator();
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
  <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>WhatsApp</Text>
-        <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'black'}  style={styles.materialIcon} />
+        <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'black'}  style={styles.searchIcon} />
+        <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
+             <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'black'}  style={styles.threeDotIcon} />
+             </TouchableOpacity>
 </View>
     <Tab.Navigator
           screenOptions={{
@@ -70,9 +73,14 @@ const Tab = createMaterialTopTabNavigator();
    flexDirection:'row',
    justifyContent:'space-between'
    },
-   materialIcon:{
-   marginTop:hp('3'),
-   marginRight:wp('3')
+   searchIcon:{
+    marginTop:hp('3'),
+    marginLeft:wp('45')
+
+   },
+   threeDotIcon:{
+     marginTop:hp('3'),
+      marginRight:wp('4')
 
    }
 
