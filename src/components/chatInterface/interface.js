@@ -9,12 +9,50 @@ TextInput}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import database from '@react-native-firebase/database';
+import firebaseConfig from '../../../setup';
 
 export default function Interface({route,navigation}){
 
 const[user,setUser]=useState(route.params.data)
  const [text, onChangeText] = React.useState('');
-  const [number, onChangeNumber] = React.useState('');
+const [messages, setMessages] = useState([]);
+
+  const dataBase = () =>{
+    // Get the current user ID
+    const userID = firebase.auth().currentUser.uid;
+
+    // Create a new data object with the user ID and message text
+    var data = {
+      userID: userID,
+      text: messageText
+    };
+
+    // Add the data to the database
+    var ref = database().ref("chat");
+    ref.push(data);
+  }
+
+  useEffect(() => {
+    // Get the current user ID
+    const userID = firebase.auth().currentUser.uid;
+
+    // Set up a listener for messages that belong to the current user
+    const ref = database().ref('chat');
+    ref.orderByChild('userID').equalTo(userID).on('value', (snapshot) => {
+      const messagesArray = [];
+      snapshot.forEach((childSnapshot) => {
+        const message = childSnapshot.val();
+        messagesArray.push(message);
+      });
+      setMessages(messagesArray);
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => {
+      ref.off();
+    };
+  }, []);
 
 return(
 
@@ -31,6 +69,11 @@ return(
                   <MaterialIcon name={'dots-vertical'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
                   </View>
          </View>
+          <View>
+             {messages.map((message) => (
+               <Text key={message.id}>{message.text}</Text>
+             ))}
+           </View>
            <View style={styles.textInputContainer}>
               <TextInput
                    style={styles.input}
@@ -39,7 +82,7 @@ return(
                    placeholderTextColor={'black'}
                    placeholder={"Type a message"}
               />
-               <TouchableOpacity style={styles.sendButton}>
+               <TouchableOpacity onPress={()=>dataBase()} style={styles.sendButton}>
                            <MaterialIcon name={'send'} size={hp('2.70%')} color={'white'}/>
                        </TouchableOpacity>
            </View>
