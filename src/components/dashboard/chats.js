@@ -3,12 +3,13 @@ import React, {useEffect, useState} from 'react';
 import {
 View,
 Image,
-Text,Button,FlatList,
+Text,Button,FlatList,Alert,
 StyleSheet,TouchableOpacity,
 TextInput}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Contacts from 'react-native-contacts';
+import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
 
  export default function Chats({navigation}){
@@ -46,36 +47,51 @@ import CardView from 'react-native-cardview'
 
       },
   ];
- {/*useEffect(() => {
-    Contacts.getAll().then(contacts => {
-      setContacts(contacts);
-    });
-  }, []);
-  const keyExtractor = (item, idx) => {
-      return item?.recordID?.toString() || idx.toString();
-    };
-    const renderItem = ({item, index}) => {
-      return <Contact contact={item} />;
-    };*/}
+     const checkPermission = async () => {
+             try {
+               const granted = await PermissionsAndroid.request(
+                 PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+               );
+               console.log('Permission status:', granted);
+               if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                 contactsG();
+               } else {
+                 Alert.alert(
+                   'Permission Denied!',
+                   'You need to give storage permission to get the contacts'
+                 );
+               }
+             } catch (err) {
+               console.warn(err);
+             }
+           };
+  useEffect(() => {
+Contacts.getAll().then(contacts => {
+  // contacts returned
+  console.log(contacts,'got it')
+  setContacts(contacts)
+
+})
+  }, [])
+
  return(
 
           <View style={styles.emptyView}>
                <FlatList
                   data={DATA}
                   renderItem={({item}) =>
+             <TouchableOpacity activeOpacity={0.9}  onPress={() => navigation.navigate('Interface',{data:item})}>
                 <CardView
                   cardElevation={2}
-                  cardMaxElevation={2}
-
-                  style={styles.chatCard}>
+                  cardMaxElevation={2} style={styles.chatCard}>
                      <View style={styles.userChatBox}>
-                  <Image resizeMode="cover"
-                          style={styles.tinyLogo}
-                          source={require('../../assets/profile.jpg')}
-                        />
+                   <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                     <Text style={styles.name}>{item.title}</Text>
+                       {/*  <Text style={styles.name}>{item.displayName}</Text>*/}
                     </View>
-                 </CardView>}
+                 </CardView>
+                   </TouchableOpacity>}
+
                    keyExtractor={item => item.id}
                 />
 
@@ -118,7 +134,7 @@ import CardView from 'react-native-cardview'
 
   },
   tinyLogo:{
-    height: hp('5%'),
+     height: hp('5%'),
       width: wp('10%'),
       borderRadius: wp('5%'),
       marginLeft:wp('5')
@@ -132,7 +148,8 @@ import CardView from 'react-native-cardview'
   },
   name:{
   marginLeft:wp('5'),
-  marginBottom:hp('3')
+  marginBottom:hp('3'),
+  color:'black'
 
   }
 

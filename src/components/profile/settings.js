@@ -9,11 +9,11 @@ TextInput}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-export default function Settings(navigation){
+export default function Settings({navigation}){
  return(
           <View style={styles.container}>
              <View style={styles.headingContainer}>
-                 <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
+                 <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
                           <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
                           </TouchableOpacity>
                <Text style={styles.settingsHeader}>Settings</Text>
