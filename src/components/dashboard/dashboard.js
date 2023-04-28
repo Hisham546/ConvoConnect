@@ -14,14 +14,16 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Calls from "./calls";
 import Chats from "./chats";
 import Status from "./status";
+import { useRecoilState } from "recoil";
+import { username } from "../../state/atom";
 const Tab = createMaterialTopTabNavigator();
 
  export default function Dashboard ({navigation}) {
-
+ const [text, onChangeText] = useRecoilState(username);
  return(
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
- <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>WhatsApp</Text>
+ <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>{text}</Text>
         <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'black'}  style={styles.searchIcon} />
         <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
              <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'black'}  style={styles.threeDotIcon} />

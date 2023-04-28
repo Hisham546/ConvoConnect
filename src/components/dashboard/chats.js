@@ -68,7 +68,6 @@ import CardView from 'react-native-cardview'
   useEffect(() => {
 Contacts.getAll().then(contacts => {
   // contacts returned
-  console.log(contacts,'got it')
   setContacts(contacts)
 
 })

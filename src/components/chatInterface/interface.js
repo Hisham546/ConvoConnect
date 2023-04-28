@@ -11,35 +11,27 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import database from '@react-native-firebase/database';
 import firebaseConfig from '../../../setup';
-
 export default function Interface({route,navigation}){
 
 const[user,setUser]=useState(route.params.data)
+const[title,setTitle]=useState(route.params.data.title)
  const [text, onChangeText] = React.useState('');
 const [messages, setMessages] = useState([]);
+console.log(title)
 
   const dataBase = () =>{
-    // Get the current user ID
-    const userID = firebase.auth().currentUser.uid;
-
-    // Create a new data object with the user ID and message text
-    var data = {
-      userID: userID,
-      text: messageText
-    };
-
+     // Create a new data object
+      var data = {
+       text,
+       title // a state variable that have message from text input
+       };
     // Add the data to the database
     var ref = database().ref("chat");
-    ref.push(data);
+   ref.push(data);
   }
-
   useEffect(() => {
-    // Get the current user ID
-    const userID = firebase.auth().currentUser.uid;
-
-    // Set up a listener for messages that belong to the current user
     const ref = database().ref('chat');
-    ref.orderByChild('userID').equalTo(userID).on('value', (snapshot) => {
+    ref.on('value', (snapshot) => {
       const messagesArray = [];
       snapshot.forEach((childSnapshot) => {
         const message = childSnapshot.val();
@@ -47,13 +39,7 @@ const [messages, setMessages] = useState([]);
       });
       setMessages(messagesArray);
     });
-
-    // Clean up the listener when the component unmounts
-    return () => {
-      ref.off();
-    };
   }, []);
-
 return(
 
       <View style={styles.container}>
@@ -69,10 +55,18 @@ return(
                   <MaterialIcon name={'dots-vertical'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
                   </View>
          </View>
-          <View>
-             {messages.map((message) => (
-               <Text key={message.id}>{message.text}</Text>
-             ))}
+         <View style={styles.messageWrapperView}>
+
+
+                  <FlatList
+                          data={messages}
+                          renderItem={({item}) =>
+                          <View style={styles.textMessageView}>
+                    <Text>{item.text}</Text>
+                    </View>
+                        }
+                   keyExtractor={item => item.id}
+                                />
            </View>
            <View style={styles.textInputContainer}>
               <TextInput
@@ -133,10 +127,9 @@ const styles =StyleSheet.create({
   },
   textInputContainer:{
     width:wp('100'),
-    height:hp('20'),
-    marginTop:hp('71%'),
+    height:hp('13'),
     justifyContent:'space-around',
-    alignItems:'flex-end',
+    alignItems:'center',
     flexDirection:'row',
 
  },
@@ -155,9 +148,30 @@ const styles =StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     backgroundColor:'green'
+ },
+ messageWrapperView:{
+ width:wp('100'),
+ height:hp('80'),
 
+ },
+
+ messageView:{
+   width:wp('100'),
+   height:hp('8'),
+
+ },
+ textMessageView:{
+  width:wp('24'),
+  height:hp('7'),
+  backgroundColor:'#F0F0F0',
+  marginTop:hp('.80'),
+  marginLeft:wp('3'),
+  borderRadius:5
 
  }
+
+
+
 })
 
 

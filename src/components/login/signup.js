@@ -4,20 +4,23 @@ import {
 View,
 Image,
 Text,Button,FlatList,
-StyleSheet,TouchableOpacity,
-TextInput}
+StyleSheet,TouchableOpacity,TextInput
+}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Octicons';
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin,statusCodes,GoogleSigninButton   } from '@react-native-google-signin/google-signin';
+import { useRecoilState } from "recoil";
+import { username } from "../../state/atom";
 
 export default function Signup({navigation}){
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
   webClientId: '715629424810-qhcg34emjc8ejfd7ejbtrq82d18586bo.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
   hostedDomain: '', // specifies a hosted domain restriction
   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
   accountName: '', // [Android] specifies an account name on the device that should be used
@@ -26,65 +29,90 @@ GoogleSignin.configure({
   openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
   profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
 });
- const [text, onChangeText] = React.useState('');
+ const [text, onChangeText] = useRecoilState(username);
   const [number, onChangeNumber] = React.useState('');
-
-  async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-  }
+  const [userDetails, setUserDetails] = React.useState('');
+   const [focusControl, setfocusControl] = React.useState(null);
 
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
+
       const userInfo = await GoogleSignin.signIn();
-      this.setState({ userInfo });
+
+      setUserDetails(userInfo)
+   console.log(userDetails)
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
+
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+
         // play services not available or outdated
       } else {
         // some other error happened
       }
     }
   };
+ async function signInWithPhoneNumber(phoneNumber) {
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  }
+  const onFocus = (control) => {
+        setfocusControl(control)
+     };
 return(
       <View style={styles.container}>
-         <View style={styles.centerView}>
-              <Text style={{color:'black'}}>Create an account</Text>
+         <View style={styles.upperView}>
+             <Icon name='chevron-left' size={hp('3.20%')}color='white' style={styles.backIcon} />
+                <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginLeft:wp('8')}}> Sign up</Text>
+        </View>
+            <View style={styles.upperView}>
+                 <Text style={{color:'white',fontSize:hp('1.80'),fontFamily:'Manrope-Regular',marginLeft:wp('8')}}> Sign up with the one of the following options</Text>
+            </View>
+            <View style={styles.centerView}>
+             <View style={styles.headingTextView}>
+               <Text style={styles.headingText}>Enter your name</Text>
+             </View>
                 <TextInput
-                      style={styles.input}
+                   onFocus={() => onFocus("Name")}
+                    style={[styles.input, {
+                          borderWidth: focusControl == "Name" ? 4 : 0.2,
+                          borderColor: focusControl == "Name" ? '#77037B' : '#F3E8FF'
+                    }]}
                       onChangeText={onChangeText}
                       value={text}
-                      placeholderTextColor={'black'}
+                      placeholderTextColor={'gray'}
                       placeholder={"Name"}
-                    />
-                  <TextInput
-                        style={styles.input}
-                        onChangeText={onChangeText}
-                        value={text}
-                        placeholderTextColor={'black'}
+                />
+                 <View style={styles.headingTextView}>
+                   <Text style={styles.headingText}>Enter your password</Text>
+                   </View>
+                 <TextInput
+                     onFocus={() => onFocus("phone")}
+                      style={[styles.input, {
+                           borderWidth: focusControl == "phone" ? 4 : 0.2,
+                           borderColor: focusControl == "phone" ? '#77037B' : '#F3E8FF'
+                      }]}
+                        onChangeText={onChangeNumber}
+                        value={number}
+                        placeholderTextColor={'gray'}
                         placeholder={"phone number"}
-                  />
-                   <TouchableOpacity activeOpacity={0.90} style={styles.submitButton}onPress={()=>navigation.navigate('Dashboard')}>
-                      <Text style={styles.submitText}>Create account</Text>
-                    </TouchableOpacity>
-                     <TouchableOpacity activeOpacity={0.90} style={styles.googleButton} onPress={()=>onGoogleButtonPress()}>
-                        <MaterialIcon name={'google'} size={hp('2.80%')} color={'rgba(15 157 88)'}  style={styles.threeDotIcon} />
-                            <Text style={styles.googleText}>Sign up with Google</Text>
-                     </TouchableOpacity>
-         </View>
+                 />
+                <TouchableOpacity activeOpacity={0.90} style={styles.submitButton}onPress={()=>navigation.navigate('Dashboard')}>
+                    <Text style={styles.submitText}>Create account</Text>
+                </TouchableOpacity>
+                 {/* <GoogleSigninButton
+                    style={{ width:wp('40'), height:hp('8') }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Dark}
+                    onPress={()=>signIn()}
+
+                  />*/}
+            </View>
       </View>
 
 )
@@ -95,35 +123,23 @@ const styles =StyleSheet.create({
 
    container:{
       flex:1,
-      justifyContent:'center',
-      backgroundColor:'white',
+      backgroundColor:'black',
       alignItems:'center'
    },
    centerView:{
-      width:wp('70%'),
+      width:wp('90%'),
       height:hp('50%'),
       borderColor:'gray',
+      backgroundColor:'black',
       justifyContent:'space-evenly',
-      alignItems:'center'
+      alignItems:'center',
    },
-   input:{
-      height: hp(2.8),
-      width: wp('68%'),
-      color: 'black',
-      marginTop: hp('.70'),
-      padding: 0,
-      fontSize: hp('1.50%'),
-      fontWeight: '300',
-      borderBottomColor: 'grey',
-      borderBottomWidth:1,
-      paddingLeft: wp('1%')
 
-   },
    submitButton: {
       height: hp(6),
       width: wp('68'),
-      backgroundColor: 'black',
-      color: 'white',
+      backgroundColor: '#654E92',
+      color: 'black',
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'center',
@@ -138,8 +154,6 @@ const styles =StyleSheet.create({
       fontSize: hp('1.70%'),
        color: 'black',
        letterSpacing: wp('.10%'),
-
-
     },
     googleButton:{
          height: hp(6),
@@ -153,10 +167,35 @@ const styles =StyleSheet.create({
           borderRadius: 20,
           borderWidth:1,
           borderColor:'black',
+    },
+    upperView:{
+        width:wp('100'),
+        height:hp('10'),
+        flexDirection:'row',
+        alignItems:'center',
+        marginTop:hp('2')
+    },
+    backIcon:{
+      marginLeft:wp('4')
+    },
+    input:{
+        width:wp('80%'),
+        height:hp('7'),
+        borderRadius:10,
+        backgroundColor:'#413543'
+    },
+   headingText:{
+       fontSize: hp('1.50%'),
+        color: 'white',
+        letterSpacing: wp('.10%'),
+        marginLeft:wp('6')
 
+   },
+  headingTextView:{
+    width:wp('90'),
+    height:hp('5'),
+    justifyContent:'center',
+    marginTop:hp('3')
 
-
-    }
-
-
+  }
 })
