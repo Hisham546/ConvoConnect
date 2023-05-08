@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect,useRef,useState} from 'react';
 
 import {
 View,
@@ -14,7 +14,8 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin,statusCodes,GoogleSigninButton   } from '@react-native-google-signin/google-signin';
 import { useRecoilState } from "recoil";
 import { username } from "../../state/atom";
-
+import LinearGradient from 'react-native-linear-gradient';
+import PhoneInput from "react-native-phone-number-input";
 export default function Signup({navigation}){
 
 GoogleSignin.configure({
@@ -33,6 +34,11 @@ GoogleSignin.configure({
   const [number, onChangeNumber] = React.useState('');
   const [userDetails, setUserDetails] = React.useState('');
    const [focusControl, setfocusControl] = React.useState(null);
+   const[clicked,setClicked]=useState(false);
+   const [changeButton,setChangeButton] = useState(false);
+       const phoneInput = useRef(null);
+  const [country, setCountry] = useState(['91']);
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const signIn = async () => {
     try {
@@ -57,10 +63,39 @@ GoogleSignin.configure({
       }
     }
   };
- async function signInWithPhoneNumber(phoneNumber) {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    setConfirm(confirmation);
+//   async function signInWithPhoneNumber(number) {
+//        try {
+//          const confirmation = await auth().signInWithPhoneNumber(number);
+//          if(confirmation.state != "error") {
+//            setLoading(false);
+//            navigation.navigate('Otp',{confirm : confirmation});
+//            console.log("confirmation",confirmation);
+//          }
+//        } catch (error) {
+//          if (error.code == 'auth/too-many-requests') {
+//            Toast.show('Too-many-requests',Toast.SHORT);
+//            console.log('auth/too-many-requests',error);
+//          }else if (error.code === 'auth/user-disabled') {
+//            Toast.show('Sorry, this phone number has been blocked.',Toast.SHORT)
+//            console.log('auth/user-disabled',error);
+//          } else {
+//            Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
+//            + 'Please try again later. '
+//            + '\n\nIf the issue persists, please contact support.',Toast.SHORT);
+//            console.log(error);
+//          }
+//        }
+//      };
+   function changingState() {
+    setClicked(true)
+    setChangeButton(true)
+
   }
+  const signInWithPhoneNumber = () => {
+             Keyboard.dismiss();
+
+             signInWithPhoneNumber('+' + country + phoneNumber);
+           }
   const onFocus = (control) => {
         setfocusControl(control)
      };
@@ -74,13 +109,34 @@ return(
                  <Text style={{color:'white',fontSize:hp('1.80'),fontFamily:'Manrope-Regular',marginLeft:wp('8')}}> Sign up with the one of the following options</Text>
             </View>
             <View style={styles.centerView}>
-             <View style={styles.headingTextView}>
+            {changeButton ?
+         <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              style={styles.submitButton}
+              colors={['#E11299','#654E92']}>
+             <TouchableOpacity activeOpacity={0.90} onPress={()=> changingState()}>
+               <Text style={styles.submitText}>Submit</Text>
+            </TouchableOpacity>
+      </LinearGradient>
+      :
+       <LinearGradient
+         start={{x: 0, y: 0}}
+         end={{x: 1, y: 0}}
+         style={styles.submitButton}
+         colors={['#E11299','#654E92']}>
+        <TouchableOpacity activeOpacity={0.90} onPress={()=> signInWithPhoneNumber()}>
+          <Text style={styles.submitText}>Continue with number</Text>
+       </TouchableOpacity>
+       </LinearGradient>}
+
+             {/*<View style={styles.headingTextView}>
                <Text style={styles.headingText}>Enter your name</Text>
              </View>
                 <TextInput
                    onFocus={() => onFocus("Name")}
                     style={[styles.input, {
-                          borderWidth: focusControl == "Name" ? 4 : 0.2,
+                          borderWidth: focusControl == "Name" ? 2.1 : 0.2,
                           borderColor: focusControl == "Name" ? '#77037B' : '#F3E8FF'
                     }]}
                       onChangeText={onChangeText}
@@ -90,21 +146,39 @@ return(
                 />
                  <View style={styles.headingTextView}>
                    <Text style={styles.headingText}>Enter your password</Text>
-                   </View>
-                 <TextInput
+                   </View>*/}
+                 {/*<TextInput
                      onFocus={() => onFocus("phone")}
                       style={[styles.input, {
-                           borderWidth: focusControl == "phone" ? 4 : 0.2,
+                           borderWidth: focusControl == "phone" ? 2.1 : 0.2,
                            borderColor: focusControl == "phone" ? '#77037B' : '#F3E8FF'
                       }]}
                         onChangeText={onChangeNumber}
                         value={number}
                         placeholderTextColor={'gray'}
                         placeholder={"phone number"}
-                 />
-                <TouchableOpacity activeOpacity={0.90} style={styles.submitButton}onPress={()=>navigation.navigate('Dashboard')}>
-                    <Text style={styles.submitText}>Create account</Text>
-                </TouchableOpacity>
+                 />*/}
+                   {clicked ?
+                              <PhoneInput
+                                       ref={phoneInput}
+                                       defaultValue={phoneNumber}
+                                       defaultCode="IN"
+                                       layout="first"
+                                       codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500', paddingBottom: hp('0.2%') }}
+                                       textInputStyle={{ fontSize: hp('1.75%'), fontWeight: '400' }}
+                                       placeholder="Enter Phone Number"
+                                       placeholderTextColor={'gray'}
+                                       countryPickerProps={{ withAlphaFilter: true }}
+                                       containerStyle={styles.phoneNumberView}
+                                       onChangeText={text => {
+                                         setPhoneNumber(text);
+                                       }}
+                                       onChangeCountry={text => {
+                                         setCountry(text.callingCode.join(','));
+                                       }}
+                                       textContainerStyle={{ paddingVertical: 0 }}
+                                     />: null}
+
                  {/* <GoogleSigninButton
                     style={{ width:wp('40'), height:hp('8') }}
                     size={GoogleSigninButton.Size.Wide}
@@ -124,21 +198,21 @@ const styles =StyleSheet.create({
    container:{
       flex:1,
       backgroundColor:'black',
-      alignItems:'center'
+
    },
    centerView:{
-      width:wp('90%'),
+      width:wp('100%'),
       height:hp('50%'),
       borderColor:'gray',
-      backgroundColor:'black',
+      backgroundColor:'white',
       justifyContent:'space-evenly',
       alignItems:'center',
+      marginTop:hp('25')
    },
 
    submitButton: {
       height: hp(6),
       width: wp('68'),
-      backgroundColor: '#654E92',
       color: 'black',
       alignItems: 'center',
       justifyContent: 'center',
@@ -181,8 +255,8 @@ const styles =StyleSheet.create({
     input:{
         width:wp('80%'),
         height:hp('7'),
-        borderRadius:10,
-        backgroundColor:'#413543'
+        borderRadius:13,
+
     },
    headingText:{
        fontSize: hp('1.50%'),
@@ -197,5 +271,12 @@ const styles =StyleSheet.create({
     justifyContent:'center',
     marginTop:hp('3')
 
-  }
+  },
+         phoneNumberView : {
+             marginTop : hp(1),
+             justifyContent : 'center',
+             width : wp('80%'),
+             height : hp('7%'),
+             borderRadius : 5,
+         },
 })

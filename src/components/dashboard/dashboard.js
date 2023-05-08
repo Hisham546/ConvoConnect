@@ -24,9 +24,9 @@ const Tab = createMaterialTopTabNavigator();
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
  <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>{text}</Text>
-        <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'black'}  style={styles.searchIcon} />
+        <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'white'}  style={styles.searchIcon} />
         <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
-             <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'black'}  style={styles.threeDotIcon} />
+             <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'white'}  style={styles.threeDotIcon} />
              </TouchableOpacity>
 </View>
     <Tab.Navigator
@@ -66,7 +66,7 @@ const Tab = createMaterialTopTabNavigator();
 
   container:{
       flex:1,
-   backgroundColor:'#128c7e',
+   backgroundColor:'black',
    },
    topViewContainer:{
    width:wp('100'),

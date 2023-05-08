@@ -95,7 +95,7 @@ const styles =StyleSheet.create({
      flexDirection:'row',
      alignItems:'center',
      height:hp('7.50'),
-     backgroundColor:'#128c7e',
+     backgroundColor:'black',
      elevation:3
   },
   settingsHeader:{
@@ -147,7 +147,7 @@ const styles =StyleSheet.create({
     borderRadius: wp('7%'),
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'green'
+    backgroundColor:'black'
  },
  messageWrapperView:{
  width:wp('100'),
