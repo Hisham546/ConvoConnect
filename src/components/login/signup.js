@@ -16,6 +16,7 @@ import { useRecoilState } from "recoil";
 import { username } from "../../state/atom";
 import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from "react-native-phone-number-input";
+import Toast from "react-native-simple-toast";
 export default function Signup({navigation}){
 
 GoogleSignin.configure({
@@ -63,36 +64,36 @@ GoogleSignin.configure({
       }
     }
   };
-//   async function signInWithPhoneNumber(number) {
-//        try {
-//          const confirmation = await auth().signInWithPhoneNumber(number);
-//          if(confirmation.state != "error") {
-//            setLoading(false);
-//            navigation.navigate('Otp',{confirm : confirmation});
-//            console.log("confirmation",confirmation);
-//          }
-//        } catch (error) {
-//          if (error.code == 'auth/too-many-requests') {
-//            Toast.show('Too-many-requests',Toast.SHORT);
-//            console.log('auth/too-many-requests',error);
-//          }else if (error.code === 'auth/user-disabled') {
-//            Toast.show('Sorry, this phone number has been blocked.',Toast.SHORT)
-//            console.log('auth/user-disabled',error);
-//          } else {
-//            Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
-//            + 'Please try again later. '
-//            + '\n\nIf the issue persists, please contact support.',Toast.SHORT);
-//            console.log(error);
-//          }
-//        }
-//      };
+   async function signInWithPhoneNumber(number) {
+        try {
+          const confirmation = await auth().signInWithPhoneNumber(number);
+          if(confirmation.state != "error") {
+            setLoading(false);
+            navigation.navigate('Otp',{confirm : confirmation});
+            console.log("confirmation",confirmation);
+          }
+        } catch (error) {
+          if (error.code == 'auth/too-many-requests') {
+            Toast.show('Too-many-requests',Toast.SHORT);
+            console.log('auth/too-many-requests',error);
+          }else if (error.code === 'auth/user-disabled') {
+            Toast.show('Sorry, this phone number has been blocked.',Toast.SHORT)
+            console.log('auth/user-disabled',error);
+          } else {
+            Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
+            + 'Please try again later. '
+            + '\n\nIf the issue persists, please contact support.',Toast.SHORT);
+            console.log(error);
+          }
+        }
+      };
    function changingState() {
     setClicked(true)
     setChangeButton(true)
 
   }
-  const signInWithPhoneNumber = () => {
-             Keyboard.dismiss();
+  const onNext = () => {
+            // Keyboard.dismiss();
 
              signInWithPhoneNumber('+' + country + phoneNumber);
            }
@@ -102,90 +103,48 @@ GoogleSignin.configure({
 return(
       <View style={styles.container}>
          <View style={styles.upperView}>
-             <Icon name='chevron-left' size={hp('3.20%')}color='white' style={styles.backIcon} />
-                <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginLeft:wp('8')}}> Sign up</Text>
+            {/* <Icon name='chevron-left' size={hp('3.20%')}color='white' style={styles.backIcon} />*/}
+                <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginLeft:wp('8')}}> WhatsApp</Text>
         </View>
-            <View style={styles.upperView}>
-                 <Text style={{color:'white',fontSize:hp('1.80'),fontFamily:'Manrope-Regular',marginLeft:wp('8')}}> Sign up with the one of the following options</Text>
-            </View>
-            <View style={styles.centerView}>
-            {changeButton ?
-         <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              style={styles.submitButton}
-              colors={['#E11299','#654E92']}>
-             <TouchableOpacity activeOpacity={0.90} onPress={()=> changingState()}>
-               <Text style={styles.submitText}>Submit</Text>
-            </TouchableOpacity>
-      </LinearGradient>
-      :
-       <LinearGradient
-         start={{x: 0, y: 0}}
-         end={{x: 1, y: 0}}
-         style={styles.submitButton}
-         colors={['#E11299','#654E92']}>
-        <TouchableOpacity activeOpacity={0.90} onPress={()=> signInWithPhoneNumber()}>
-          <Text style={styles.submitText}>Continue with number</Text>
-       </TouchableOpacity>
-       </LinearGradient>}
+            <View style={styles.secondView}>
+             <Text style={{color:'black',fontSize:hp('1.80'),fontFamily:'Manrope-Regular'}}> Enter your mobile number login or register</Text>
 
-             {/*<View style={styles.headingTextView}>
-               <Text style={styles.headingText}>Enter your name</Text>
-             </View>
-                <TextInput
-                   onFocus={() => onFocus("Name")}
-                    style={[styles.input, {
-                          borderWidth: focusControl == "Name" ? 2.1 : 0.2,
-                          borderColor: focusControl == "Name" ? '#77037B' : '#F3E8FF'
-                    }]}
-                      onChangeText={onChangeText}
-                      value={text}
-                      placeholderTextColor={'gray'}
-                      placeholder={"Name"}
-                />
-                 <View style={styles.headingTextView}>
-                   <Text style={styles.headingText}>Enter your password</Text>
-                   </View>*/}
-                 {/*<TextInput
-                     onFocus={() => onFocus("phone")}
-                      style={[styles.input, {
-                           borderWidth: focusControl == "phone" ? 2.1 : 0.2,
-                           borderColor: focusControl == "phone" ? '#77037B' : '#F3E8FF'
-                      }]}
-                        onChangeText={onChangeNumber}
-                        value={number}
-                        placeholderTextColor={'gray'}
-                        placeholder={"phone number"}
-                 />*/}
-                   {clicked ?
-                              <PhoneInput
-                                       ref={phoneInput}
-                                       defaultValue={phoneNumber}
-                                       defaultCode="IN"
-                                       layout="first"
-                                       codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500', paddingBottom: hp('0.2%') }}
-                                       textInputStyle={{ fontSize: hp('1.75%'), fontWeight: '400' }}
-                                       placeholder="Enter Phone Number"
-                                       placeholderTextColor={'gray'}
-                                       countryPickerProps={{ withAlphaFilter: true }}
-                                       containerStyle={styles.phoneNumberView}
-                                       onChangeText={text => {
-                                         setPhoneNumber(text);
-                                       }}
-                                       onChangeCountry={text => {
-                                         setCountry(text.callingCode.join(','));
-                                       }}
-                                       textContainerStyle={{ paddingVertical: 0 }}
-                                     />: null}
 
-                 {/* <GoogleSigninButton
-                    style={{ width:wp('40'), height:hp('8') }}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={()=>signIn()}
+             <TextInput
+                                onFocus={() => onFocus("Name")}
+                                 style={[styles.input, {
+                                       borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
+                                       borderBottomColor: focusControl == "Name" ? 'green' : '#128C7E'
+                                 }]}
+                                   onChangeText={onChangeText}
+                                   value={text}
+                                   placeholderTextColor={'gray'}
+                                   placeholder={"Name"}
+                             />
+                             <PhoneInput
+                                                                    ref={phoneInput}
+                                                                    defaultValue={phoneNumber}
+                                                                    defaultCode="IN"
+                                                                    layout="first"
+                                                                    codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500', paddingBottom: hp('0.2%') }}
+                                                                    textInputStyle={{ fontSize: hp('1.75%'), fontWeight: '400' }}
+                                                                    placeholder="Enter Phone Number"
+                                                                    placeholderTextColor={'gray'}
+                                                                    countryPickerProps={{ withAlphaFilter: true }}
+                                                                    containerStyle={styles.phoneNumberView}
+                                                                    onChangeText={text => {
+                                                                      setPhoneNumber(text);
+                                                                    }}
+                                                                    onChangeCountry={text => {
+                                                                      setCountry(text.callingCode.join(','));
+                                                                    }}
+                                                                    textContainerStyle={{ paddingVertical: 0 }}
+                                                                  />
 
-                  />*/}
+                        <TouchableOpacity style={styles.roundButton}   onPress={() => onNext()}>
+                        <Icon name='chevron-right' size={hp('3.20%')}color='white'  />
+                          </TouchableOpacity>
+
             </View>
       </View>
 
@@ -197,19 +156,25 @@ const styles =StyleSheet.create({
 
    container:{
       flex:1,
-      backgroundColor:'black',
+      backgroundColor:'white',
 
    },
-   centerView:{
+   secondView:{
       width:wp('100%'),
-      height:hp('50%'),
-      borderColor:'gray',
+      height:hp('60%'),
       backgroundColor:'white',
       justifyContent:'space-evenly',
       alignItems:'center',
-      marginTop:hp('25')
-   },
 
+   },
+    upperView:{
+        width:wp('100'),
+        height:hp('40'),
+        flexDirection:'row',
+        alignItems:'center',
+        backgroundColor:'#128C7E',
+
+    },
    submitButton: {
       height: hp(6),
       width: wp('68'),
@@ -242,20 +207,13 @@ const styles =StyleSheet.create({
           borderWidth:1,
           borderColor:'black',
     },
-    upperView:{
-        width:wp('100'),
-        height:hp('10'),
-        flexDirection:'row',
-        alignItems:'center',
-        marginTop:hp('2')
-    },
+
     backIcon:{
       marginLeft:wp('4')
     },
     input:{
         width:wp('80%'),
-        height:hp('7'),
-        borderRadius:13,
+        height:hp('5'),
 
     },
    headingText:{
@@ -277,6 +235,17 @@ const styles =StyleSheet.create({
              justifyContent : 'center',
              width : wp('80%'),
              height : hp('7%'),
-             borderRadius : 5,
+           // borderBottomWidth:wp('.50'),
+           // borderBottomColor:'green'
          },
+         roundButton:{
+         width:wp('11'),
+         height:hp('5.5'),
+         borderRadius:20,
+         backgroundColor:'#128C7E',
+         justifyContent:'center',
+         alignItems:'center',
+         marginLeft:wp('70')
+
+         }
 })
