@@ -65,10 +65,10 @@ GoogleSignin.configure({
     }
   };
    async function signInWithPhoneNumber(number) {
+   console.log(number,'.......number')
         try {
           const confirmation = await auth().signInWithPhoneNumber(number);
           if(confirmation.state != "error") {
-            setLoading(false);
             navigation.navigate('Otp',{confirm : confirmation});
             console.log("confirmation",confirmation);
           }
@@ -94,8 +94,8 @@ GoogleSignin.configure({
   }
   const onNext = () => {
             // Keyboard.dismiss();
-
-             signInWithPhoneNumber('+' + country + phoneNumber);
+ navigation.navigate('Dashboard');
+            // signInWithPhoneNumber('+' + country + phoneNumber);
            }
   const onFocus = (control) => {
         setfocusControl(control)

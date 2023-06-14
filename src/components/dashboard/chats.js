@@ -11,10 +11,12 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 import Contacts from 'react-native-contacts';
 import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
-
+import { useRecoilState } from "recoil";
+import { rawID } from "../../state/atom";
  export default function Chats({navigation}){
 
   const [contacts, setContacts] = useState([]);
+  const [uniqueKey,setUniqueKey]=useRecoilState(rawID)
   const DATA = [
     {
       id: 1,
@@ -54,7 +56,7 @@ import CardView from 'react-native-cardview'
                );
                console.log('Permission status:', granted);
                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                 contactsG();
+                 getContacts();
                } else {
                  Alert.alert(
                    'Permission Denied!',
@@ -66,18 +68,31 @@ import CardView from 'react-native-cardview'
              }
            };
   useEffect(() => {
-Contacts.getAll().then(contacts => {
-  // contacts returned
-  setContacts(contacts)
-
-})
+checkPermission()
   }, [])
+
+
+ const  getContacts = () => {
+
+  Contacts.getAll().then(contacts => {
+    // contacts returned
+    setContacts(contacts)
+
+   // console.log(contacts,'.....contactz')
+ for (let i = 0; i < contacts.length; i++) {
+      const rawContactId = contacts[i].rawContactId;
+     // console.log('Raw Contact ID:', rawContactId);
+    setUniqueKey(rawContactId)
+      // Do something with the rawContactId
+    }
+  })
+  }
 
  return(
 
           <View style={styles.emptyView}>
                <FlatList
-                  data={DATA}
+                  data={contacts}
                   renderItem={({item}) =>
              <TouchableOpacity activeOpacity={0.9}  onPress={() => navigation.navigate('Interface',{data:item})}>
                 <CardView
@@ -86,7 +101,7 @@ Contacts.getAll().then(contacts => {
                      <View style={styles.userChatBox}>
                    <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                     <Text style={styles.name}>{item.title}</Text>
-                       {/*  <Text style={styles.name}>{item.displayName}</Text>*/}
+                   <Text style={styles.name}>{item.displayName}</Text>
                     </View>
                  </CardView>
                    </TouchableOpacity>}

@@ -4,30 +4,47 @@ import {
 View,
 Image,
 Text,Button,FlatList,
-StyleSheet,TouchableOpacity,
+StyleSheet,TouchableOpacity,KeyboardAvoidingView,
 TextInput}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import database from '@react-native-firebase/database';
 import firebaseConfig from '../../../setup';
+import { useRecoilState } from "recoil";
+import { rawID } from "../../state/atom";
+import Toast from 'react-native-toast-message';
 export default function Interface({route,navigation}){
 
 const[user,setUser]=useState(route.params.data)
 const[title,setTitle]=useState(route.params.data.title)
  const [text, onChangeText] = React.useState('');
 const [messages, setMessages] = useState([]);
-console.log(title)
+const [uniqueId,setUniqueId] = useState();
 
-  const dataBase = () =>{
+const generateRecipientId = () => {
+  if (text.length > 0) {
+    // Generate a random recipient ID or use a temporary identifier
+    const recipientId = Math.random().toString(36).substring(7);
+    dataBase(recipientId);
+    // setUniqueId(recipientId);
+  } else {
+    Toast.show('Enter some message', Toast.SHORT);
+    console.log('error');
+  }
+};
+
+  const dataBase = (recipientId) =>{
      // Create a new data object
       var data = {
        text,
-       title // a state variable that have message from text input
+       title ,// a state variable that have message from text input
+       recipientId
        };
     // Add the data to the database
     var ref = database().ref("chat");
    ref.push(data);
+
   }
   useEffect(() => {
     const ref = database().ref('chat');
@@ -42,7 +59,9 @@ console.log(title)
   }, []);
 return(
 
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+
+      style={styles.container} >
          <View style={styles.headingContainer}>
            <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
@@ -62,7 +81,7 @@ return(
                           data={messages}
                           renderItem={({item}) =>
                           <View style={styles.textMessageView}>
-                    <Text>{item.text}</Text>
+                    <Text style={{color:'black'}}>{item.text}</Text>
                     </View>
                         }
                    keyExtractor={item => item.id}
@@ -73,14 +92,15 @@ return(
                    style={styles.input}
                    onChangeText={onChangeText}
                    value={text}
-                   placeholderTextColor={'black'}
-                   placeholder={"Type a message"}
+                   placeholderTextColor={'gray'}
+                   placeholder={"Message"}
+                    textAlign="center"
               />
-               <TouchableOpacity onPress={()=>dataBase()} style={styles.sendButton}>
+               <TouchableOpacity onPress={()=>generateRecipientId()} style={styles.sendButton}>
                            <MaterialIcon name={'send'} size={hp('2.70%')} color={'white'}/>
                        </TouchableOpacity>
            </View>
-      </View>
+      </KeyboardAvoidingView>
 
 )
 }
@@ -88,14 +108,14 @@ return(
 const styles =StyleSheet.create({
   container:{
      flex:1,
-     backgroundColor:'white'
+     backgroundColor:'white',
   },
   headingContainer:{
      width:wp('100'),
      flexDirection:'row',
      alignItems:'center',
      height:hp('7.50'),
-     backgroundColor:'black',
+        backgroundColor:'#128C7E',
      elevation:3
   },
   settingsHeader:{
@@ -115,13 +135,15 @@ const styles =StyleSheet.create({
      marginLeft:wp('5')
   },
   input:{
-    height: hp('7%'),
+    height: hp('6%'),
     width: wp('75%'),
     color: 'black',
-    fontSize: hp('1.50%'),
+    fontSize: hp('1.80%'),
     borderWidth: 1,
-    borderRadius:5,
+    borderRadius:30,
     paddingLeft: wp('2%'),
+    marginLeft:wp('3'),
+    bottomOffset: 0
 
 
   },
@@ -142,16 +164,16 @@ const styles =StyleSheet.create({
     alignItems:'center'
  },
  sendButton:{
-    height: hp('7%'),
-    width: wp('13%'),
-    borderRadius: wp('7%'),
+    height: hp('6.50%'),
+    width: wp('14%'),
+    borderRadius:35,
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'black'
+    backgroundColor:'#128C7E',
  },
  messageWrapperView:{
- width:wp('100'),
- height:hp('80'),
+     width:wp('100'),
+     height:hp('80'),
 
  },
 
@@ -162,12 +184,13 @@ const styles =StyleSheet.create({
  },
  textMessageView:{
   width:wp('24'),
-  height:hp('7'),
+  minHeight:hp('4'),
   backgroundColor:'#F0F0F0',
   marginTop:hp('.80'),
   marginLeft:wp('3'),
-  borderRadius:5
-
+  borderRadius:8,
+  justifyContent:'center',
+  alignItems:'center',
  }
 
 

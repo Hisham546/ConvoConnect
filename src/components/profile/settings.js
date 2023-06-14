@@ -51,7 +51,7 @@ const styles =StyleSheet.create({
      flexDirection:'row',
      alignItems:'center',
      height:hp('7'),
-     backgroundColor:'gray'
+     backgroundColor:'white'
   },
   settingsHeader:{
      color:'white',

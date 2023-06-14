@@ -23,8 +23,10 @@ const Tab = createMaterialTopTabNavigator();
  return(
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
- <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>{text}</Text>
+ <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>WhatsApp</Text>
+                 <MaterialIcon name={'camera-enhance'} size={hp('2.65%')} color={'white'}  style={styles.cameraIcon} />
         <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'white'}  style={styles.searchIcon} />
+
         <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
              <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'white'}  style={styles.threeDotIcon} />
              </TouchableOpacity>
@@ -66,7 +68,7 @@ const Tab = createMaterialTopTabNavigator();
 
   container:{
       flex:1,
-   backgroundColor:'black',
+        backgroundColor:'#128C7E',
    },
    topViewContainer:{
    width:wp('100'),
@@ -77,13 +79,17 @@ const Tab = createMaterialTopTabNavigator();
    },
    searchIcon:{
     marginTop:hp('3'),
-    marginLeft:wp('45')
+    marginLeft:wp('4.50')
+
+   },
+   cameraIcon:{
+      marginTop:hp('3'),
+          marginLeft:wp('35')
 
    },
    threeDotIcon:{
-     marginTop:hp('3'),
+      marginTop:hp('3'),
       marginRight:wp('4')
-
    }
 
 

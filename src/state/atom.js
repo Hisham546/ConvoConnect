@@ -12,3 +12,9 @@ export const number = atom({
  default:'',
 
 });
+
+export const rawID = atom({
+key: 'rawContactId',
+default:'',
+
+})
