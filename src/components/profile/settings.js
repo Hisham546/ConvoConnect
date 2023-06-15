@@ -23,9 +23,20 @@ export default function Settings({navigation}){
                <Text style={styles.settingsHeader}>Settings</Text>
              </View>
           <View style={styles.profileContainer}>
+                  <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
+                        <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('15')}}>Username</Text>
 
-                        <Text style={styles.settingsHeader}>{name}</Text>
                       </View>
+    <View style={styles.profileContainer}>
+             <MaterialIcon name={'account'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
+                          <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('15')}}>Account</Text>
+                        </View>
+
+ <View style={styles.profileContainer}>
+              <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
+                           <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('15')}}>Privacy</Text>
+                         </View>
+
           </View>
        )
 
@@ -50,8 +61,11 @@ const styles =StyleSheet.create({
      width:wp('100'),
      flexDirection:'row',
      alignItems:'center',
-     height:hp('7'),
-     backgroundColor:'white'
+     height:hp('13'),
+    //justifyContent:"space-evenly",
+     backgroundColor:'white',
+        borderBottomWidth: .2,
+        borderBottomColor: '#d8d8d8',
   },
   settingsHeader:{
      color:'white',
@@ -62,7 +76,13 @@ const styles =StyleSheet.create({
      threeDotIcon:{
       marginLeft:wp('4')
 
-     }
+     },
+       tinyLogo:{
+           height: hp('7%'),
+           width: wp('12%'),
+           borderRadius: wp('5%'),
+           marginLeft:wp('8')
+       },
 
 
 

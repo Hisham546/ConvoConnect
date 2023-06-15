@@ -21,31 +21,36 @@ import { rawID } from "../../state/atom";
     {
       id: 1,
       title: 'Alan',
+      time: '1:00 pm'
 
     },
     {
       id: 2,
       title: 'Jagan',
-
+      time: '4:50 pm'
     },
     {
       id: 3,
       title: 'Ancy',
+      time: '2:30 pm'
 
     },
       {
         id: 4,
         title: 'Johann',
+      time: '7:00 pm'
 
       },
       {
         id: 5,
         title: 'Vishnu',
+          time: '9:00 pm'
 
       },
       {
         id: 6,
         title: 'Rakhil',
+       time: '9:45 pm'
 
       },
   ];
@@ -92,7 +97,7 @@ checkPermission()
 
           <View style={styles.emptyView}>
                <FlatList
-                  data={contacts}
+                  data={DATA}
                   renderItem={({item}) =>
              <TouchableOpacity activeOpacity={0.9}  onPress={() => navigation.navigate('Interface',{data:item})}>
                 <CardView
@@ -101,8 +106,12 @@ checkPermission()
                      <View style={styles.userChatBox}>
                    <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                     <Text style={styles.name}>{item.title}</Text>
-                   <Text style={styles.name}>{item.displayName}</Text>
+                  {/* <Text style={styles.name}>{item.displayName}</Text>*/}
+
                     </View>
+                      <View style={styles.userChatBox2}>
+                                         <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('2')}}>{item.time}</Text>
+                                            </View>
                  </CardView>
                    </TouchableOpacity>}
 
@@ -130,40 +139,44 @@ checkPermission()
  const  styles =StyleSheet.create({
 
   emptyView:{
-     flex : 1,
-    width:wp('100'),
-    height:hp('100'),
-     backgroundColor:'white',
-
-
+      flex : 1,
+      width:wp('100'),
+      height:hp('100'),
+      backgroundColor:'white',
   },
-     text:{
-      color:'black'
+   text:{
+       color:'black'
 
-     },
-  chatCard:{
-  width:wp('100'),
-  height:hp('10'),
-  backgroundColor:'white'
-
+   },
+   chatCard:{
+          width:wp('100'),
+          height:hp('10'),
+          backgroundColor:'white',
+          flexDirection:'row'
   },
   tinyLogo:{
-     height: hp('5%'),
+      height: hp('5%'),
       width: wp('10%'),
       borderRadius: wp('5%'),
       marginLeft:wp('5')
   },
   userChatBox:{
-  width:wp('50'),
-  height:hp('8'),
-  flexDirection:'row',
-  alignItems:'center'
+      width:wp('50'),
+      height:hp('8'),
+      flexDirection:'row',
+      alignItems:'center'
 
   },
+  userChatBox2:{
+    width:wp('50'),
+    height:hp('8'),
+   flexDirection:'row',
+   justifyContent:'flex-end',
+  },
   name:{
-  marginLeft:wp('5'),
-  marginBottom:hp('3'),
-  color:'black'
+      marginLeft:wp('5'),
+      marginBottom:hp('3'),
+      color:'black'
 
   }
 

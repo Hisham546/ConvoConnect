@@ -23,7 +23,7 @@ const Tab = createMaterialTopTabNavigator();
  return(
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
- <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3')}}>WhatsApp</Text>
+ <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3'),fontSize:hp('2.20')}}>WhatsApp</Text>
                  <MaterialIcon name={'camera-enhance'} size={hp('2.65%')} color={'white'}  style={styles.cameraIcon} />
         <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'white'}  style={styles.searchIcon} />
 
@@ -42,7 +42,7 @@ const Tab = createMaterialTopTabNavigator();
                          },
                          tabBarScrollEnabled: true,
                          tabBarLabelStyle: {fontSize:hp('1.40'),textTransform: 'none'},
-                         tabBarItemStyle: { width: 120 },
+                         tabBarItemStyle: { width:wp('33') },
                          tabBarStyle: {
                            height:hp('5'),
                            width:wp('100'),
