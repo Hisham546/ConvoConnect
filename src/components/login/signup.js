@@ -93,9 +93,9 @@ GoogleSignin.configure({
 
   }
   const onNext = () => {
-            // Keyboard.dismiss();
- navigation.navigate('Dashboard');
-            // signInWithPhoneNumber('+' + country + phoneNumber);
+          // Keyboard.dismiss();
+ //navigation.navigate('Otp');
+             signInWithPhoneNumber('+' + country + phoneNumber);
            }
   const onFocus = (control) => {
         setfocusControl(control)

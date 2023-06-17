@@ -4,14 +4,62 @@ import {
 View,
 Image,
 Text,Button,
-StyleSheet,TouchableOpacity,
+StyleSheet,TouchableOpacity,Keyboard,
 TextInput}
 from "react-native";
-import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import auth from '@react-native-firebase/auth';
 
  export default function Otp({navigation,route}){
+
 const [confirm,setConfirm] = useState(route.params.confirm);
 const [code,setCode] = useState(route.params.confirm.code ? route.params.confirm.code : '');
+
+async function confirmCode() {
+  try {
+    await confirm.confirm(code).then(() => {
+
+   //    setLoading(false);
+     navigation.navigate('Dashboard');
+
+    }).catch(() => {
+
+ // setLoading(false);
+      Toast.show("please check you pin again",Toast.SHORT);
+
+    });
+  } catch (error) {
+    if (error.code == 'auth/invalid-verification-code') {
+     // setLoading(false);
+
+    } else if (error.code === 'auth/user-disabled') {
+     // setLoading(false);
+      Toast.show('Sorry, this phone number has been blocked.',Toast.SHORT)
+
+    } else if (error.code === 'auth/invalid-credential') {
+    //  setLoading(false);
+      Toast.show('Invalid Credential.',Toast.SHORT)
+
+    } else {
+    //  setLoading(false);
+      Toast.show('Sorry, we couldn\'t verify your phone number at the moment. '
+      + 'Please try again later. '
+      + '\n\nIf the issue persists, please contact support.',Toast.SHORT);
+
+    }
+  }
+}
+
+const onSubmit = () => {
+  if (code.length === 6) {
+ //  setLoading(true);
+    confirmCode();
+  } else {
+    Toast.show('OTP cannot be empty',Toast.SHORT);
+  }
+}
  return(
        <View style={styles.container}>
           <View style={styles.upperView}>
@@ -33,8 +81,8 @@ const [code,setCode] = useState(route.params.confirm.code ? route.params.confirm
                             />
 
 
-                         <TouchableOpacity style={styles.roundButton}   onPress={() => onNext()}>
-                         <Icon name='chevron-right' size={hp('3.20%')}color='white'  />
+                         <TouchableOpacity style={styles.roundButton}   onPress={() => onSubmit()}>
+
                            </TouchableOpacity>
 
              </View>

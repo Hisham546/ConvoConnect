@@ -24,17 +24,19 @@ export default function Settings({navigation}){
              </View>
           <View style={styles.profileContainer}>
                   <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
-                        <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('15')}}>Username</Text>
-
+                        <View style={{height:hp('13'),width:wp('30'),justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{fontSize:hp('1.60'),color:'black'}}>Username</Text>
+                         <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('5'),marginTop:hp('.50')}}>About</Text>
+                            </View>
                       </View>
-    <View style={styles.profileContainer}>
+    <View style={styles.settingsOptions}>
              <MaterialIcon name={'account'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
-                          <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('15')}}>Account</Text>
+                          <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('5')}}>Account</Text>
                         </View>
 
- <View style={styles.profileContainer}>
+ <View style={styles.settingsOptions}>
               <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
-                           <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('15')}}>Privacy</Text>
+                           <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('5')}}>Privacy</Text>
                          </View>
 
           </View>
@@ -62,10 +64,15 @@ const styles =StyleSheet.create({
      flexDirection:'row',
      alignItems:'center',
      height:hp('13'),
-    //justifyContent:"space-evenly",
-     backgroundColor:'white',
-        borderBottomWidth: .2,
-        borderBottomColor: '#d8d8d8',
+    borderBottomWidth: .2,
+    borderBottomColor: '#d8d8d8',
+  },
+  settingsOptions:{
+       width:wp('100'),
+       flexDirection:'row',
+       alignItems:'center',
+       height:hp('9'),
+       marginLeft:wp('5'),
   },
   settingsHeader:{
      color:'white',
