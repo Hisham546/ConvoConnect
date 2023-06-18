@@ -1,9 +1,8 @@
-import React, {useEffect,useRef,useState} from 'react';
+import React, {useRef,useState} from 'react';
 
 import {
 View,
-Image,
-Text,Button,FlatList,
+Text,
 StyleSheet,TouchableOpacity,TextInput
 }
 from "react-native";
@@ -11,12 +10,14 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Octicons';
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin,statusCodes,GoogleSigninButton   } from '@react-native-google-signin/google-signin';
+import { GoogleSignin,statusCodes   } from '@react-native-google-signin/google-signin';
 import { useRecoilState } from "recoil";
 import { username } from "../../state/atom";
-import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from "react-native-phone-number-input";
 import Toast from "react-native-simple-toast";
+import database from '@react-native-firebase/database';
+
+
 export default function Signup({navigation}){
 
 GoogleSignin.configure({
@@ -31,7 +32,7 @@ GoogleSignin.configure({
   openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
   profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
 });
- const [text, onChangeText] = useRecoilState(username);
+ const [text, setText] = useRecoilState(username);
   const [number, onChangeNumber] = React.useState('');
   const [userDetails, setUserDetails] = React.useState('');
    const [focusControl, setfocusControl] = React.useState(null);
@@ -65,7 +66,7 @@ GoogleSignin.configure({
     }
   };
    async function signInWithPhoneNumber(number) {
-   console.log(number,'.......number')
+
         try {
           const confirmation = await auth().signInWithPhoneNumber(number);
           if(confirmation.state != "error") {
@@ -100,49 +101,77 @@ GoogleSignin.configure({
   const onFocus = (control) => {
         setfocusControl(control)
      };
+
+  const saveToDatabase = (newText) =>{
+      // Create a new data object
+       var data = {
+        text,
+             // a state variable that have message from text input
+        };
+     // Send the data to the database
+     var ref = database().ref("username");
+    ref.push(data);
+
+}
+
+  const checkTextLength = (newText) =>{
+  console.log(newText,'.............')
+     setText(newText)
+    if(newText.length === 6){
+
+    saveToDatabase()
+   }
+   else{
+    //   Toast.show('Enter 6 digits.',Toast.SHORT)
+  console.log('.............')
+   }
+
+  }
 return(
       <View style={styles.container}>
          <View style={styles.upperView}>
-            {/* <Icon name='chevron-left' size={hp('3.20%')}color='white' style={styles.backIcon} />*/}
-                <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginLeft:wp('8')}}> WhatsApp</Text>
+         <MaterialIcon name={'whatsapp'} size={hp('7%')} color={'white'}   />
+                <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginTop:hp('2')}}> WhatsApp</Text>
         </View>
             <View style={styles.secondView}>
-             <Text style={{color:'black',fontSize:hp('1.80'),fontFamily:'Manrope-Regular'}}> Enter your mobile number login or register</Text>
+             <Text style={{color:'black',fontSize:hp('1.80'),fontFamily:'Manrope-Regular'}}> Enter your mobile number to login or register</Text>
 
 
              <TextInput
                                 onFocus={() => onFocus("Name")}
                                  style={[styles.input, {
                                        borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
-                                       borderBottomColor: focusControl == "Name" ? 'green' : '#128C7E'
+                                       borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
                                  }]}
-                                   onChangeText={onChangeText}
+                                   onChangeText={checkTextLength}
                                    value={text}
                                    placeholderTextColor={'gray'}
-                                   placeholder={"Name"}
+                                   placeholder={"Enter your username"}
                              />
                              <PhoneInput
-                                                                    ref={phoneInput}
-                                                                    defaultValue={phoneNumber}
-                                                                    defaultCode="IN"
-                                                                    layout="first"
-                                                                    codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500', paddingBottom: hp('0.2%') }}
-                                                                    textInputStyle={{ fontSize: hp('1.75%'), fontWeight: '400' }}
-                                                                    placeholder="Enter Phone Number"
-                                                                    placeholderTextColor={'gray'}
-                                                                    countryPickerProps={{ withAlphaFilter: true }}
-                                                                    containerStyle={styles.phoneNumberView}
-                                                                    onChangeText={text => {
-                                                                      setPhoneNumber(text);
-                                                                    }}
-                                                                    onChangeCountry={text => {
-                                                                      setCountry(text.callingCode.join(','));
-                                                                    }}
-                                                                    textContainerStyle={{ paddingVertical: 0 }}
-                                                                  />
+                                    ref={phoneInput}
+                                    defaultValue={phoneNumber}
+                                    defaultCode="IN"
+                                    layout="first"
+                                    codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500',textAlign:"center", paddingBottom: hp('0.2%') }}
+                                    textInputStyle={{ fontSize: hp('1.75%'),textAlign:"center", fontWeight: '400', }}
+                                    placeholder="Enter Phone Number"
+                                    placeholderTextColor={'gray'}
+                                       
+                                    countryPickerProps={{ withAlphaFilter: true }}
+                                    containerStyle={styles.phoneNumberView}
+                                    onChangeText={text => {
+                                      setPhoneNumber(text);
+                                    }}
+                                    onChangeCountry={text => {
+                                      setCountry(text.callingCode.join(','));
+                                    }}
+                                    textContainerStyle={{ paddingVertical: 0 }}
+                                  />
 
                         <TouchableOpacity style={styles.roundButton}   onPress={() => onNext()}>
-                        <Icon name='chevron-right' size={hp('3.20%')}color='white'  />
+                        <Text style={{color:'white',fontSize:hp('2.20'),letterSpacing:wp('.25'),fontFamily:'Manrope-Bold'}}> SIGN UP</Text>
+                       {/* <Icon name='chevron-right' size={hp('2.90%')}color='white' style={{marginLeft:wp('8')}}  />*/}
                           </TouchableOpacity>
 
             </View>
@@ -170,8 +199,8 @@ const styles =StyleSheet.create({
     upperView:{
         width:wp('100'),
         height:hp('40'),
-        flexDirection:'row',
         alignItems:'center',
+        justifyContent:'center',
         backgroundColor:'#128C7E',
 
     },
@@ -213,9 +242,21 @@ const styles =StyleSheet.create({
     },
     input:{
         width:wp('80%'),
-        height:hp('5'),
-
+        height:hp('7'),
+        borderRadius: 5,
+        borderWidth: wp('.4'),
+        borderColor: '#128C7E',
     },
+    phoneNumberView : {
+      marginTop : hp(1),
+      justifyContent : 'center',
+      width : wp('80%'),
+      height : hp('7%'),
+      borderRadius: 5,
+      borderWidth: wp('.4'),
+      borderColor: '#128C7E',
+
+  },
    headingText:{
        fontSize: hp('1.50%'),
         color: 'white',
@@ -229,23 +270,16 @@ const styles =StyleSheet.create({
     justifyContent:'center',
     marginTop:hp('3')
 
-  },
-         phoneNumberView : {
-             marginTop : hp(1),
-             justifyContent : 'center',
-             width : wp('80%'),
-             height : hp('7%'),
-           // borderBottomWidth:wp('.50'),
-           // borderBottomColor:'green'
-         },
-         roundButton:{
-         width:wp('11'),
-         height:hp('5.5'),
-         borderRadius:20,
-         backgroundColor:'#128C7E',
-         justifyContent:'center',
-         alignItems:'center',
-         marginLeft:wp('70')
+  },         
+     roundButton:{
+          width:wp('80'),
+          height:hp('6.5'),
+          borderRadius:19,
+          flexDirection:'row',
+          backgroundColor:'#128C7E',
+          justifyContent:'center',
+          alignItems:'center',
+          elevation:3
 
          }
 })

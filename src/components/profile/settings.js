@@ -11,9 +11,31 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRecoilState } from "recoil";
 import { username } from "../../state/atom";
-
+import database from '@react-native-firebase/database';
 export default function Settings({navigation}){
+
+
+
  const [name] = useRecoilState(username);
+
+const [accountName,setAccountName]=useState('');
+
+    useEffect(() => {
+      database()
+        .ref('username')
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val(); // Retrieve the data from the snapshot
+          const textValues = Object.values(data).map(item => item.text); // Extract the "text" values
+          console.log('text values:', textValues);
+            setAccountName(textValues)
+
+        });
+    }, []);
+
+
+
+
  return(
           <View style={styles.container}>
              <View style={styles.headingContainer}>
@@ -25,7 +47,7 @@ export default function Settings({navigation}){
           <View style={styles.profileContainer}>
                   <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                         <View style={{height:hp('13'),width:wp('30'),justifyContent:'center',alignItems:'center'}}>
-                        <Text style={{fontSize:hp('1.60'),color:'black'}}>Username</Text>
+                        <Text style={{fontSize:hp('1.60'),color:'black'}}>{accountName}</Text>
                          <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('5'),marginTop:hp('.50')}}>About</Text>
                             </View>
                       </View>
