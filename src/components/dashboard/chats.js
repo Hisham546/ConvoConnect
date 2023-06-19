@@ -11,45 +11,44 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 import Contacts from 'react-native-contacts';
 import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
-import { useRecoilState } from "recoil";
-import { rawID } from "../../state/atom";
+
  export default function Chats({navigation}){
 
   const [contacts, setContacts] = useState([]);
-  const [uniqueKey,setUniqueKey]=useRecoilState(rawID)
+
   const DATA = [
     {
       id: 1,
-      title: 'Alan',
+      title: 'Sundar',
       time: '1:00 pm'
 
     },
     {
       id: 2,
-      title: 'Jagan',
+      title: 'Elon',
       time: '4:50 pm'
     },
     {
       id: 3,
-      title: 'Ancy',
+      title: 'Arnold',
       time: '2:30 pm'
 
     },
       {
         id: 4,
-        title: 'Johann',
+        title: 'Ruby',
       time: '7:00 pm'
 
       },
       {
         id: 5,
-        title: 'Vishnu',
+        title: 'Steve Rogers',
           time: '9:00 pm'
 
       },
       {
         id: 6,
-        title: 'Rakhil',
+        title: 'Robert',
        time: '9:45 pm'
 
       },
@@ -110,7 +109,7 @@ checkPermission()
 
                     </View>
                       <View style={styles.userChatBox2}>
-                                         <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('2')}}>{item.time}</Text>
+                                         <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('3')}}>{item.time}</Text>
                                             </View>
                  </CardView>
                    </TouchableOpacity>}
@@ -171,6 +170,7 @@ checkPermission()
     width:wp('50'),
     height:hp('8'),
    flexDirection:'row',
+   alignItems:'center',
    justifyContent:'flex-end',
   },
   name:{

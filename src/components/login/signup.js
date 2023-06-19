@@ -3,7 +3,7 @@ import React, {useRef,useState} from 'react';
 import {
 View,
 Text,
-StyleSheet,TouchableOpacity,TextInput
+StyleSheet,TouchableOpacity,TextInput,Keyboard,
 }
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
@@ -11,14 +11,17 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Octicons';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin,statusCodes   } from '@react-native-google-signin/google-signin';
-import { useRecoilState } from "recoil";
-import { username } from "../../state/atom";
 import PhoneInput from "react-native-phone-number-input";
 import Toast from "react-native-simple-toast";
 import database from '@react-native-firebase/database';
-
-
+import { addingPhoneNumber} from "../../state/counterReducer";
+import { useDispatch } from 'react-redux';
+import { PacmanIndicator } from 'react-native-indicators';
+import { CommonActions } from '@react-navigation/native';
 export default function Signup({navigation}){
+
+
+
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
@@ -32,7 +35,7 @@ GoogleSignin.configure({
   openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
   profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
 });
- const [text, setText] = useRecoilState(username);
+ const [text, setText] = useState();
   const [number, onChangeNumber] = React.useState('');
   const [userDetails, setUserDetails] = React.useState('');
    const [focusControl, setfocusControl] = React.useState(null);
@@ -40,7 +43,13 @@ GoogleSignin.configure({
    const [changeButton,setChangeButton] = useState(false);
        const phoneInput = useRef(null);
   const [country, setCountry] = useState(['91']);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState();
+    const [loading, setLoading] = useState(false);
+
+
+      const dispatch = useDispatch();
+
+
 
   const signIn = async () => {
     try {
@@ -70,8 +79,17 @@ GoogleSignin.configure({
         try {
           const confirmation = await auth().signInWithPhoneNumber(number);
           if(confirmation.state != "error") {
+            setLoading(false);
             navigation.navigate('Otp',{confirm : confirmation});
-            console.log("confirmation",confirmation);
+             navigation.dispatch(state => {
+                        let routes = state.routes.filter(r => r.name !== 'Signup');
+                        return CommonActions.reset({
+                          ...state,
+                          routes,
+                          index: routes.length - 1,
+                        });
+                      });
+            //console.log("confirmation",confirmation);
           }
         } catch (error) {
           if (error.code == 'auth/too-many-requests') {
@@ -94,10 +112,20 @@ GoogleSignin.configure({
 
   }
   const onNext = () => {
-          // Keyboard.dismiss();
- //navigation.navigate('Otp');
+
+         //  Keyboard.dismiss();
+    if (phoneNumber === '') {
+      Toast.show("Enter your phone number first!", Toast.SHORT);
+    } else {
+     setLoading(true);
+      dispatch(addingPhoneNumber(phoneNumber));
              signInWithPhoneNumber('+' + country + phoneNumber);
+
+   }
            }
+
+
+
   const onFocus = (control) => {
         setfocusControl(control)
      };
@@ -115,7 +143,6 @@ GoogleSignin.configure({
 }
 
   const checkTextLength = (newText) =>{
-  console.log(newText,'.............')
      setText(newText)
     if(newText.length === 6){
 
@@ -153,8 +180,8 @@ return(
                                     defaultValue={phoneNumber}
                                     defaultCode="IN"
                                     layout="first"
-                                    codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500',textAlign:"center", paddingBottom: hp('0.2%') }}
-                                    textInputStyle={{ fontSize: hp('1.75%'),textAlign:"center", fontWeight: '400', }}
+                                    codeTextStyle={{ fontSize: hp('1.75%'), fontWeight: '500', paddingBottom: hp('0.2%') }}
+                                    textInputStyle={{ fontSize: hp('1.75%'), fontWeight: '400', }}
                                     placeholder="Enter Phone Number"
                                     placeholderTextColor={'gray'}
                                        
@@ -170,8 +197,10 @@ return(
                                   />
 
                         <TouchableOpacity style={styles.roundButton}   onPress={() => onNext()}>
-                        <Text style={{color:'white',fontSize:hp('2.20'),letterSpacing:wp('.25'),fontFamily:'Manrope-Bold'}}> SIGN UP</Text>
-                       {/* <Icon name='chevron-right' size={hp('2.90%')}color='white' style={{marginLeft:wp('8')}}  />*/}
+                                            {loading === true ?
+                                                                 <PacmanIndicator color='#fff' size={26} />
+                                                                 :
+                        <Text style={{color:'white',fontSize:hp('2.20'),letterSpacing:wp('.25'),fontFamily:'Manrope-Bold'}}> SIGN UP</Text>}
                           </TouchableOpacity>
 
             </View>

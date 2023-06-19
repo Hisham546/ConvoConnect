@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {
 View,
 Image,
-Text,Button,FlatList,
+Text,Button,FlatList,Keyboard,
 StyleSheet,TouchableOpacity,KeyboardAvoidingView,
 TextInput}
 from "react-native";
@@ -23,6 +23,7 @@ const [messages, setMessages] = useState([]);
 const [uniqueId,setUniqueId] = useState();
 
 const generateRecipientId = () => {
+Keyboard.dismiss();
   if (text.length > 0) {
     // Generate a random recipient ID or use a temporary identifier
     const recipientId = Math.random().toString(36).substring(7);
@@ -94,7 +95,7 @@ return(
                    value={text}
                    placeholderTextColor={'gray'}
                    placeholder={"Message"}
-                    textAlign="center"
+
               />
                <TouchableOpacity onPress={()=>generateRecipientId()} style={styles.sendButton}>
                            <MaterialIcon name={'send'} size={hp('2.70%')} color={'white'}/>

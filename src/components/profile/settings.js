@@ -9,14 +9,12 @@ TextInput}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRecoilState } from "recoil";
-import { username } from "../../state/atom";
 import database from '@react-native-firebase/database';
 export default function Settings({navigation}){
 
 
 
- const [name] = useRecoilState(username);
+
 
 const [accountName,setAccountName]=useState('');
 

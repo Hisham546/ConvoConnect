@@ -14,12 +14,10 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Calls from "./calls";
 import Chats from "./chats";
 import Status from "./status";
-import { useRecoilState } from "recoil";
-import { username } from "../../state/atom";
 const Tab = createMaterialTopTabNavigator();
 
  export default function Dashboard ({navigation}) {
- const [text, onChangeText] = useRecoilState(username);
+
  return(
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>

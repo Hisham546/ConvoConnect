@@ -11,39 +11,44 @@ import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
-
+import { useDispatch, useSelector} from 'react-redux';
+import { PacmanIndicator } from 'react-native-indicators';
+import Toast from "react-native-simple-toast";
+import { CommonActions } from '@react-navigation/native';
  export default function Otp({navigation,route}){
 
+ const mobileNo = useSelector((state) => state.counter.phone);
+const dispatch = useDispatch();
 const [confirm,setConfirm] = useState(route.params.confirm);
 const [code,setCode] = useState(route.params.confirm.code ? route.params.confirm.code : '');
+    const [loading, setLoading] = useState(false);
 
 async function confirmCode() {
   try {
     await confirm.confirm(code).then(() => {
 
-   //    setLoading(false);
+       setLoading(false);
      navigation.navigate('Dashboard');
-
     }).catch(() => {
 
- // setLoading(false);
+  setLoading(false);
       Toast.show("please check you pin again",Toast.SHORT);
 
     });
   } catch (error) {
     if (error.code == 'auth/invalid-verification-code') {
-     // setLoading(false);
+      setLoading(false);
 
     } else if (error.code === 'auth/user-disabled') {
-     // setLoading(false);
+      setLoading(false);
       Toast.show('Sorry, this phone number has been blocked.',Toast.SHORT)
 
     } else if (error.code === 'auth/invalid-credential') {
-    //  setLoading(false);
+      setLoading(false);
       Toast.show('Invalid Credential.',Toast.SHORT)
 
     } else {
-    //  setLoading(false);
+      setLoading(false);
       Toast.show('Sorry, we couldn\'t verify your phone number at the moment. '
       + 'Please try again later. '
       + '\n\nIf the issue persists, please contact support.',Toast.SHORT);
@@ -51,10 +56,22 @@ async function confirmCode() {
     }
   }
 }
+  const removeLogin = () => {
+    navigation.dispatch(state => {
+      const routes = state.routes.filter(r => r.name !== 'Otp');
+      return CommonActions.reset({
+        ...state,
+        routes,
+        index: routes.length - 1,
+      });
+    });
+  };
+
 
 const onSubmit = () => {
   if (code.length === 6) {
- //  setLoading(true);
+   setLoading(true);
+   removeLogin()
     confirmCode();
   } else {
     Toast.show('OTP cannot be empty',Toast.SHORT);
@@ -63,12 +80,11 @@ const onSubmit = () => {
  return(
        <View style={styles.container}>
           <View style={styles.upperView}>
-             {/* <Icon name='chevron-left' size={hp('3.20%')}color='white' style={styles.backIcon} />*/}
-                 <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginLeft:wp('8')}}> WhatsApp</Text>
-         </View>
+                  <MaterialIcon name={'whatsapp'} size={hp('7%')} color={'white'}   />
+                         <Text style={{color:'white',fontSize:hp('3'),fontFamily:'Manrope-Bold',marginTop:hp('2')}}> WhatsApp</Text>
+                 </View>
              <View style={styles.secondView}>
-              <Text style={{color:'black',fontSize:hp('1.80'),fontFamily:'Manrope-Regular'}}> Waiting to automatically detect and send sms to ..</Text>
-
+              <Text style={{color:'black',fontSize:hp('1.80'),fontFamily:'Manrope-Regular'}}> Enter the OTP received in  {mobileNo}</Text>
                  <OTPInputView
                               pinCount={6}
                               style = {styles.enterPin}
@@ -79,11 +95,13 @@ const onSubmit = () => {
                               onCodeChanged={text => setCode(text)}
                               onCodeFilled={() => Keyboard.dismiss()}
                             />
+                        <TouchableOpacity style={styles.roundButton} onPress={() => onSubmit()}>
+                                                      {loading === true ?
+                                                                                         <PacmanIndicator color='#fff' size={25} />
+                                                                                         :
+                          <Text style={{color:'white',fontSize:hp('2.20'),letterSpacing:wp('.25'),fontFamily:'Manrope-Bold'}}> REGISTER</Text>}
+                            </TouchableOpacity>
 
-
-                         <TouchableOpacity style={styles.roundButton}   onPress={() => onSubmit()}>
-
-                           </TouchableOpacity>
 
              </View>
        </View>
@@ -97,7 +115,6 @@ const onSubmit = () => {
     container:{
        flex:1,
        backgroundColor:'white',
-
     },
     secondView:{
        width:wp('100%'),
@@ -105,16 +122,15 @@ const onSubmit = () => {
        backgroundColor:'white',
        justifyContent:'space-evenly',
        alignItems:'center',
+    },
+    upperView:{
+        width:wp('100'),
+        height:hp('40'),
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor:'#128C7E',
 
     },
-     upperView:{
-         width:wp('100'),
-         height:hp('40'),
-         flexDirection:'row',
-         alignItems:'center',
-         backgroundColor:'#128C7E',
-
-     },
     submitButton: {
        height: hp(6),
        width: wp('68'),
@@ -129,49 +145,52 @@ const onSubmit = () => {
        color: 'white',
        letterSpacing: wp('.10%'),
     },
-
-     backIcon:{
+    backIcon:{
        marginLeft:wp('4')
-     },
-     input:{
-         width:wp('80%'),
-         height:hp('5'),
-
-     },
+    },
+    input:{
+      width:wp('80%'),
+      height:hp('5'),
+    },
     headingText:{
-        fontSize: hp('1.50%'),
-         color: 'white',
-         letterSpacing: wp('.10%'),
-         marginLeft:wp('6')
-
+      fontSize: hp('1.50%'),
+      color: 'white',
+      letterSpacing: wp('.10%'),
+      marginLeft:wp('6')
     },
    headingTextView:{
-     width:wp('90'),
-     height:hp('5'),
-     justifyContent:'center',
-     marginTop:hp('3')
-
+      width:wp('90'),
+      height:hp('5'),
+      justifyContent:'center',
+      marginTop:hp('3')
    },
+   roundButton:{
+      width:wp('80'),
+      height:hp('6.5'),
+      borderRadius:19,
+      flexDirection:'row',
+      backgroundColor:'#128C7E',
+      justifyContent:'center',
+      alignItems:'center',
+      elevation:3
+   },
+   enterPin: {
+      height : hp('6.75%'),
+      width : wp('80%'),
+      margin:wp('1%'),
 
-          roundButton:{
-          width:wp('11'),
-          height:hp('5.5'),
-          borderRadius:20,
-          backgroundColor:'#128C7E',
-          justifyContent:'center',
-          alignItems:'center',
-          marginLeft:wp('70')
-
-          },
-
-
-              enterPin: {
-                 height : hp('6.75%'),
-                 width : wp('90%'),
-                 margin:wp('1%'),
-                 padding: 10,
-                 marginLeft:wp('6.50%'),
-                 marginTop:10,
-
-               },
+      padding: 10,
+      marginTop:10,
+   },
+   underlineStyleBase: {
+       width:wp('8'),
+       height: 45,
+       borderWidth: 0,
+       borderBottomWidth:wp('.40'),
+       borderBottomColor: "gray",
+             color:'#128C7E',
+   },
+   underlineStyleHighLighted: {
+       borderColor: "red",
+   },
  })
