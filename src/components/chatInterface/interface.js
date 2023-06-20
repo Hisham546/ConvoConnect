@@ -67,13 +67,15 @@ return(
            <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
-              <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
+           <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={()=> navigation.navigate('ProfileDetails')}>
+             <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                  <Text style={styles.settingsHeader}>{user.title}</Text>
                     <View style={styles.iconsHolder}>
                   <MaterialIcon name={'video'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
                   <MaterialIcon name={'phone'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
                   <MaterialIcon name={'dots-vertical'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
-                  </View>
+</View>
+                  </TouchableOpacity>     
          </View>
          <View style={styles.messageWrapperView}>
 
@@ -116,8 +118,15 @@ const styles =StyleSheet.create({
      flexDirection:'row',
      alignItems:'center',
      height:hp('7.50'),
-        backgroundColor:'#128C7E',
+     backgroundColor:'#128C7E',
      elevation:3
+  },
+  userHeader:{
+    height:hp('7.50'),
+    width:wp('96'),
+    backgroundColor:'#128C7E',
+    flexDirection:'row',
+    alignItems:'center',
   },
   settingsHeader:{
      color:'white',

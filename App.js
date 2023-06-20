@@ -7,6 +7,7 @@ import Settings from './src/components/profile/settings';
 import Signup from './src/components/login/signup';
 import Otp from './src/components/login/otp'
 import Interface from './src/components/chatInterface/interface';
+import ProfileDetails from './src/components/chatInterface/profileDetails';
 const Stack = createStackNavigator();
 
 
@@ -35,6 +36,10 @@ const App = () => {
                   options={{headerShown : false}}
                   name="Interface"
                   component={Interface}/>
+            <Stack.Screen
+                  options={{headerShown : false}}
+                  name="ProfileDetails"
+                  component={ProfileDetails}/>             
         </Stack.Navigator>
 
     </NavigationContainer>
