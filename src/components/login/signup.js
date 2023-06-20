@@ -110,13 +110,13 @@ export default function Signup({ navigation }) {
       try {   
           const session = await EncryptedStorage.getItem("user_login");
       
-          if (session !== undefined && null) {
+          if (session !== undefined) {
             goToDashboard()
-              // Congrats! You've just retrieved your first value!
-              console.log(session,'......session')
+
+            // console.log(session,'......session')
           }
       } catch (error) {
-          // There was an error on the native side
+
       }
   }
   retrieveUserSession()
