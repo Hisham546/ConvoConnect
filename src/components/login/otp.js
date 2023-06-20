@@ -15,6 +15,7 @@ import { useDispatch, useSelector} from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import Toast from "react-native-simple-toast";
 import { CommonActions } from '@react-navigation/native';
+
  export default function Otp({navigation,route}){
 
  const mobileNo = useSelector((state) => state.counter.phone);
@@ -29,6 +30,7 @@ async function confirmCode() {
 
        setLoading(false);
      navigation.navigate('Dashboard');
+     removeLogin()
     }).catch(() => {
 
   setLoading(false);
@@ -71,7 +73,7 @@ async function confirmCode() {
 const onSubmit = () => {
   if (code.length === 6) {
    setLoading(true);
-   removeLogin()
+
     confirmCode();
   } else {
     Toast.show('OTP cannot be empty',Toast.SHORT);
