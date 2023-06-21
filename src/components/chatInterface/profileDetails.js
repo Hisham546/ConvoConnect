@@ -10,19 +10,24 @@ import {
     import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function  ProfileDetails({navigation,route}){
-
+    const[user]=useState(route.params.user)
+    console.log(user,'........user')
 return(
 
 
 <View style={styles.mainContainer}>
     
     <View style={styles.firstView}>
-    <TouchableOpacity onPress={()=>navigation.navigate('Interface')}>
+    <TouchableOpacity onPress={()=>navigation.navigate('Interface',{user})}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
            <Image resizeMode="cover"  style={styles.profileLogo} source={require('../../assets/profile.jpg')}  />
            <MaterialIcon name={'dots-vertical'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
+   
+           
     </View>
+    <View style={styles.titleView}><Text style={{color:'white',fontSize:hp('1.90'),letterSpacing:wp('.70'),fontFamily:'Manrope-Medium'}}>{user.title}</Text>
+           </View>
     <View style={styles.belowView}>
 
 
@@ -60,7 +65,7 @@ const styles = StyleSheet.create ({
     },
     firstView:{
         width:wp('100'),
-        height:hp('30'),
+        height:hp('20'),
         backgroundColor:'#128C7E',
         flexDirection:'row',
         justifyContent:'space-between'
@@ -86,8 +91,17 @@ const styles = StyleSheet.create ({
         flexDirection:'row',
         justifyContent:'space-between'
 
+     },
+     titleView:{
+width:wp('100'),
+height:hp('15'),
+backgroundColor:'#128C7E',
+
+   alignItems:'center'
+
 
      }
+
 
 
 

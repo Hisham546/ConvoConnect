@@ -67,7 +67,7 @@ return(
            <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
-           <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={()=> navigation.navigate('ProfileDetails')}>
+           <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={()=> navigation.navigate('ProfileDetails',{user})}>
              <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                  <Text style={styles.settingsHeader}>{user.title}</Text>
                     <View style={styles.iconsHolder}>
