@@ -34,6 +34,22 @@ Keyboard.dismiss();
     console.log('error');
   }
 };
+const test = () => {
+  // var arr = ['a', 'b', 'c']
+  // for (let i of arr) {
+  //   console.log(i)
+    
+  // }
+//   let arr1 = [1, 2, 3]
+// let arr2 = ['a', 'b', 'c']
+// let arr3 = [...arr1, ...arr2] //spread
+// console.log(arr3)
+const arr = ['a', 'b']
+// In the same way, we can change the contents of this array
+arr.push('c')
+arr[1] = 'd'
+console.log(arr)
+ }
 
   const dataBase = (recipientId) =>{
      // Create a new data object
@@ -47,6 +63,7 @@ Keyboard.dismiss();
    ref.push(data);
 
   }
+
   useEffect(() => {
     const ref = database().ref('chat');
     ref.on('value', (snapshot) => {
@@ -64,7 +81,7 @@ return(
 
       style={styles.container} >
          <View style={styles.headingContainer}>
-           <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
+           <TouchableOpacity onPress={()=>test()}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
            <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={()=> navigation.navigate('ProfileDetails',{user})}>

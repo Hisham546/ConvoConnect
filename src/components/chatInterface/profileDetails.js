@@ -8,7 +8,7 @@ import {
     from "react-native";
     import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
     import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+ 
 export default function  ProfileDetails({navigation,route}){
     const[user]=useState(route.params.user)
     console.log(user,'........user')
