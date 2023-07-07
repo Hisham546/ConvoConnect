@@ -70,7 +70,7 @@ export default function Signup({ navigation }) {
 
         // play services not available or outdated
       } else {
-        // some other error happened
+        // some other error happeneded
       }
     }
   };
