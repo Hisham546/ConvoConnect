@@ -52,6 +52,41 @@ import CardView from 'react-native-cardview'
        time: '9:45 pm'
 
       },
+ {
+      id: 7,
+      title: 'Sundar',
+      time: '1:00 pm'
+
+    },
+    {
+      id: 8,
+      title: 'Elon',
+      time: '4:50 pm'
+    },
+    {
+      id: 9,
+      title: 'Arnold',
+      time: '2:30 pm'
+
+    },
+      {
+        id: 10,
+        title: 'Ruby',
+      time: '7:00 pm'
+
+      },
+      {
+        id: 11,
+        title: 'Steve Rogers',
+          time: '9:00 pm'
+
+      },
+      {
+        id: 12,
+        title: 'Robert',
+       time: '9:45 pm'
+
+      },
   ];
      const checkPermission = async () => {
              try {
@@ -176,7 +211,8 @@ checkPermission()
   name:{
       marginLeft:wp('5'),
       marginBottom:hp('3'),
-      color:'black'
+      color:'black',
+      fontFamily:'Manrope-Medium'
 
   }
 
