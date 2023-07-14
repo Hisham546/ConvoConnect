@@ -35,32 +35,31 @@ const [accountName,setAccountName]=useState('');
 
 
  return(
-          <View style={styles.container}>
+       <View style={styles.container}>
              <View style={styles.headingContainer}>
                  <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
-                          <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
-                          </TouchableOpacity>
+                     <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
+                 </TouchableOpacity>
                <Text style={styles.settingsHeader}>Settings</Text>
              </View>
           <View style={styles.profileContainer}>
-                  <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
-                        <View style={{height:hp('13'),width:wp('30'),justifyContent:'center',alignItems:'center'}}>
-                        <Text style={{fontSize:hp('1.60'),color:'black'}}>{accountName}</Text>
-                         <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('5'),marginTop:hp('.50')}}>About</Text>
-                            </View>
-                      </View>
-    <View style={styles.settingsOptions}>
-             <MaterialIcon name={'account'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
-                          <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('5')}}>Account</Text>
-                        </View>
-
- <View style={styles.settingsOptions}>
-              <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
-                           <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('5')}}>Privacy</Text>
-                         </View>
-
+              <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
+                 <View style={{height:hp('13'),width:wp('30'),justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{fontSize:hp('1.60'),color:'black'}}>{accountName}</Text>
+                     <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('5'),marginTop:hp('.50')}}>About</Text>
+                 </View>
           </View>
-       )
+             <View style={styles.settingsOptions}>
+                 <MaterialIcon name={'account'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
+                      <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('5')}}>Account</Text>
+             </View>
+                <View style={styles.settingsOptions}>
+                    <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'}  style={styles.threeDotIcon} />
+                          <Text style={{fontSize:hp('1.50'),color:'black',marginLeft:wp('5')}}>Privacy</Text>
+                </View>
+
+       </View>
+ )
 
 
 

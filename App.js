@@ -8,6 +8,7 @@ import Signup from './src/components/login/signup';
 import Otp from './src/components/login/otp'
 import Interface from './src/components/chatInterface/interface';
 import ProfileDetails from './src/components/chatInterface/profileDetails';
+
 const Stack = createStackNavigator();
 
 
@@ -39,7 +40,8 @@ const App = () => {
             <Stack.Screen
                   options={{headerShown : false}}
                   name="ProfileDetails"
-                  component={ProfileDetails}/>             
+                  component={ProfileDetails}/>
+
         </Stack.Navigator>
 
     </NavigationContainer>

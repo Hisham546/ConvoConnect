@@ -81,7 +81,7 @@ return(
 
       style={styles.container} >
          <View style={styles.headingContainer}>
-           <TouchableOpacity onPress={()=>test()}>
+           <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
            <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={()=> navigation.navigate('ProfileDetails',{user})}>

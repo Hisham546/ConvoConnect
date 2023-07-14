@@ -15,14 +15,28 @@ import Calls from "./calls";
 import Chats from "./chats";
 import Status from "./status";
 const Tab = createMaterialTopTabNavigator();
+import { useSelector, useDispatch } from "react-redux";
+import Camera from '../../camera/camera';
+import { triggerCamera,openModalPopup } from '../../state/counterReducer';
 
  export default function Dashboard ({navigation}) {
 
+
+    const openModal = useSelector((state) => state.counter.openModal);
+
+    const dispatch= useDispatch()
+
+
  return(
+
+
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
  <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3'),fontSize:hp('2.20')}}>WhatsApp</Text>
+    <TouchableOpacity  onPress={() => dispatch(openModalPopup(true))}>
                  <MaterialIcon name={'camera-enhance'} size={hp('2.65%')} color={'white'}  style={styles.cameraIcon} />
+        </TouchableOpacity>
+      {openModal ? <Camera /> : null}
         <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'white'}  style={styles.searchIcon} />
 
         <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>

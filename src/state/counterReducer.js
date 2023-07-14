@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
 
- phone : '',
- camera: false,
-
+    phone : '',
+    camera: false,
+    openModal: false,
 
 }
 
@@ -22,13 +22,18 @@ export const counterSlice = createSlice({
        state.camera = action.payload
 
       },
+  openModalPopup : (state,action) => {
+       state.openModal = action.payload
+
+      },
         }
       })
 
-        export const {
-    addingPhoneNumber,
-    triggerCamera,
-} = counterSlice.actions;
+    export const {
+         addingPhoneNumber,
+         triggerCamera,
+         openModalPopup,
+   } = counterSlice.actions;
 
 
   export default counterSlice.reducer;
