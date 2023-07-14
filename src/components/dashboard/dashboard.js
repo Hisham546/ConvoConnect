@@ -2,8 +2,8 @@ import React from 'react';
 
 import {
 View,
-Image,
-Text,FlatList,
+Image,BackHandler,
+Text,FlatList,Alert,
 StyleSheet,TouchableOpacity,
 TextInput}
 from "react-native";
@@ -18,13 +18,34 @@ const Tab = createMaterialTopTabNavigator();
 import { useSelector, useDispatch } from "react-redux";
 import Camera from '../../camera/camera';
 import { triggerCamera,openModalPopup } from '../../state/counterReducer';
-
+import { PermissionsAndroid } from 'react-native';
+import Toast from "react-native-simple-toast";
  export default function Dashboard ({navigation}) {
 
 
     const openModal = useSelector((state) => state.counter.openModal);
 
     const dispatch= useDispatch()
+
+ //--To check the user granted the necessary permissions or not
+   const checkCameraPermission = async () => {
+               try {
+                 const granted = await PermissionsAndroid.request(
+                   PermissionsAndroid.PERMISSIONS.CAMERA
+                 );
+                 console.log('Permission status:', granted);
+                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                   dispatch(openModalPopup(true));
+                 } else {
+                   Alert.alert(
+                     'Permission Denied!',
+                     'You need to give storage permission to get the contacts'
+                   );
+                 }
+               } catch (err) {
+                 console.warn(err);
+               }
+             };
 
 
  return(
@@ -33,7 +54,7 @@ import { triggerCamera,openModalPopup } from '../../state/counterReducer';
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
  <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3'),fontSize:hp('2.20')}}>WhatsApp</Text>
-    <TouchableOpacity  onPress={() => dispatch(openModalPopup(true))}>
+    <TouchableOpacity  onPress={() => checkCameraPermission() }>
                  <MaterialIcon name={'camera-enhance'} size={hp('2.65%')} color={'white'}  style={styles.cameraIcon} />
         </TouchableOpacity>
       {openModal ? <Camera /> : null}

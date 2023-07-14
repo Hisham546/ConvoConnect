@@ -21,13 +21,13 @@ export default function Camera(navigation){
     const dispatch= useDispatch()
 console.log(openModal,'.........')
 
-//    openCamera({
-//        width: 300,
-//        height: 400,
-//        cropping: true
-//      }).then(image => {
-//        console.log(image);
-//      });
+    openCamera({
+        width: 300,
+        height: 400,
+        cropping: true
+      }).then(image => {
+        console.log(image);
+      });
 
 
 
