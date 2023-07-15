@@ -8,6 +8,7 @@ import Signup from './src/components/login/signup';
 import Otp from './src/components/login/otp'
 import Interface from './src/components/chatInterface/interface';
 import ProfileDetails from './src/components/chatInterface/profileDetails';
+import { MenuProvider } from 'react-native-popup-menu';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ const Stack = createStackNavigator();
 const App = () => {
 
   return (
+   <MenuProvider>
         <NavigationContainer>
         <Stack.Navigator>
             <Stack.Screen
@@ -43,8 +45,8 @@ const App = () => {
                   component={ProfileDetails}/>
 
         </Stack.Navigator>
-
     </NavigationContainer>
+ </MenuProvider>
 );
 }
 

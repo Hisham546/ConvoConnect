@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
 View,
@@ -20,9 +20,25 @@ import Camera from '../../camera/camera';
 import { triggerCamera,openModalPopup } from '../../state/counterReducer';
 import { PermissionsAndroid } from 'react-native';
 import Toast from "react-native-simple-toast";
+//import {
+//  Menu,
+//  MenuOptions,
+//  MenuOption,
+//  MenuTrigger,
+//} from 'react-native-popup-menu';
+  import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
  export default function Dashboard ({navigation}) {
 
+  const [visible, setVisible] = useState(false);
 
+  const hideMenu = () => setVisible(false);
+   function goTOSettings() {
+   navigation.navigate('Settings')
+   setVisible(false);
+
+   }
+
+  const showMenu = () => setVisible(true);
     const openModal = useSelector((state) => state.counter.openModal);
 
     const dispatch= useDispatch()
@@ -60,9 +76,24 @@ import Toast from "react-native-simple-toast";
       {openModal ? <Camera /> : null}
         <MaterialIcon name={'magnify'} size={hp('2.65%')} color={'white'}  style={styles.searchIcon} />
 
-        <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
+      {/*  <TouchableOpacity onPress={()=>navigation.navigate('Settings')}>
              <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'white'}  style={styles.threeDotIcon} />
-             </TouchableOpacity>
+             </TouchableOpacity>*/}
+                    <Menu
+                          visible={visible}
+                          style ={styles.menuStyle}
+                          anchor={
+                                  <TouchableOpacity activeOpacity={1} onPress={showMenu}>
+                                    <MaterialIcon name={'dots-vertical'} size={hp('2.65%')} color={'white'}  style={styles.threeDotIcon} />
+                                  </TouchableOpacity>
+                                 }
+                    onRequestClose={hideMenu}>
+                           <MenuItem textStyle ={styles.menuTextStyle} onPress={() => goTOSettings()}>Settings</MenuItem>
+                              <MenuItem  textStyle ={styles.menuTextStyle} onPress={hideMenu}>About</MenuItem>
+
+
+                             </Menu>
+
 </View>
     <Tab.Navigator
           screenOptions={{
@@ -123,7 +154,19 @@ import Toast from "react-native-simple-toast";
    threeDotIcon:{
       marginTop:hp('3'),
       marginRight:wp('4')
-   }
+   },
+ menuStyle:{
+       backgroundColor :'white',
+       width:wp('40'),
+       marginLeft:wp('2.50')
+
+ },
+ menuTextStyle:{
+ color:'black',
+ fontSize:hp('1.50'),
+ fontFamily:'Manrope-Regular'
+
+ },
 
 
 
