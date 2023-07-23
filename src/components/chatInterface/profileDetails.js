@@ -11,7 +11,7 @@ import {
  
 export default function  ProfileDetails({navigation,route}){
     const[user]=useState(route.params.user)
-    console.log(user,'........user')
+   // console.log(user,'........user')
 return(
 
 
