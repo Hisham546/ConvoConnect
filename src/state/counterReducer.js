@@ -4,6 +4,7 @@ const initialState = {
     phone : '',
     camera: false,
     openModal: false,
+    profileImage:'',
 
 }
 
@@ -22,9 +23,12 @@ export const counterSlice = createSlice({
        state.camera = action.payload
 
       },
-  openModalPopup : (state,action) => {
-       state.openModal = action.payload
+      openModalPopup : (state,action) => {
+         state.openModal = action.payload
 
+      },
+      updateProfileImage: (state,action) => {
+          state.profileImage = action.payload
       },
         }
       })
@@ -33,6 +37,7 @@ export const counterSlice = createSlice({
          addingPhoneNumber,
          triggerCamera,
          openModalPopup,
+         updateProfileImage,
    } = counterSlice.actions;
 
 

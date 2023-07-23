@@ -10,11 +10,17 @@ from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import database from '@react-native-firebase/database';
+import { useSelector, useDispatch } from "react-redux";
+import Camera from '../../camera/camera';
+import { triggerCamera,openModalPopup } from '../../state/counterReducer';
+import { PermissionsAndroid } from 'react-native';
 export default function Settings({navigation}){
 
 
 
+    const openModal = useSelector((state) => state.counter.openModal);
 
+    const dispatch= useDispatch()
 
 const [accountName,setAccountName]=useState('');
 
@@ -32,6 +38,25 @@ const [accountName,setAccountName]=useState('');
     }, []);
 
 
+ //--To check the user granted the necessary permissions or not
+   const checkCameraPermission = async () => {
+               try {
+                 const granted = await PermissionsAndroid.request(
+                   PermissionsAndroid.PERMISSIONS.CAMERA
+                 );
+                 console.log('Permission status:', granted);
+                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                   dispatch(openModalPopup(true));
+                 } else {
+                   Alert.alert(
+                     'Permission Denied!',
+                     'You need to give storage permission to get the contacts'
+                   );
+                 }
+               } catch (err) {
+                 console.warn(err);
+               }
+             };
 
 
  return(
@@ -43,7 +68,9 @@ const [accountName,setAccountName]=useState('');
                <Text style={styles.settingsHeader}>Settings</Text>
              </View>
           <View style={styles.profileContainer}>
+         <TouchableOpacity activeOpacity={1} onPress={() => checkCameraPermission() }>
               <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
+              </TouchableOpacity>
                  <View style={{height:hp('13'),width:wp('30'),justifyContent:'center',alignItems:'center'}}>
                     <Text style={{fontSize:hp('1.60'),color:'black'}}>{accountName}</Text>
                      <Text style={{fontSize:hp('1.50'),color:'black',marginRight:wp('5'),marginTop:hp('.50')}}>About</Text>
