@@ -19,9 +19,9 @@ export default function Settings({navigation}){
 
 
     const openModal = useSelector((state) => state.counter.openModal);
-
+    const profileImage = useSelector((state) => state.counter.profileImage);
     const dispatch= useDispatch()
-
+console.log(profileImage,'.......')
 const [accountName,setAccountName]=useState('');
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const [accountName,setAccountName]=useState('');
              </View>
           <View style={styles.profileContainer}>
          <TouchableOpacity activeOpacity={1} onPress={() => checkCameraPermission() }>
-              <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
+              <Image resizeMode="cover"  style={styles.tinyLogo} source={profileImage ? { uri: profileImage } : require('../../assets/profile.jpg')}  />
               </TouchableOpacity>
                  <View style={{height:hp('13'),width:wp('30'),justifyContent:'center',alignItems:'center'}}>
                     <Text style={{fontSize:hp('1.60'),color:'black'}}>{accountName}</Text>
@@ -131,9 +131,9 @@ const styles =StyleSheet.create({
 
      },
        tinyLogo:{
-           height: hp('7%'),
-           width: wp('12%'),
-           borderRadius: wp('5%'),
+           height: 60,
+           width: 60,
+           borderRadius:30,
            marginLeft:wp('8')
        },
 
