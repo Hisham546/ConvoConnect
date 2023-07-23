@@ -150,13 +150,7 @@ const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
                   cardElevation={2}
                   cardMaxElevation={2} style={styles.chatCard}>
                      <View style={styles.userChatBox}>
- <Image
-
-                 key={item.id}
-                 resizeMode="cover"
-                 style={styles.tinyLogo}
- source={{ uri: `${item.image}` }}
-               />
+                   <Image resizeMode="cover"  style={styles.tinyLogo} source={require('../../assets/profile.jpg')}  />
                    <Text style={styles.name}>{item.title}</Text>
                   {/* <Text style={styles.name}>{item.displayName}</Text>*/}
 
