@@ -23,25 +23,27 @@ export default function Camera(navigation){
 
 
     const chooseImage = (cropping) => {
-   ImagePicker.openCamera({
-     width: 300,
-     height: 400,
-     cropping: true,
-   }).then(image => {
-     console.log(image);
-     dispatch(updateProfileImage(image.path))
-   });
-}
-                   const chooseGallery = (cropping) => {
-                 ImagePicker.openPicker({
-                   width: 300,
-                   height: 400,
-                   cropping: true
-                 }).then(image => {
-                   console.log(image);
-                dispatch(updateProfileImage(image.path))
-                 });
-            }
+       ImagePicker.openCamera({
+          width: 300,
+          height: 400,
+          cropping: true,
+       }).then(image => {
+        // console.log(image);
+           dispatch(updateProfileImage(image.path))
+           dispatch(openModalPopup(false))
+      });
+    }
+          const chooseGallery = (cropping) => {
+             ImagePicker.openPicker({
+                width: 300,
+                height: 400,
+                cropping: true
+             }).then(image => {
+             //  console.log(image);
+                 dispatch(updateProfileImage(image.path))
+                 dispatch(openModalPopup(false))
+             });
+          }
 return(
 
 
