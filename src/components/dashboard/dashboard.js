@@ -70,7 +70,7 @@ import Toast from "react-native-simple-toast";
  <View style ={styles.container}>
  <View style ={styles.topViewContainer}>
  <Text style={{color:'white',marginLeft:wp('4'),marginTop:hp('3'),fontSize:hp('2.20')}}>WhatsApp</Text>
-    <TouchableOpacity  onPress={() => checkCameraPermission() }>
+    <TouchableOpacity activeOpacity={1} onPress={() => checkCameraPermission() }>
                  <MaterialIcon name={'camera-enhance'} size={hp('2.65%')} color={'white'}  style={styles.cameraIcon} />
         </TouchableOpacity>
       {openModal ? <Camera /> : null}

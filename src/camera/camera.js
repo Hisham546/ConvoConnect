@@ -50,29 +50,28 @@ return(
                visible={openModal}>
            <View style={styles.TransparentView}>
                    <View style={styles.modalView}>
-
                      <View style={styles.mainView}>
-                          <View style={{width:wp('100'),flexDirection:'row',justifyContent:'space-around',height:hp('5')}}>
-                    <Text style={{fontFamily:'Manrope-Bold',fontSize:hp('2.10'),color:'white',marginTop:hp('1.50'),marginRight:wp('43.50')}}> Add Photo</Text>
+                          <View style={{width:wp('100'),flexDirection:'row',justifyContent:'space-around',height:hp('7')}}>
+                    <Text style={{fontFamily:'Manrope-Bold',fontSize:hp('2.10'),color:'black',marginTop:hp('2.50'),marginRight:wp('43.50')}}> Add Photo</Text>
                       <TouchableOpacity  style={styles.closeButton}
                         onPress={() => dispatch(openModalPopup(false))}>
-                          <MaterialIcon name={'close-circle-outline'} size={hp('3%')} color={'#e1e1e1'}  style={styles.threeDotIcon} />
+                          <MaterialIcon name={'close-circle-outline'} size={hp('3%')} color={'black'}  style={styles.threeDotIcon} />
                       </TouchableOpacity>
                       </View>
-                      <View style={{width:wp('100'),height:hp('16'),flexDirection:'row',alignItems:'center',justifyContent:'space-around' }}>
+                      <View style={{width:wp('100'),height:hp('17'),flexDirection:'row',alignItems:'center',justifyContent:'space-around' }}>
                          <View style={styles.iconView}>
 
-                           <TouchableOpacity onPress={() => chooseImage()} style={{width:45,height:45,
-                              borderRadius:22.5,borderColor:'#9DC08B',justifyContent:'center',alignItems:'center',borderWidth:wp('.3')}}>
-                             <MaterialIcon name={'camera-enhance-outline'} size={hp('3%')} color={'#41644A'}   />
+                           <TouchableOpacity onPress={() => chooseImage()} style={{width:50,height:50,
+                              borderRadius:25,borderColor:'#9DC08B',justifyContent:'center',alignItems:'center',borderWidth:wp('.3')}}>
+                             <MaterialIcon name={'camera-enhance-outline'} size={hp('3%')} color={'gray'}   />
                           </TouchableOpacity>
 
                             <Text style={styles.cameraTexts}> Camera</Text>
                          </View>
                          <View style={styles.iconView}>
-                              <TouchableOpacity onPress={() => chooseGallery()}  style={{width:45,height:45,
-                              borderRadius:22.5,borderColor:'#9DC08B',justifyContent:'center',alignItems:'center',borderWidth:wp('.3')}}>
-                             <MaterialIcon name={'image'} size={hp('3%')} color={'#41644A'}  />
+                              <TouchableOpacity onPress={() => chooseGallery()}  style={{width:50,height:50,
+                              borderRadius:25,borderColor:'#9DC08B',justifyContent:'center',alignItems:'center',borderWidth:wp('.3')}}>
+                             <MaterialIcon name={'image'} size={hp('3%')} color={'gray'}  />
                           </TouchableOpacity>
                                <Text style={styles.cameraTexts}>Gallery</Text>
 
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
         { translateY: -90 }],
         height: hp('24%'),
         width: width * 1,
-        backgroundColor: "#A0C49D",
+        backgroundColor: "white",
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15
    },
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
    closeButton:{
      width:wp('5'),
      height:hp('5'),
-     marginTop:hp('1.50'),
+     marginTop:hp('2.50'),
 
 
    },
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
      textAlign: 'center',
    },
    cameraTexts:{
-      color:'#F5F5F5',
+      color:'black',
       fontSize:hp('1.50'),
       fontFamily:'Manrope-Regular',
       marginTop:hp('1')
