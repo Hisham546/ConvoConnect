@@ -21,82 +21,82 @@ import CardView from 'react-native-cardview'
       id: 1,
       title: 'Sundar',
       time: '1:00 pm',
-      uri:'https://legacy.reactjs.org/logo-og.png'
+      image:'https://legacy.reactjs.org/logo-og.png'
 
     },
     {
       id: 2,
       title: 'Elon',
       time: '4:50 pm',
-            uri:'https://legacy.reactjs.org/logo-og.png'
+            image:'https://legacy.reactjs.org/logo-og.png'
     },
     {
       id: 3,
       title: 'Arnold',
       time: '2:30 pm',
-         uri:'https://legacy.reactjs.org/logo-og.png'
+      image:'https://legacy.reactjs.org/logo-og.png'
 
     },
       {
         id: 4,
         title: 'Ruby',
-      time: '7:00 pm',
-           uri:'https://legacy.reactjs.org/logo-og.png'
+        time: '7:00 pm',
+        image:'https://legacy.reactjs.org/logo-og.png'
 
       },
       {
         id: 5,
         title: 'Steve Rogers',
-          time: '9:00 pm',
-         uri:'https://legacy.reactjs.org/logo-og.png'
+        time: '9:00 pm',
+        image:'https://legacy.reactjs.org/logo-og.png'
 
       },
       {
         id: 6,
         title: 'Robert',
-       time: '9:45 pm',
-          uri:'https://legacy.reactjs.org/logo-og.png'
+        time: '9:45 pm',
+        image:'https://legacy.reactjs.org/logo-og.png'
 
       },
- {
+     {
       id: 7,
       title: 'Sundar',
       time: '1:00 pm',
-         uri:'https://legacy.reactjs.org/logo-og.png'
+      image:'https://legacy.reactjs.org/logo-og.png'
 
     },
     {
       id: 8,
       title: 'Elon',
       time: '4:50 pm',
-            uri:'https://legacy.reactjs.org/logo-og.png'
+       image:'https://legacy.reactjs.org/logo-og.png'
     },
     {
       id: 9,
       title: 'Arnold',
       time: '2:30 pm',
-         uri:'https://legacy.reactjs.org/logo-og.png'
+      image:'https://legacy.reactjs.org/logo-og.png'
 
     },
       {
         id: 10,
         title: 'Ruby',
-      time: '7:00 pm',
-           uri:'https://legacy.reactjs.org/logo-og.png'
+        time: '7:00 pm',
+        image:'https://legacy.reactjs.org/logo-og.png'
 
       },
       {
         id: 11,
         title: 'Steve Rogers',
-          time: '9:00 pm',
-            uri:'https://legacy.reactjs.org/logo-og.png'
+        time: '9:00 pm',
+        image:'https://legacy.reactjs.org/logo-og.png'
 
       },
       {
         id: 12,
         title: 'Robert',
-       time: '9:45 pm',
-         uri:'https://legacy.reactjs.org/logo-og.png'
+        time: '9:45 pm',
+        image:'https://legacy.reactjs.org/logo-og.png'
 
       },
   ];
@@ -151,12 +151,13 @@ const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
                   cardMaxElevation={2} style={styles.chatCard}>
                      <View style={styles.userChatBox}>
  <Image
-          key={item.id}
-          resizeMode="cover"
-          style={styles.tinyLogo}
-          source={require('../../assets/profile.jpg')} // Replace with your local image path
-        />
-                    <Text style={styles.name}>{item.title}</Text>
+
+                 key={item.id}
+                 resizeMode="cover"
+                 style={styles.tinyLogo}
+ source={{ uri: `${item.image}` }}
+               />
+                   <Text style={styles.name}>{item.title}</Text>
                   {/* <Text style={styles.name}>{item.displayName}</Text>*/}
 
                     </View>
@@ -209,7 +210,8 @@ const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
       height: 40,
       width: 40,
       borderRadius:20,
-      marginLeft:wp('5')
+      marginLeft:wp('5'),
+
   },
   userChatBox:{
       width:wp('50'),
