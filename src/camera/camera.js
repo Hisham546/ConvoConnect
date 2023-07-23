@@ -48,11 +48,12 @@ return(
                animationType="slide"
                transparent={true}
                visible={openModal}>
-                 <View style={styles.centeredView}>
+           <View style={styles.TransparentView}>
                    <View style={styles.modalView}>
+
                      <View style={styles.mainView}>
-                          <View style={{width:wp('100'),flexDirection:'row',justifyContent:'space-between',height:hp('5')}}>
-                    <Text style={{fontFamily:'Manrope-Bold',fontSize:hp('1.90'),color:'white',marginTop:hp('.70'),marginLeft:wp('1')}}> Add Photo</Text>
+                          <View style={{width:wp('100'),flexDirection:'row',justifyContent:'space-around',height:hp('5')}}>
+                    <Text style={{fontFamily:'Manrope-Bold',fontSize:hp('2.10'),color:'white',marginTop:hp('1.50'),marginRight:wp('43.50')}}> Add Photo</Text>
                       <TouchableOpacity  style={styles.closeButton}
                         onPress={() => dispatch(openModalPopup(false))}>
                           <MaterialIcon name={'close-circle-outline'} size={hp('3%')} color={'#e1e1e1'}  style={styles.threeDotIcon} />
@@ -78,8 +79,9 @@ return(
                          </View>
 </View>
                       </View>
+                      </View>
                        </View>
-                 </View>
+
          </Modal>
 
 
@@ -89,14 +91,9 @@ return(
 const styles = StyleSheet.create({
 
 
-   centeredView: {
-     flex: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
-     marginTop: 22,
-   },
+
    modalView: {
-       position: "absolute",
+        position: "absolute",
         top: hp('88%'),
         left: wp('40%'),
         elevation: 10,
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
         { translateY: -90 }],
         height: hp('24%'),
         width: width * 1,
-        backgroundColor: "white",
+        backgroundColor: "#A0C49D",
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15
    },
@@ -126,8 +123,8 @@ const styles = StyleSheet.create({
    closeButton:{
      width:wp('5'),
      height:hp('5'),
-     marginTop:hp('.70'),
-     marginRight:wp('1')
+     marginTop:hp('1.50'),
+
 
    },
    textStyle: {
@@ -152,5 +149,9 @@ const styles = StyleSheet.create({
      justifyContent:'center',
      alignItems:'center'
 
-   }
+   },
+       TransparentView: {
+           flex: 1,
+           backgroundColor: "rgba(44, 44, 44, 0.7)",
+       },
 })
