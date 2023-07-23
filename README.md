@@ -1,4 +1,5 @@
 # whatsapp-clone
-A chat app integrated with Firebase realtime database.
+This app basically like a chat app with whatsapp ui.for the real time chat update firebase realtime database is used
+
 
 still in development
