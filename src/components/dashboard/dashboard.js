@@ -19,14 +19,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Camera from '../../camera/camera';
 import { openModalPopup } from '../../state/counterReducer';
 import { PermissionsAndroid } from 'react-native';
-
-//import {
-//  Menu,
-//  MenuOptions,
-//  MenuOption,
-//  MenuTrigger,
-//} from 'react-native-popup-menu';
-  import { Menu, MenuItem,  } from 'react-native-material-menu';
+ import { Menu, MenuItem,  } from 'react-native-material-menu';
+ 
  export default function Dashboard ({navigation}) {
 
   const [visible, setVisible] = useState(false);
