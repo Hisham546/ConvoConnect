@@ -12,8 +12,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import database from '@react-native-firebase/database';
 import { useSelector, useDispatch } from "react-redux";
-import Camera from '../../camera/camera';
-import { triggerCamera, openModalPopup } from '../../state/counterReducer';
+import {  openModalPopup } from '../../state/counterReducer';
 import { PermissionsAndroid } from 'react-native';
 export default function Settings({ navigation }) {
 
