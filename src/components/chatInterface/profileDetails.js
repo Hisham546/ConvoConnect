@@ -9,7 +9,7 @@ import {
     import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
     import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
  
-export default function  ProfileDetails({navigation,route}){
+export default function  ProfileDetails({ route, navigation: { goBack }, navigation}){
     const[user]=useState(route.params.user)
 
 return(
@@ -18,7 +18,7 @@ return(
 <View style={styles.mainContainer}>
     
     <View style={styles.firstView}>
-    <TouchableOpacity onPress={()=>navigation.navigate('Interface',{user})}>
+    <TouchableOpacity onPress={()=>goBack()}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
            <Image resizeMode="cover"  style={styles.profileLogo} source={require('../../assets/profile.jpg')}  />
