@@ -1,15 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {
 View,
-Image,BackHandler,
-Text,FlatList,Alert,
+Text,Alert,
 StyleSheet,TouchableOpacity,
-TextInput}
+}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import ActionButton from 'react-native-circular-action-menu';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Calls from "./calls";
 import Chats from "./chats";
@@ -20,7 +18,7 @@ import Camera from '../../camera/camera';
 import { openModalPopup } from '../../state/counterReducer';
 import { PermissionsAndroid } from 'react-native';
  import { Menu, MenuItem,  } from 'react-native-material-menu';
- 
+
  export default function Dashboard ({navigation}) {
 
   const [visible, setVisible] = useState(false);
