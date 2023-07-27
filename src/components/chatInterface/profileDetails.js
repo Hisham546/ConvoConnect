@@ -11,7 +11,7 @@ import {
  
 export default function  ProfileDetails({navigation,route}){
     const[user]=useState(route.params.user)
-   // console.log(user,'........user')
+
 return(
 
 
@@ -28,6 +28,10 @@ return(
     </View>
     <View style={styles.titleView}><Text style={{color:'white',fontSize:hp('1.90'),letterSpacing:wp('.70'),fontFamily:'Manrope-Medium'}}>{user.title}</Text>
            </View>
+           <View style={{width:wp('100'),height:hp('8'),flexDirection:'row',justifyContent:'space-evenly',backgroundColor:'#128C7E'}}>         
+           <MaterialIcon name={'video'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} /> 
+           <MaterialIcon name={'phone'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />         
+           </View>    
     <View style={styles.belowView}>
 
 
@@ -87,7 +91,7 @@ const styles = StyleSheet.create ({
         width:wp('100'),
         height:hp('30'),
         marginTop:hp('1'),
-        backgroundColor:'#128C7E',
+       // backgroundColor:'#128C7E',
         flexDirection:'row',
         justifyContent:'space-between'
 
