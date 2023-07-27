@@ -117,7 +117,7 @@ return(
 
               />
                <TouchableOpacity onPress={()=>generateRecipientId()} style={styles.sendButton}>
-                           <MaterialIcon name={'send'} size={hp('2.70%')} color={'white'}/>
+                           <MaterialIcon name={'send'} size={hp('2.50%')} color={'white'}/>
                        </TouchableOpacity>
            </View>
       </KeyboardAvoidingView>
@@ -191,9 +191,9 @@ const styles =StyleSheet.create({
     alignItems:'center'
  },
  sendButton:{
-    height: hp('6.50%'),
-    width: wp('14%'),
-    borderRadius:35,
+    height: 55,
+    width: 55,
+    borderRadius:27.5,
     justifyContent:'center',
     alignItems:'center',
     backgroundColor:'#128C7E',
