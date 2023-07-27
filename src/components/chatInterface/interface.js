@@ -75,13 +75,14 @@ console.log(arr)
       setMessages(messagesArray);
     });
   }, []);
+
 return(
 
       <KeyboardAvoidingView
 
       style={styles.container} >
          <View style={styles.headingContainer}>
-           <TouchableOpacity onPress={()=>navigation.navigate('Dashboard')}>
+           <TouchableOpacity activeOpacity={1} onPress={()=>navigation.navigate('Dashboard')}>
                <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'}  style={styles.threeDotIcon} />
            </TouchableOpacity>
            <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={()=> navigation.navigate('ProfileDetails',{user})}>
@@ -113,10 +114,11 @@ return(
                    onChangeText={onChangeText}
                    value={text}
                    placeholderTextColor={'gray'}
-                   placeholder={"Message"}
+                   placeholder={"Type a message"}
+         
 
               />
-               <TouchableOpacity onPress={()=>generateRecipientId()} style={styles.sendButton}>
+               <TouchableOpacity onPress={()=>dataBase()} style={styles.sendButton}>
                            <MaterialIcon name={'send'} size={hp('2.50%')} color={'white'}/>
                        </TouchableOpacity>
            </View>
@@ -156,13 +158,13 @@ const styles =StyleSheet.create({
      marginLeft:wp('4')
   },
   tinyLogo:{
-     height: hp('5%'),
-     width: wp('10%'),
-     borderRadius: wp('5%'),
+     height: 35,
+     width: 35,
+     borderRadius:17.5,
      marginLeft:wp('5')
   },
   input:{
-    height: hp('6%'),
+    height: hp('5.50%'),
     width: wp('75%'),
     color: 'black',
     fontSize: hp('1.80%'),
@@ -170,7 +172,7 @@ const styles =StyleSheet.create({
     borderRadius:30,
     paddingLeft: wp('2%'),
     marginLeft:wp('3'),
-    bottomOffset: 0
+    bottomOffset: 0,
 
 
   },
@@ -191,9 +193,9 @@ const styles =StyleSheet.create({
     alignItems:'center'
  },
  sendButton:{
-    height: 55,
-    width: 55,
-    borderRadius:27.5,
+    height: 50,
+    width: 50,
+    borderRadius:25,
     justifyContent:'center',
     alignItems:'center',
     backgroundColor:'#128C7E',

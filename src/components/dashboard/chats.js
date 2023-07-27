@@ -225,7 +225,7 @@ const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
       marginLeft:wp('5'),
       marginBottom:hp('3'),
       color:'black',
-      fontFamily:'Manrope-Medium'
+      fontFamily:'Manrope-Regular'
 
   }
 
