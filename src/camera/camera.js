@@ -57,7 +57,7 @@ return(
                      <View style={styles.mainView}>
                           <View style={{width:wp('100'),flexDirection:'row',justifyContent:'space-around',height:hp('7')}}>
                     <Text style={{fontFamily:'Manrope-Bold',fontSize:hp('2.10'),color:'black',marginTop:hp('2.50'),marginRight:wp('43.50')}}> Add Photo</Text>
-                      <TouchableOpacity  style={styles.closeButton}
+                      <TouchableOpacity activeOpacity={1} style={styles.closeButton}
                         onPress={() => dispatch(openModalPopup(false))}>
                           <MaterialIcon name={'close-circle-outline'} size={hp('3%')} color={'black'}  style={styles.threeDotIcon} />
                       </TouchableOpacity>
