@@ -4,9 +4,9 @@ import React  from 'react';
 import {
 View,
 Image,
-Text,Button,FlatList,Keyboard,Modal,Dimensions,
-StyleSheet,TouchableOpacity,KeyboardAvoidingView,Pressable,
-TextInput}
+Text,Modal,Dimensions,
+StyleSheet,TouchableOpacity,
+}
 from "react-native";
 import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {openModalPopup,updateProfileImage } from '../state/counterReducer';
 
 const { width } = Dimensions.get("window");
+
 export default function Camera(navigation){
 
     const openModal = useSelector((state) => state.counter.openModal);
