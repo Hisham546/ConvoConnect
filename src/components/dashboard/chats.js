@@ -138,19 +138,19 @@ checkPermission()
     }
   })
   }
-const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
+const image = 'https://legacy.reactjs.org/logo-og.png';
  return(
 
           <View style={styles.emptyView}>
                <FlatList
                   data={DATA}
                   renderItem={({item}) =>
-             <TouchableOpacity activeOpacity={0.9}  onPress={() => navigation.navigate('Interface',{data:item})}>
+             <TouchableOpacity activeOpacity={0.9}  onPress={() => navigation.navigate('Interface',{data:item,image})}>
                 <CardView
                   cardElevation={2}
                   cardMaxElevation={2} style={styles.chatCard}>
                      <View style={styles.userChatBox}>
-                   <Image resizeMode="cover"  style={styles.tinyLogo} source={{uri: 'https://pngtree.com/free-png-vectors/user-icon'}}  />
+                   <Image resizeMode="cover"  style={styles.tinyLogo} source={{uri: image}}  />
                    <Text style={styles.name}>{item.title}</Text>
                   {/* <Text style={styles.name}>{item.displayName}</Text>*/}
 

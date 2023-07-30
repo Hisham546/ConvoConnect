@@ -17,6 +17,7 @@ import Toast from 'react-native-toast-message';
 export default function Interface({route,navigation}){
 
 const[user,setUser]=useState(route.params.data)
+const [image]= route.params.image
 const[title,setTitle]=useState(route.params.data.title)
  const [text, onChangeText] = React.useState('');
 const [messages, setMessages] = useState([]);
