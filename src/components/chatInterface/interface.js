@@ -65,15 +65,18 @@ console.log(arr)
   }
 
   useEffect(() => {
-    const ref = database().ref('chat');
-    ref.on('value', (snapshot) => {
-      const messagesArray = [];
-      snapshot.forEach((childSnapshot) => {
-        const message = childSnapshot.val();
-        messagesArray.push(message);
-      });
-      setMessages(messagesArray);
+  const fetchMessages = async() => {
+    const ref = await database().ref('chat');
+      ref.on('value', (snapshot) => {
+       const messagesArray = [];
+       snapshot.forEach((childSnapshot) => {
+         const message = childSnapshot.val();
+         messagesArray.push(message);
+     });
+     setMessages(messagesArray);
     });
+  };
+  fetchMessages()
   }, []);
 
 return(
