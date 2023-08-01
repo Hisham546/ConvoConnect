@@ -87,39 +87,39 @@ export default function Signup({ navigation }) {
     } catch (error) {
       if (error.code == 'auth/too-many-requests') {
         Toast.show('Too-many-requests', Toast.SHORT);
-        console.log('auth/too-many-requests',error);
+        console.log('auth/too-many-requests', error);
       } else if (error.code === 'auth/user-disabled') {
         Toast.show('Sorry, this phone number has been blocked.', Toast.SHORT)
-        console.log('auth/user-disabled',error);
+        console.log('auth/user-disabled', error);
       } else {
         Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
           + 'Please try again later. '
           + '\n\nIf the issue persists, please contact support.', Toast.SHORT);
-         console.log(error);
+        console.log(error);
       }
     }
   };
-  const goToDashboard = () =>{
+  const goToDashboard = () => {
 
     navigation.navigate('Dashboard');
 
   }
-  useEffect (() => {
+  useEffect(() => {
 
     async function retrieveUserSession() {
-      try {   
-          const session = await EncryptedStorage.getItem("user_login");
-      
-          if (session !== undefined) {
-            goToDashboard()
+      try {
+        const session = await EncryptedStorage.getItem("user_login");
 
-            // console.log(session,'......session')
-          }
+        if (session !== undefined) {
+          goToDashboard()
+
+          // console.log(session,'......session')
+        }
       } catch (error) {
 
       }
-  }
-  retrieveUserSession()
+    }
+    retrieveUserSession()
 
   }, []);
 
@@ -148,20 +148,20 @@ export default function Signup({ navigation }) {
 
   async function storeUserSession() {
     try {
-        await EncryptedStorage.setItem(
-            "user_login",
-            JSON.stringify({
-               
-                'number' :phoneNumber ,
-           
-            })
-        );
+      await EncryptedStorage.setItem(
+        "user_login",
+        JSON.stringify({
 
-        // Congrats! You've just stored your first value!
+          'number': phoneNumber,
+
+        })
+      );
+
+      // Congrats! You've just stored your first value!
     } catch (error) {
-        // There was an error on the native side
+      // There was an error on the native side
     }
-}
+  }
   const onFocus = (control) => {
     setfocusControl(control)
   };
