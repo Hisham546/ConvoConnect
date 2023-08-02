@@ -79,6 +79,7 @@ const onSubmit = () => {
     Toast.show('OTP cannot be empty',Toast.SHORT);
   }
 }
+
  return(
        <View style={styles.container}>
           <View style={styles.upperView}>

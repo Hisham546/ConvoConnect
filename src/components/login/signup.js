@@ -115,6 +115,10 @@ export default function Signup({ navigation }) {
 
           // console.log(session,'......session')
         }
+        else{
+
+          Toast.show("please login", Toast.SHORT);    
+        }
       } catch (error) {
 
       }
@@ -162,6 +166,29 @@ export default function Signup({ navigation }) {
       // There was an error on the native side
     }
   }
+
+  const PersonSchema = {
+    name: 'userNumber',
+    primaryKey: 'id',
+    properties: {
+      id: 'int',
+      number:'int'
+    },
+  };
+  const realmConfig = {
+    schema: [PersonSchema],
+    schemaVersion: 0,
+  };
+  const addPerson = () => {
+    realm.write(() => {
+      realm.create('userNumber', {
+        id: new Date().getTime(),
+        number:'int'
+      });
+    });
+
+
+  };
   const onFocus = (control) => {
     setfocusControl(control)
   };
