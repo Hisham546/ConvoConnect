@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import { CommonActions } from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
-
+import Realm from 'realm';
 export default function Signup({ navigation }) {
 
 
