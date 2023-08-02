@@ -127,7 +127,7 @@ export default function Signup({ navigation }) {
 
   async function storeUserSession() {
     try {
-      storage.set('userNumber',phoneNumber)
+      storage.set('userNumber', phoneNumber)
       // Congrats! You've just stored your first value!
     } catch (error) {
       // There was an error on the native side
@@ -135,19 +135,19 @@ export default function Signup({ navigation }) {
   }
 
 
-// const handleAddDog = () => {
-//   realm.write(() => {
-//     realm.create('userNumber', {number: phoneNumber})
-//   });
-// };
+  // const handleAddDog = () => {
+  //   realm.write(() => {
+  //     realm.create('userNumber', {number: phoneNumber})
+  //   });
+  // };
 
   useEffect(() => {
-    function getUserToken(){
-    const number = storage.getString('userNumber') 
-    console.log(number, 'token generated')
-    if(number != undefined){
-      navigation.navigate('Dashboard')
-    }
+    function getUserToken() {
+      const number = storage.getString('userNumber')
+      console.log(number, 'token generated')
+      if (number != undefined) {
+        navigation.navigate('Dashboard')
+      }
     }
     getUserToken()
   }, []);
