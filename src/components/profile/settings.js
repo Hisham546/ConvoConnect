@@ -81,7 +81,7 @@ export default function Settings({ navigation }) {
           <Image resizeMode="cover" style={styles.tinyLogo} source={profileImage ? { uri: profileImage } : require('../../assets/profile.jpg')} />
         </TouchableOpacity>
         <View style={{ height: hp('13'), width: wp('30'), justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: hp('1.60'), color: 'black' }}>Username</Text>
+          <Text style={{ fontSize: hp('1.60'), color: 'black' }}>{accountName}</Text>
           <Text style={{ fontSize: hp('1.50'), color: 'black', marginRight: wp('5'), marginTop: hp('.50') }}>About</Text>
         </View>
       </View>
