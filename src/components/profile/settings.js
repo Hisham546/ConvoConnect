@@ -14,6 +14,8 @@ import database from '@react-native-firebase/database';
 import { useSelector, useDispatch } from "react-redux";
 import { openModalPopup } from '../../state/counterReducer';
 import { PermissionsAndroid } from 'react-native';
+import { MMKV } from 'react-native-mmkv'
+
 export default function Settings({ navigation }) {
 
 
