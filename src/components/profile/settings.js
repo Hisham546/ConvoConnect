@@ -26,16 +26,24 @@ export default function Settings({ navigation }) {
   const [accountName, setAccountName] = useState('');
 
   useEffect(() => {
-    database()
-      .ref('username')
-      .once('value')
-      .then(snapshot => {
-        const data = snapshot.val(); // Retrieve the data from the snapshot
-        const textValues = Object.values(data).map(item => item.text); // Extract the "text" values
-        console.log('text values:', textValues);
-        setAccountName(textValues)
+    // database()
+    //   .ref('username')
+    //   .once('value')
+    //   .then(snapshot => {
+    //     const data = snapshot.val(); // Retrieve the data from the snapshot
+    //     const textValues = Object.values(data).map(item => item.text); // Extract the "text" values
+    //     console.log('text values:', textValues);
+    //     setAccountName(textValues)
 
-      });
+    //   });
+    function getUserName() {
+      const userId = storage.getString('userName')
+    //  console.log(number, 'token generated')
+      if (userId != undefined) {
+        setAccountName(userId)
+      }
+    }
+    getUserName()
   }, []);
 
 
