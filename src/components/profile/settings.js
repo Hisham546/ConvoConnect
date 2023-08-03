@@ -18,7 +18,7 @@ import { MMKV } from 'react-native-mmkv'
 
 export default function Settings({ navigation }) {
 
-
+  const storage = new MMKV() 
 
   const openModal = useSelector((state) => state.counter.openModal);
   const profileImage = useSelector((state) => state.counter.profileImage);

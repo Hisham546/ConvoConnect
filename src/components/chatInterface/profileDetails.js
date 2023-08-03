@@ -14,7 +14,7 @@ import { openModalPopup } from '../../state/counterReducer';
 
 export default function ProfileDetails({ route, navigation: { goBack }, navigation }) {
 
-    const storage = new MMKV() 
+ 
     const openModal = useSelector((state) => state.counter.openModal);
     const dispatch = useDispatch()
     const [user] = useState(route.params.user)
