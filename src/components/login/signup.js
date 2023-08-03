@@ -166,7 +166,7 @@ export default function Signup({ navigation }) {
     // var ref = database().ref("username");
     // ref.push(data);
     try {
-      storage.set('userName', text)
+      storage.set('userName', newText)
 
     } catch (error) {
 
@@ -177,7 +177,7 @@ export default function Signup({ navigation }) {
     setText(newText)
     if (newText.length === 6) {
 
-      saveToDatabase()
+      saveToDatabase(newText)
     }
     else {
       //   Toast.show('Enter 6 digits.',Toast.SHORT)
