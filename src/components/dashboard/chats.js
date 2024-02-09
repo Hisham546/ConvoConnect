@@ -144,7 +144,7 @@ export default function Chats({ navigation }) {
 
     <View style={styles.emptyView}>
       <FlatList
-        data={DATA}
+        data={contacts}
         renderItem={({ item }) =>
           <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item, image })}>
             <CardView

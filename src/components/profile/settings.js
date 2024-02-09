@@ -12,7 +12,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import database from '@react-native-firebase/database';
 import { useSelector, useDispatch } from "react-redux";
-import { openModalPopup } from '../../state/counterReducer';
+import { openModalPopup } from '../../state/chatReducer';
 import { PermissionsAndroid } from 'react-native';
 import { MMKV } from 'react-native-mmkv'
 
@@ -20,8 +20,8 @@ export default function Settings({ navigation }) {
 
   const storage = new MMKV() 
 
-  const openModal = useSelector((state) => state.counter.openModal);
-  const profileImage = useSelector((state) => state.counter.profileImage);
+  const openModal = useSelector((state) => state.chatReducer.openModal);
+  const profileImage = useSelector((state) => state.chatReducer.profileImage);
   const dispatch = useDispatch()
   const [accountName, setAccountName] = useState('');
 

@@ -15,7 +15,7 @@ import Status from "./status";
 const Tab = createMaterialTopTabNavigator();
 import { useSelector, useDispatch } from "react-redux";
 import Camera from '../../camera/camera';
-import { openModalPopup } from '../../state/counterReducer';
+import { openModalPopup } from '../../state/chatReducer';
 import { PermissionsAndroid } from 'react-native';
 import { Menu, MenuItem, } from 'react-native-material-menu';
 
@@ -31,7 +31,7 @@ export default function Dashboard({ navigation }) {
   }
 
   const showMenu = () => setVisible(true);
-  const openModal = useSelector((state) => state.counter.openModal);
+  const openModal = useSelector((state) => state.chatReducer.openModal);
 
   const dispatch = useDispatch()
 

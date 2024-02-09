@@ -11,13 +11,13 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
-import { openModalPopup, updateProfileImage } from '../state/counterReducer';
+import { openModalPopup, updateProfileImage } from '../state/chatReducer';
 
 const { width } = Dimensions.get("window");
 
 export default function Camera(navigation) {
 
-  const openModal = useSelector((state) => state.counter.openModal);
+  const openModal = useSelector((state) => state.chatReducer.openModal);
 
   const dispatch = useDispatch()
 

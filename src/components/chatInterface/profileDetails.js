@@ -10,12 +10,12 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
-import { openModalPopup } from '../../state/counterReducer';
+import { openModalPopup } from '../../state/chatReducer';
 
 export default function ProfileDetails({ route, navigation: { goBack }, navigation }) {
 
  
-    const openModal = useSelector((state) => state.counter.openModal);
+    const openModal = useSelector((state) => state.chatReducer.openModal);
     const dispatch = useDispatch()
     const [user] = useState(route.params.user)
 

@@ -1,10 +1,10 @@
 import { configureStore} from '@reduxjs/toolkit';
-import counterReducer from './counterReducer';
+import chatReducer from './chatReducer';
 
 
 const store = configureStore({
     reducer : {
-        counter: counterReducer,
+        chatReducer: chatReducer,
     }
 });
 

@@ -14,7 +14,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import PhoneInput from "react-native-phone-number-input";
 import Toast from "react-native-simple-toast";
 import database from '@react-native-firebase/database';
-import { addingPhoneNumber } from "../../state/counterReducer";
+import { addingPhoneNumber } from "../../state/chatReducer";
 import { useDispatch } from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import { CommonActions } from '@react-navigation/native';

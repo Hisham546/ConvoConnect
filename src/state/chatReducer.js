@@ -10,7 +10,7 @@ const initialState = {
 
 
 
-export const counterSlice = createSlice({
+export const chatReducer = createSlice({
   name: 'counter',
   initialState,
   reducers: {
@@ -38,7 +38,7 @@ export const {
   triggerCamera,
   openModalPopup,
   updateProfileImage,
-} = counterSlice.actions;
+} = chatReducer.actions;
 
 
-export default counterSlice.reducer;
+export default chatReducer.reducer;
