@@ -144,7 +144,7 @@ export default function Signup({ navigation }) {
   useEffect(() => {
     function getUserToken() {
       const number = storage.getString('userNumber')
-    //  console.log(number, 'token generated')
+      //  console.log(number, 'token generated')
       if (number != undefined) {
         navigation.navigate('Dashboard')
       }
@@ -156,21 +156,17 @@ export default function Signup({ navigation }) {
     setfocusControl(control)
   };
 
-  const saveToDatabase = (newText) => {
-    // Create a new data object
-    //var data = {
-    //   text,
-    //   // a state variable that have message from text input
-    // };
-    // // Send the data to the database
-    // var ref = database().ref("username");
-    // ref.push(data);
-    try {
-      storage.set('userName', newText)
+  const saveToDatabase = (username) => {
 
-    } catch (error) {
-
-    }
+    var data = {
+      username,
+      phoneNumber,
+      // a state variable that have message from text input
+    };
+    // Send the data to the database
+    var ref = database().ref("userdetails");
+    ref.push(data);
+   
   }
 
   const checkTextLength = (newText) => {
@@ -307,6 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: wp('.4'),
     borderColor: '#128C7E',
+    color: 'black'
   },
   phoneNumberView: {
     marginTop: hp(1),

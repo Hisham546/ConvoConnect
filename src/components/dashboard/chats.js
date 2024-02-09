@@ -12,7 +12,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Contacts from 'react-native-contacts';
 import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
-
+import auth from '@react-native-firebase/auth';
 export default function Chats({ navigation }) {
 
   const [contacts, setContacts] = useState([]);
@@ -120,10 +120,25 @@ export default function Chats({ navigation }) {
     }
   };
   useEffect(() => {
-    checkPermission()
+  //  checkPermission()
+  fetchUsers()
   }, [])
 
+const fetchUsers = async () => {
+  try {
+    const userList = await auth().listUsers(1000); // Max 1000 users per call
+    const users = userList.users.map(userRecord => ({
 
+      phoneNumber: userRecord.phoneNumber,
+      // Add any other user properties you want to retrieve
+    }));
+    console.log(users,'......userslist')
+    //return users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
+};
   const getContacts = () => {
 
     Contacts.getAll().then(contacts => {

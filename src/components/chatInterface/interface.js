@@ -68,7 +68,7 @@ export default function Interface({ route, navigation }) {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const ref = await database().ref('chat');
+      const ref = database().ref('chat');
       ref.on('value', (snapshot) => {
         const messagesArray = [];
         snapshot.forEach((childSnapshot) => {

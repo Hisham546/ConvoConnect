@@ -18,7 +18,7 @@ import { CommonActions } from '@react-navigation/native';
 
  export default function Otp({navigation,route}){
 
- const mobileNo = useSelector((state) => state.counter.phone);
+ const mobileNo = useSelector((state) => state.chatReducer.phone);
 const dispatch = useDispatch();
 const [confirm,setConfirm] = useState(route.params.confirm);
 const [code,setCode] = useState(route.params.confirm.code ? route.params.confirm.code : '');
