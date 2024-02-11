@@ -104,7 +104,7 @@ export default function Signup({ navigation }) {
 
   const onNext = () => {
     if (phoneNumber === '') {
-      Toast.show("Enter your phone number first!", Toast.SHORT);
+      Toast.show("Enter your phone number ", Toast.SHORT);
     } else {
       Keyboard.dismiss();
       setLoading(true);
@@ -166,14 +166,15 @@ export default function Signup({ navigation }) {
     // Send the data to the database
     var ref = database().ref("userdetails");
     ref.push(data);
-   
-  }
 
+  }
+//need some changes here
   const checkTextLength = (newText) => {
     setText(newText)
-    if (newText.length === 6) {
-
+    if (newText.length > 6) {
+       if(phoneNumber.length === 10){
       saveToDatabase(newText)
+      }
     }
     else {
       //   Toast.show('Enter 6 digits.',Toast.SHORT)
