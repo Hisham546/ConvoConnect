@@ -13,9 +13,11 @@ import Contacts from 'react-native-contacts';
 import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 export default function Chats({ navigation }) {
 
   const [contacts, setContacts] = useState([]);
+   const [users, setUsers] = useState('');
 
   const DATA = [
     {
@@ -121,59 +123,62 @@ export default function Chats({ navigation }) {
   };
   useEffect(() => {
   //  checkPermission()
-  fetchUsers()
+  fetchMessages()
   }, [])
 
-const fetchUsers = async () => {
-  try {
-    const userList = await auth().listUsers(1000); // Max 1000 users per call
-    const users = userList.users.map(userRecord => ({
+ 
 
-      phoneNumber: userRecord.phoneNumber,
-      // Add any other user properties you want to retrieve
-    }));
-    console.log(users,'......userslist')
-    //return users;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    return [];
-  }
-};
-  const getContacts = () => {
+const fetchMessages = async () => {
+  console.log('.........hi')
+      const ref = database().ref('userdetails');
+      ref.on('value', (snapshot) => {
+        const usersArray = [];
+        snapshot.forEach((childSnapshot) => {
+          const getUsers = childSnapshot.val();
+          console.log(getUsers,'.........')
+          usersArray.push(getUsers);
+        });
+        setUsers(usersArray);
+      });
+    };
 
-    Contacts.getAll().then(contacts => {
-      // contacts returned
-      setContacts(contacts)
 
-      // console.log(contacts,'.....contactz')
-      for (let i = 0; i < contacts.length; i++) {
-        const rawContactId = contacts[i].rawContactId;
-        // console.log('Raw Contact ID:', rawContactId);
-        setUniqueKey(rawContactId)
-        // Do something with the rawContactId
-      }
-    })
-  }
-  const image = 'https://legacy.reactjs.org/logo-og.png';
+
+  // const getContacts = () => {
+
+  //   Contacts.getAll().then(contacts => {
+  //     // contacts returned
+  //     setContacts(contacts)
+
+  //     // console.log(contacts,'.....contactz')
+  //     for (let i = 0; i < contacts.length; i++) {
+  //       const rawContactId = contacts[i].rawContactId;
+  //       // console.log('Raw Contact ID:', rawContactId);
+  //       setUniqueKey(rawContactId)
+  //       // Do something with the rawContactId
+  //     }
+  //   })
+  // }
+
   return (
 
     <View style={styles.emptyView}>
       <FlatList
-        data={contacts}
+        data={users}
         renderItem={({ item }) =>
-          <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item, image })}>
+          <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
             <CardView
               cardElevation={2}
               cardMaxElevation={2} style={styles.chatCard}>
               <View style={styles.userChatBox}>
-                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} />
-                <Text style={styles.name}>{item.title}</Text>
+{/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
+                <Text style={styles.name}>{item.username}</Text>
                 {/* <Text style={styles.name}>{item.displayName}</Text>*/}
 
               </View>
-              <View style={styles.userChatBox2}>
+              {/* <View style={styles.userChatBox2}>
                 <Text style={{ fontSize: hp('1.50'), color: 'black', marginRight: wp('3') }}>{item.time}</Text>
-              </View>
+              </View> */}
             </CardView>
           </TouchableOpacity>}
 

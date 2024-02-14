@@ -18,40 +18,10 @@ import Toast from 'react-native-toast-message';
 export default function Interface({ route, navigation }) {
 
   const [user, setUser] = useState(route.params.data)
-  const [image] = route.params.image
+  //const [image] = route.params.image
   const [title, setTitle] = useState(route.params.data.title)
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
-  const [uniqueId, setUniqueId] = useState();
-
-  const generateRecipientId = () => {
-    Keyboard.dismiss();
-    if (text.length > 0) {
-      // Generate a random recipient ID or use a temporary identifier
-      const recipientId = Math.random().toString(36).substring(7);
-      dataBase(recipientId);
-      // setUniqueId(recipientId);
-    } else {
-      Toast.show('Enter some message', Toast.SHORT);
-      console.log('error');
-    }
-  };
-  const test = () => {
-    // var arr = ['a', 'b', 'c']
-    // for (let i of arr) {
-    //   console.log(i)
-
-    // }
-    //   let arr1 = [1, 2, 3]
-    // let arr2 = ['a', 'b', 'c']
-    // let arr3 = [...arr1, ...arr2] //spread
-    // console.log(arr3)
-    const arr = ['a', 'b']
-    // In the same way, we can change the contents of this array
-    arr.push('c')
-    arr[1] = 'd'
-    console.log(arr)
-  }
 
   const dataBase = (recipientId) => {
     // Create a new data object
@@ -92,7 +62,7 @@ export default function Interface({ route, navigation }) {
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={() => navigation.navigate('ProfileDetails', { user })}>
           <Image resizeMode="cover" style={styles.tinyLogo} source={require('../../assets/profile.jpg')} />
-          <Text style={styles.settingsHeader}>{user.title}</Text>
+          <Text style={styles.settingsHeader}>{user.username}</Text>
           <View style={styles.iconsHolder}>
             <MaterialIcon name={'video'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
             <MaterialIcon name={'phone'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
