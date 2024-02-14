@@ -1,4 +1,5 @@
 import { BSON, ObjectSchema } from "realm";
+import Realm from 'realm'
 
 // Define your object model
 export class Profile extends Realm.Object<Profile> {
