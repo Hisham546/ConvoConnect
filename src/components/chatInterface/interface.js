@@ -23,17 +23,21 @@ export default function Interface({ route, navigation }) {
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
 
-  const dataBase = (recipientId) => {
-    // Create a new data object
-    var data = {
-      text,
-      title,// a state variable that have message from text input
-      recipientId
-    };
-    // Add the data to the database
-    var ref = database().ref("chat");
-    ref.push(data);
+  const sendMessage = (recipientId) => {
+    if (text != '') {
+      // Create a new data object
+      var data = {
+        text,
+        title,// a state variable that have message from text input
+        recipientId
+      };
+      // Add the data to the database
+      var ref = database().ref("chat");
+      ref.push(data);
+      onChangeText('')
+    } else {
 
+    }
   }
 
   useEffect(() => {
@@ -93,7 +97,7 @@ export default function Interface({ route, navigation }) {
 
 
         />
-        <TouchableOpacity onPress={() => dataBase()} style={styles.sendButton}>
+        <TouchableOpacity onPress={() => sendMessage()} style={styles.sendButton}>
           <MaterialIcon name={'send'} size={hp('2.50%')} color={'white'} />
         </TouchableOpacity>
       </View>

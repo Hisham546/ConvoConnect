@@ -19,90 +19,6 @@ export default function Chats({ navigation }) {
   const [contacts, setContacts] = useState([]);
    const [users, setUsers] = useState('');
 
-  const DATA = [
-    {
-      id: 1,
-      title: 'Sundar',
-      time: '1:00 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 2,
-      title: 'Elon',
-      time: '4:50 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-    },
-    {
-      id: 3,
-      title: 'Arnold',
-      time: '2:30 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 4,
-      title: 'Ruby',
-      time: '7:00 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 5,
-      title: 'Steve Rogers',
-      time: '9:00 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 6,
-      title: 'Robert',
-      time: '9:45 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 7,
-      title: 'Sundar',
-      time: '1:00 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 8,
-      title: 'Elon',
-      time: '4:50 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-    },
-    {
-      id: 9,
-      title: 'Arnold',
-      time: '2:30 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 10,
-      title: 'Ruby',
-      time: '7:00 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 11,
-      title: 'Steve Rogers',
-      time: '9:00 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-    {
-      id: 12,
-      title: 'Robert',
-      time: '9:45 pm',
-      image: 'https://legacy.reactjs.org/logo-og.png'
-
-    },
-  ];
   const checkPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -129,13 +45,13 @@ export default function Chats({ navigation }) {
  
 
 const fetchMessages = async () => {
-  console.log('.........hi')
+
       const ref = database().ref('userdetails');
       ref.on('value', (snapshot) => {
         const usersArray = [];
         snapshot.forEach((childSnapshot) => {
           const getUsers = childSnapshot.val();
-          console.log(getUsers,'.........')
+        
           usersArray.push(getUsers);
         });
         setUsers(usersArray);
