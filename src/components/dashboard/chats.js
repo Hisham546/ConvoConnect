@@ -75,7 +75,7 @@ const fetchMessages = async () => {
   //     }
   //   })
   // }
-
+  const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 
     <View style={styles.emptyView}>
@@ -88,6 +88,7 @@ const fetchMessages = async () => {
               cardMaxElevation={2} style={styles.chatCard}>
               <View style={styles.userChatBox}>
 {/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
+               <Image resizeMode="cover" style={styles.tinyLogo} source={{uri:image }} />
                 <Text style={styles.name}>{item.username}</Text>
                 {/* <Text style={styles.name}>{item.displayName}</Text>*/}
 
@@ -162,7 +163,8 @@ const styles = StyleSheet.create({
     marginLeft: wp('5'),
     marginBottom: hp('3'),
     color: 'black',
-    fontFamily: 'Manrope-Regular'
+    fontWeight:'500',
+    fontSize:hp(1.80)
 
   }
 
