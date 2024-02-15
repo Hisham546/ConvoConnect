@@ -14,10 +14,18 @@ import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import {BSON} from 'realm';
+import { Profile } from '../../models/realmModels';
+import {useRealm} from '@realm/react';
+
+
+
 export default function Chats({ navigation }) {
 
   const [contacts, setContacts] = useState([]);
    const [users, setUsers] = useState('');
+
+   const realm = useRealm();
 
   const checkPermission = async () => {
     try {
@@ -39,10 +47,14 @@ export default function Chats({ navigation }) {
   };
   useEffect(() => {
   //  checkPermission()
-  fetchMessages()
+  fetchMessages();
+  getUserNumber()
   }, [])
 
- 
+  const getUserNumber = () => {
+    const people = realm.objects(Profile);
+    console.log('People:......', people);
+  };
 
 const fetchMessages = async () => {
 

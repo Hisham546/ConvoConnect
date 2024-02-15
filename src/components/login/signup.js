@@ -18,8 +18,9 @@ import { addingPhoneNumber } from "../../state/chatReducer";
 import { useDispatch } from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import { CommonActions } from '@react-navigation/native';
-
-import Realm from 'realm';
+import { BSON } from 'realm';
+import { Profile } from '../../models/realmModels';
+import { useRealm } from '@realm/react';
 import { MMKV } from 'react-native-mmkv'
 export default function Signup({ navigation }) {
 
@@ -46,7 +47,7 @@ export default function Signup({ navigation }) {
   const [country, setCountry] = useState(['91']);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const realm = useRealm();
 
   const dispatch = useDispatch();
 
@@ -76,6 +77,7 @@ export default function Signup({ navigation }) {
   //   }
   // };
   async function signInWithPhoneNumber(number) {
+    console.log(typeof (number))
     storeUserSession(number)
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
@@ -105,7 +107,8 @@ export default function Signup({ navigation }) {
   const onNext = () => {
     if (phoneNumber === '') {
       Toast.show("Enter your phone number ", Toast.SHORT);
-    } else {
+    } else {  
+      saveToDatabase(text)
       Keyboard.dismiss();
       setLoading(true);
 
@@ -125,14 +128,23 @@ export default function Signup({ navigation }) {
     });
   };
 
-  async function storeUserSession() {
-    try {
-      storage.set('userNumber', phoneNumber)
-      // Congrats! You've just stored your first value!
-    } catch (error) {
-      // There was an error on the native side
-    }
-  }
+  const storeUserSession = (number) => {
+    realm.write(() => {
+      realm.create(Profile, {
+        _id: new BSON.ObjectId(),
+        username: number,
+      });
+    });
+  };
+
+  // async function storeUserSession() {
+  //   try {
+  //     storage.set('userNumber', phoneNumber)
+  //     // Congrats! You've just stored your first value!
+  //   } catch (error) {
+  //     // There was an error on the native side
+  //   }
+  // }
 
 
   // const handleAddDog = () => {
@@ -156,8 +168,9 @@ export default function Signup({ navigation }) {
     setfocusControl(control)
   };
 
-  const saveToDatabase = (username) => {
-
+  const saveToDatabase = (username) => { 
+    console.log('function called')
+    console.log(username)
     var data = {
       username,
       phoneNumber,
@@ -168,12 +181,13 @@ export default function Signup({ navigation }) {
     ref.push(data);
 
   }
-//need some changes here
-  const checkTextLength = (newText) => {
-    setText(newText)
-    if (newText.length > 6) {
-       if(phoneNumber.length === 10){
-      saveToDatabase(newText)
+  //need some changes here
+  const checkTextLength = (username) => {
+    console.log('hi')
+    setText(username)
+    if (text != '') {
+      if (phoneNumber.length === 10) {
+      
       }
     }
     else {
@@ -198,7 +212,7 @@ export default function Signup({ navigation }) {
             borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
             borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
           }]}
-          onChangeText={checkTextLength}
+          onChangeText={(value) => checkTextLength(value)}
           value={text}
           placeholderTextColor={'gray'}
           placeholder={"Enter your username"}
