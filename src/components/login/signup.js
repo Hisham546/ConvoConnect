@@ -22,6 +22,8 @@ import { BSON } from 'realm';
 import { Profile } from '../../models/realmModels';
 import { useRealm } from '@realm/react';
 import { MMKV } from 'react-native-mmkv'
+import { getAuth, onAuthStateChanged } from "firebase/auth"
+import { realmStoreUserData } from '../../data/realms';
 export default function Signup({ navigation }) {
 
   const storage = new MMKV()
@@ -47,7 +49,7 @@ export default function Signup({ navigation }) {
   const [country, setCountry] = useState(['91']);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
-  const realm = useRealm();
+ 
 
   const dispatch = useDispatch();
 
@@ -77,12 +79,18 @@ export default function Signup({ navigation }) {
   //   }
   // };
   async function signInWithPhoneNumber(number) {
-    console.log(typeof (number))
-    storeUserSession(number)
+   
+    const storeUserSession = realmStoreUserData(); // Call the custom hook to get storeUserSession
+
+    storeUserSession(number);
+    storeUserSessionToMMKV()
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
+      const userId = confirmation.uid;
+      console.log(userId,'.........userid')
       if (confirmation.state != "error") {
         setLoading(false);
+      console.log(confirmation,'................')
         removeLogin()
         navigation.navigate('Otp', { confirm: confirmation });
 
@@ -91,10 +99,13 @@ export default function Signup({ navigation }) {
       if (error.code == 'auth/too-many-requests') {
         Toast.show('Too-many-requests', Toast.SHORT);
         console.log('auth/too-many-requests', error);
+        setLoading(false);
       } else if (error.code === 'auth/user-disabled') {
+        setLoading(false);
         Toast.show('Sorry, this phone number has been blocked.', Toast.SHORT)
         console.log('auth/user-disabled', error);
       } else {
+        setLoading(false);
         Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
           + 'Please try again later. '
           + '\n\nIf the issue persists, please contact support.', Toast.SHORT);
@@ -104,10 +115,13 @@ export default function Signup({ navigation }) {
   };
 
 
+
+
+
   const onNext = () => {
     if (phoneNumber === '') {
       Toast.show("Enter your phone number ", Toast.SHORT);
-    } else {  
+    } else {
       saveToDatabase(text)
       Keyboard.dismiss();
       setLoading(true);
@@ -127,24 +141,16 @@ export default function Signup({ navigation }) {
       });
     });
   };
+;
 
-  const storeUserSession = (number) => {
-    realm.write(() => {
-      realm.create(Profile, {
-        _id: new BSON.ObjectId(),
-        username: number,
-      });
-    });
-  };
-
-  // async function storeUserSession() {
-  //   try {
-  //     storage.set('userNumber', phoneNumber)
-  //     // Congrats! You've just stored your first value!
-  //   } catch (error) {
-  //     // There was an error on the native side
-  //   }
-  // }
+  async function storeUserSessionToMMKV() {
+    try {
+      storage.set('userNumber', phoneNumber)
+      // Congrats! You've just stored your first value!
+    } catch (error) {
+      // There was an error on the native side
+    }
+  }
 
 
   // const handleAddDog = () => {
@@ -164,11 +170,24 @@ export default function Signup({ navigation }) {
     getUserToken()
   }, []);
 
+  // checking the user commeted because the realm db data is not wiping 
+  // useEffect(() => {
+  //   function getUserToken() {
+  //     const people = realm.objects(Profile);
+  //       console.log(people, 'token generated')
+  //     if (people != undefined) {
+  //       navigation.navigate('Dashboard')
+  //     }
+  //   }
+  //   getUserToken()
+  // }, []);
+
+
   const onFocus = (control) => {
     setfocusControl(control)
   };
 
-  const saveToDatabase = (username) => { 
+  const saveToDatabase = (username) => {
     console.log('function called')
     console.log(username)
     var data = {
@@ -187,7 +206,7 @@ export default function Signup({ navigation }) {
     setText(username)
     if (text != '') {
       if (phoneNumber.length === 10) {
-      
+
       }
     }
     else {

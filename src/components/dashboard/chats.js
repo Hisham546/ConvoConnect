@@ -14,18 +14,18 @@ import { PermissionsAndroid } from 'react-native';
 import CardView from 'react-native-cardview'
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
-import {BSON} from 'realm';
+import { BSON } from 'realm';
 import { Profile } from '../../models/realmModels';
-import {useRealm} from '@realm/react';
+import { useRealm } from '@realm/react';
 
 
 
 export default function Chats({ navigation }) {
 
   const [contacts, setContacts] = useState([]);
-   const [users, setUsers] = useState('');
+  const [users, setUsers] = useState('');
 
-   const realm = useRealm();
+  const realm = useRealm();
 
   const checkPermission = async () => {
     try {
@@ -46,47 +46,43 @@ export default function Chats({ navigation }) {
     }
   };
   useEffect(() => {
-  //  checkPermission()
-  fetchMessages();
-  getUserNumber()
+    //  checkPermission()
+    fetchMessages();
+    getUserNumber()
   }, [])
 
   const getUserNumber = () => {
     const people = realm.objects(Profile);
-    console.log('People:......', people);
+    const usernames = people.map(person => person.username);
+    console.log('Usernames:', usernames);
+    // const phoneNumbers = users.map(item => item.phoneNumber);
+    // console.log(phoneNumbers)
+    // //  const filteredUnits = allUnits.filter(unit => unit.ItemCode === selectedItem.itemcode);
+    // if (usernames === phoneNumbers) {
+    //   console.log('same')
+    // }
+    // else {
+    //   console.log('not same')
+    // }
   };
 
-const fetchMessages = async () => {
 
-      const ref = database().ref('userdetails');
-      ref.on('value', (snapshot) => {
-        const usersArray = [];
-        snapshot.forEach((childSnapshot) => {
-          const getUsers = childSnapshot.val();
-        
-          usersArray.push(getUsers);
-        });
-        setUsers(usersArray);
+  const fetchMessages = async () => {
+
+    const ref = database().ref('userdetails');
+    ref.on('value', (snapshot) => {
+      const usersArray = [];
+      snapshot.forEach((childSnapshot) => {
+        const getUsers = childSnapshot.val();
+
+        usersArray.push(getUsers);
       });
-    };
+      setUsers(usersArray);
+    });
+  };
 
+  console.log(users)
 
-
-  // const getContacts = () => {
-
-  //   Contacts.getAll().then(contacts => {
-  //     // contacts returned
-  //     setContacts(contacts)
-
-  //     // console.log(contacts,'.....contactz')
-  //     for (let i = 0; i < contacts.length; i++) {
-  //       const rawContactId = contacts[i].rawContactId;
-  //       // console.log('Raw Contact ID:', rawContactId);
-  //       setUniqueKey(rawContactId)
-  //       // Do something with the rawContactId
-  //     }
-  //   })
-  // }
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 
@@ -99,10 +95,10 @@ const fetchMessages = async () => {
               cardElevation={2}
               cardMaxElevation={2} style={styles.chatCard}>
               <View style={styles.userChatBox}>
-{/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
-               <Image resizeMode="cover" style={styles.tinyLogo} source={{uri:image }} />
+                {/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
+                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} />
                 <Text style={styles.name}>{item.username}</Text>
-                {/* <Text style={styles.name}>{item.displayName}</Text>*/}
+                {/* <Text style={styles.name}>{item.phoneNumber}</Text> */}
 
               </View>
               {/* <View style={styles.userChatBox2}>
@@ -175,8 +171,8 @@ const styles = StyleSheet.create({
     marginLeft: wp('5'),
     marginBottom: hp('3'),
     color: 'black',
-    fontWeight:'500',
-    fontSize:hp(1.80)
+    fontWeight: '500',
+    fontSize: hp(1.80)
 
   }
 
