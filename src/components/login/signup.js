@@ -23,10 +23,10 @@ import { Profile } from '../../models/realmModels';
 import { useRealm } from '@realm/react';
 import { MMKV } from 'react-native-mmkv'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-import { realmStoreUserData } from '../../data/realms';
+import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
 export default function Signup({ navigation }) {
 
-  const storage = new MMKV()
+
 
 
   // GoogleSignin.configure({
@@ -49,10 +49,14 @@ export default function Signup({ navigation }) {
   const [country, setCountry] = useState(['91']);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
- 
 
+  const realm = useRealm();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+
+    getUserSessionFromMMKV()
+  }, []);
 
 
   // const signIn = async () => {
@@ -79,18 +83,16 @@ export default function Signup({ navigation }) {
   //   }
   // };
   async function signInWithPhoneNumber(number) {
-   
-    const storeUserSession = realmStoreUserData(); // Call the custom hook to get storeUserSession
 
-    storeUserSession(number);
-    storeUserSessionToMMKV()
+    storeUserDetailsRealm()
+    storeUserSessionToMMKV(number)
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
       const userId = confirmation.uid;
-      console.log(userId,'.........userid')
+      console.log(userId, '.........userid')
       if (confirmation.state != "error") {
         setLoading(false);
-      console.log(confirmation,'................')
+        console.log(confirmation, '................')
         removeLogin()
         navigation.navigate('Otp', { confirm: confirmation });
 
@@ -141,34 +143,19 @@ export default function Signup({ navigation }) {
       });
     });
   };
-;
-
-  async function storeUserSessionToMMKV() {
-    try {
-      storage.set('userNumber', phoneNumber)
-      // Congrats! You've just stored your first value!
-    } catch (error) {
-      // There was an error on the native side
-    }
-  }
+  ;
 
 
-  // const handleAddDog = () => {
-  //   realm.write(() => {
-  //     realm.create('userNumber', {number: phoneNumber})
-  //   });
-  // };
+  const storeUserDetailsRealm = (number) => {
 
-  useEffect(() => {
-    function getUserToken() {
-      const number = storage.getString('userNumber')
-      //  console.log(number, 'token generated')
-      if (number != undefined) {
-        navigation.navigate('Dashboard')
-      }
-    }
-    getUserToken()
-  }, []);
+    console.log('.....realm fun called')
+    realm.write(() => {
+      realm.create(Profile, {
+        _id: new BSON.ObjectId(),
+        username: number,
+      });
+    });
+  };
 
   // checking the user commeted because the realm db data is not wiping 
   // useEffect(() => {
