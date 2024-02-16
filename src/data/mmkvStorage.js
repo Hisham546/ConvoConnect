@@ -1,9 +1,9 @@
 import { MMKV } from 'react-native-mmkv'
 
 
-export async function storeUserSessionToMMKV() {
+export async function storeUserSessionToMMKV(phoneNumber) {
 
-console.log('in mmkv save')
+    console.log('in mmkv save')
     const storage = new MMKV()
     try {
         storage.set('userNumber', phoneNumber)
@@ -13,12 +13,12 @@ console.log('in mmkv save')
     }
 }
 
-export async function getUserSessionFromMMKV() { 
+export async function getUserSessionFromMMKV() {
     const storage = new MMKV()
-console.log('in mmkv retreive')
+    console.log('in mmkv retreive')
     const number = storage.getString('userNumber')
-    //  console.log(number, 'token generated')
+     console.log(number, 'token generated')
     if (number != undefined) {
-        navigation.navigate('Dashboard')
+       return true;
     }
 }

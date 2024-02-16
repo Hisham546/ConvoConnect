@@ -54,8 +54,11 @@ export default function Signup({ navigation }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (getUserSessionFromMMKV() === true) {
+      navigation.navigate('Dashboard')
+    }
 
-    getUserSessionFromMMKV()
+
   }, []);
 
 
@@ -84,15 +87,15 @@ export default function Signup({ navigation }) {
   // };
   async function signInWithPhoneNumber(number) {
 
-    storeUserDetailsRealm()
+    storeUserDetailsRealm(number)
     storeUserSessionToMMKV(number)
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
-      const userId = confirmation.uid;
-      console.log(userId, '.........userid')
+      // const userId = confirmation.uid;
+      // console.log(userId, '.........userid')
       if (confirmation.state != "error") {
         setLoading(false);
-        console.log(confirmation, '................')
+
         removeLogin()
         navigation.navigate('Otp', { confirm: confirmation });
 
@@ -100,18 +103,18 @@ export default function Signup({ navigation }) {
     } catch (error) {
       if (error.code == 'auth/too-many-requests') {
         Toast.show('Too-many-requests', Toast.SHORT);
-        console.log('auth/too-many-requests', error);
+        // console.log('auth/too-many-requests', error);
         setLoading(false);
       } else if (error.code === 'auth/user-disabled') {
         setLoading(false);
         Toast.show('Sorry, this phone number has been blocked.', Toast.SHORT)
-        console.log('auth/user-disabled', error);
+        //  console.log('auth/user-disabled', error);
       } else {
         setLoading(false);
         Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
           + 'Please try again later. '
           + '\n\nIf the issue persists, please contact support.', Toast.SHORT);
-        console.log(error);
+        //  console.log(error);
       }
     }
   };
@@ -175,8 +178,7 @@ export default function Signup({ navigation }) {
   };
 
   const saveToDatabase = (username) => {
-    console.log('function called')
-    console.log(username)
+
     var data = {
       username,
       phoneNumber,
@@ -189,7 +191,7 @@ export default function Signup({ navigation }) {
   }
   //need some changes here
   const checkTextLength = (username) => {
-    console.log('hi')
+
     setText(username)
     if (text != '') {
       if (phoneNumber.length === 10) {
