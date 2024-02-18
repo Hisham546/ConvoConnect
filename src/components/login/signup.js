@@ -151,7 +151,7 @@ export default function Signup({ navigation }) {
 
   const storeUserDetailsRealm = (number) => {
 
-    console.log('.....realm fun called')
+
     realm.write(() => {
       realm.create(Profile, {
         _id: new BSON.ObjectId(),
@@ -182,7 +182,7 @@ export default function Signup({ navigation }) {
     var data = {
       username,
       phoneNumber,
-      // a state variable that have message from text input
+      date: new Date().toUTCString()
     };
     // Send the data to the database
     var ref = database().ref("userdetails");
