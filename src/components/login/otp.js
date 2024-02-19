@@ -15,12 +15,16 @@ import { useDispatch, useSelector} from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import Toast from "react-native-simple-toast";
 import { CommonActions } from '@react-navigation/native';
+import { firebase } from '@react-native-firebase/auth';
+import { storeUid } from '../../state/actions';
 
  export default function Otp({navigation,route}){
 
  const mobileNo = useSelector((state) => state.chatReducer.phone);
 const dispatch = useDispatch();
 const [confirm,setConfirm] = useState(route.params.confirm);
+// const [uid,setUid] = useState(route.params.uid);
+// console.log(uid,'..........uid')
 const [code,setCode] = useState(route.params.confirm.code ? route.params.confirm.code : '');
     const [loading, setLoading] = useState(false);
 
@@ -29,6 +33,8 @@ async function confirmCode() {
     await confirm.confirm(code).then(() => {
 
        setLoading(false);
+       dispatch(storeUid(firebase.auth().currentUser.uid))
+       console.log("user id: " + firebase.auth().currentUser.uid,'...............uid');
      navigation.navigate('Dashboard');
      removeLogin()
     }).catch(() => {

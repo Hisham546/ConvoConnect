@@ -16,7 +16,7 @@ export async function getUserSessionFromMMKV() {
     const storage = new MMKV()
     console.log('in mmkv retreive')
     const number = storage.getString('userNumber')
-
+console.log(number,'........')
     if (number != undefined) {
         return true;
     }

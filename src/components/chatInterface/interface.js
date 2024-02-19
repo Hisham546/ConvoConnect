@@ -15,6 +15,7 @@ import firebaseConfig from '../../../setup';
 import { useRecoilState } from "recoil";
 import { rawID } from "../../state/atom";
 import Toast from 'react-native-toast-message';
+import { useDispatch, useSelector} from 'react-redux';
 export default function Interface({ route, navigation }) {
 
   const [user, setUser] = useState(route.params.data)
@@ -22,14 +23,15 @@ export default function Interface({ route, navigation }) {
   const [title, setTitle] = useState(route.params.data.title)
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
-
-  const sendMessage = (recipientId) => {
+  const senderId = useSelector((state) => state.StoreUidReducer.userId);
+  console.log(senderId, '...........recieved')
+  const sendMessage = () => {
     if (text != '') {
       // Create a new data object
       var data = {
         text,
         title,// a state variable that have message from text input
-        recipientId
+        
       };
       // Add the data to the database
       var ref = database().ref("chat");

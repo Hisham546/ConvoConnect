@@ -23,6 +23,7 @@ import { Profile } from '../../models/realmModels';
 import { useRealm } from '@realm/react';
 import { MMKV } from 'react-native-mmkv'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
+
 import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
 export default function Signup({ navigation }) {
 
@@ -91,14 +92,16 @@ export default function Signup({ navigation }) {
     storeUserSessionToMMKV(number)
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
-      // const userId = confirmation.uid;
-      // console.log(userId, '.........userid')
+
       if (confirmation.state != "error") {
         setLoading(false);
 
         removeLogin()
-        navigation.navigate('Otp', { confirm: confirmation });
-
+       
+      
+        navigation.navigate('Otp', { confirm: confirmation});
+       
+       
       }
     } catch (error) {
       if (error.code == 'auth/too-many-requests') {
@@ -111,6 +114,7 @@ export default function Signup({ navigation }) {
         //  console.log('auth/user-disabled', error);
       } else {
         setLoading(false);
+        console.log(error)
         Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
           + 'Please try again later. '
           + '\n\nIf the issue persists, please contact support.', Toast.SHORT);
@@ -180,7 +184,7 @@ export default function Signup({ navigation }) {
   const saveToDatabase = (username) => {
 
     var data = {
-      username,
+      // username,
       phoneNumber,
       date: new Date().toUTCString()
     };
