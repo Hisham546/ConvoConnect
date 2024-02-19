@@ -15,7 +15,7 @@ import CardView from 'react-native-cardview'
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import { BSON } from 'realm';
-import { Profile, UserId } from '../../models/realmModels';
+import { UserId } from '../../models/realmModels';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRealm } from '@realm/react';
 
@@ -28,7 +28,7 @@ export default function Chats({ navigation }) {
 
   const realm = useRealm();
   const senderId = useSelector((state) => state.StoreUidReducer.userId);
-
+  console.log(senderId, '.....id')
   // const checkPermission = async () => {
   //   try {
   //     const granted = await PermissionsAndroid.request(
@@ -49,10 +49,14 @@ export default function Chats({ navigation }) {
   // };
   useEffect(() => {
     //  checkPermission()
-    fetchMessages();
-    storeUserIdRealm()
+    fetchUsers();
+
   }, [])
 
+  useEffect(() => {
+
+    storeUserIdRealm()
+  }, [senderId])
   // const getUserNumber = () => {
   //   const people = realm.objects(Profile);
   //   const usernames = people.map(person => person.username);
@@ -69,18 +73,20 @@ export default function Chats({ navigation }) {
   // };
   //storing the uid to realmdb that retrieved from redux
   const storeUserIdRealm = async () => {
-
-
-    realm.write(() => {
-      realm.create(UserId, {
-
-        userid: senderId
+    try {
+      realm.write(() => {
+        realm.create('UserId', { // Use the schema name 'UserId'
+          userId: senderId // Use the property name 'userId'
+        });
       });
-    });
+      console.log("UserId stored successfully:", senderId);
+    } catch (error) {
+      console.error("Error storing UserId:", error);
+    }
   };
+  
 
-
-  const fetchMessages = async () => {
+  const fetchUsers = async () => {
 
     const ref = database().ref('userdetails');
     ref.on('value', (snapshot) => {

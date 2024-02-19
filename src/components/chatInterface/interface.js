@@ -14,6 +14,13 @@ import database from '@react-native-firebase/database';
 import firebaseConfig from '../../../setup';
 import Toast from 'react-native-toast-message';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { UserId } from '../../models/realmModels';
+
+import { useRealm } from '@realm/react';
+
+
+
 export default function Interface({ route, navigation }) {
 
   const [user, setUser] = useState(route.params.data)
@@ -22,8 +29,48 @@ export default function Interface({ route, navigation }) {
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
 
-  // console.log(title)
+  const [senderId, setSenderId] = useState('')
+  const realm = useRealm();
 
+
+ 
+  // useEffect(() => {
+  //   const fetchMessages = async () => {
+  //     const ref = database().ref('chats');
+  //     ref.orderByChild('senderId').equalTo(senderId).on('value', (snapshot) => {
+  //       const messagesObject = snapshot.val();
+  //       if (messagesObject) {
+  //         // Convert the object of messages to an array
+  //         const messagesArray = Object.values(messagesObject);
+  //         setMessages(messagesArray);
+  //       } else {
+  //         setMessages([]);
+  //       }
+  //     });
+  //   };
+  //   fetchMessages();
+  // }, [senderId]);
+
+  useEffect(() => {
+
+    getUserNumber()
+  }, [])
+
+  const getUserNumber = () => {
+    try {
+      const userIdObject  = realm.objects('UserId')[0];
+      if (userIdObject) {
+        const userId = userIdObject.userId; // Access the userId property of the object
+        console.log("User ID:", userId);
+        setSenderId(userId); // Assuming setSenderId is a state update function
+      } else {
+        console.log("No UserId object found in Realm");
+      }
+    } catch (error) {
+      console.error("Error fetching user number:", error);
+
+    }
+  };
 
   const sendMessage = () => {
     if (text != '') {
@@ -34,6 +81,7 @@ export default function Interface({ route, navigation }) {
         timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
 
       };
+
       // Add the data to the database
       var ref = database().ref("chats").child(senderId).push();
       ref.set(messageData);
@@ -42,23 +90,10 @@ export default function Interface({ route, navigation }) {
 
     }
   }
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const ref = database().ref('chats');
-      ref.orderByChild('senderId').equalTo(senderId).on('value', (snapshot) => {
-        const messagesObject = snapshot.val();
-        if (messagesObject) {
-          // Convert the object of messages to an array
-          const messagesArray = Object.values(messagesObject);
-          setMessages(messagesArray);
-        } else {
-          setMessages([]);
-        }
-      });
-    };
-    fetchMessages();
-  }, [senderId]);
-  
+
+
+
+
 
   return (
 

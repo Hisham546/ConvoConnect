@@ -16,15 +16,18 @@ export class Profile extends Realm.Object<Profile> {
 
 }
 
-export class UserId extends Realm.Object<UserId> {
+const UserIdSchema = {
+  name: 'UserId',
+  properties: {
+    userId: 'string', // Ensure userId is defined as a string property
+  },
+};
 
-  userid!: string;
-  static schema: ObjectSchema = {
-    name: 'UserId',
-    properties: {
-      userId: { type: 'string', indexed: 'full-text' },
-    },
-
-  };
-
+// Define the UserId class
+export class UserId extends Realm.Object {
+  static schema: { name: string; properties: { userId: string; }; };
+  // Empty class definition
 }
+
+// Assign the schema to the UserId class
+UserId.schema = UserIdSchema;

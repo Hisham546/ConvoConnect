@@ -187,9 +187,9 @@ export default function Signup({ navigation }) {
   const saveToDatabase = (username) => {
 
     var data = {
-      // username,
+       username,
       phoneNumber,
-      date: new Date().toUTCString()
+      logintime: new Date().toUTCString()
     };
     // Send the data to the database
     var ref = database().ref("userdetails");
