@@ -9,13 +9,13 @@ import React from 'react';
 import store from './src/state/store';
 import { Provider } from 'react-redux';
 import { RealmProvider } from '@realm/react';
-import { Profile } from './src/models/realmModels';
+import { Profile,UserId } from './src/models/realmModels';
 
-const schemaVersion = 1;
+const schemaVersion = 2;
 
 const Root = () => (
   <Provider store={store}>
-    <RealmProvider schemaVersion={schemaVersion} schema={[Profile]}>
+    <RealmProvider schemaVersion={schemaVersion} schema={[Profile,UserId]}>
       <App />
     </RealmProvider>
   </Provider>

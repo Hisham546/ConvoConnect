@@ -55,13 +55,16 @@ export default function Signup({ navigation }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (getUserSessionFromMMKV() === true) {
-      navigation.navigate('Dashboard')
-    }
+    const checkUserSession = async () => {
+      const isUserSessionSaved = await getUserSessionFromMMKV();
 
+      if (isUserSessionSaved) {
+        navigation.navigate('Dashboard');
+      }
+    };
 
+    checkUserSession();
   }, []);
-
 
   // const signIn = async () => {
   //   try {
@@ -97,11 +100,11 @@ export default function Signup({ navigation }) {
         setLoading(false);
 
         removeLogin()
-       
-      
-        navigation.navigate('Otp', { confirm: confirmation});
-       
-       
+
+
+        navigation.navigate('Otp', { confirm: confirmation });
+
+
       }
     } catch (error) {
       if (error.code == 'auth/too-many-requests') {
@@ -114,7 +117,7 @@ export default function Signup({ navigation }) {
         //  console.log('auth/user-disabled', error);
       } else {
         setLoading(false);
-        console.log(error)
+        //console.log(error)
         Toast.show('Sorry, we couldn\'t verify that phone number at the moment. '
           + 'Please try again later. '
           + '\n\nIf the issue persists, please contact support.', Toast.SHORT);

@@ -12,10 +12,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import database from '@react-native-firebase/database';
 import firebaseConfig from '../../../setup';
-import { useRecoilState } from "recoil";
-import { rawID } from "../../state/atom";
 import Toast from 'react-native-toast-message';
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 export default function Interface({ route, navigation }) {
 
   const [user, setUser] = useState(route.params.data)
@@ -23,39 +21,44 @@ export default function Interface({ route, navigation }) {
   const [title, setTitle] = useState(route.params.data.title)
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
-  const senderId = useSelector((state) => state.StoreUidReducer.userId);
-  console.log(senderId, '...........recieved')
+
+  // console.log(title)
+
+
   const sendMessage = () => {
     if (text != '') {
       // Create a new data object
-      var data = {
-        text,
-        title,// a state variable that have message from text input
-        
+      var messageData = {
+        messageText: text,
+        senderId: senderId,
+        timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+
       };
       // Add the data to the database
-      var ref = database().ref("chat");
-      ref.push(data);
+      var ref = database().ref("chats").child(senderId).push();
+      ref.set(messageData);
       onChangeText('')
     } else {
 
     }
   }
-
   useEffect(() => {
     const fetchMessages = async () => {
-      const ref = database().ref('chat');
-      ref.on('value', (snapshot) => {
-        const messagesArray = [];
-        snapshot.forEach((childSnapshot) => {
-          const message = childSnapshot.val();
-          messagesArray.push(message);
-        });
-        setMessages(messagesArray);
+      const ref = database().ref('chats');
+      ref.orderByChild('senderId').equalTo(senderId).on('value', (snapshot) => {
+        const messagesObject = snapshot.val();
+        if (messagesObject) {
+          // Convert the object of messages to an array
+          const messagesArray = Object.values(messagesObject);
+          setMessages(messagesArray);
+        } else {
+          setMessages([]);
+        }
       });
     };
-    fetchMessages()
-  }, []);
+    fetchMessages();
+  }, [senderId]);
+  
 
   return (
 
@@ -83,7 +86,7 @@ export default function Interface({ route, navigation }) {
           data={messages}
           renderItem={({ item }) =>
             <View style={styles.textMessageView}>
-              <Text style={{ color: 'black' }}>{item.text}</Text>
+              <Text style={{ color: 'black' }}>{item.messageText}</Text>
             </View>
           }
           keyExtractor={item => item.id}

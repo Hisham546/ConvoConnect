@@ -13,5 +13,18 @@ export class Profile extends Realm.Object<Profile> {
     },
     primaryKey: '_id',
   };
-  
+
+}
+
+export class UserId extends Realm.Object<UserId> {
+
+  userid!: string;
+  static schema: ObjectSchema = {
+    name: 'UserId',
+    properties: {
+      userId: { type: 'string', indexed: 'full-text' },
+    },
+
+  };
+
 }

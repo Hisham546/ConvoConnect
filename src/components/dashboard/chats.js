@@ -15,7 +15,8 @@ import CardView from 'react-native-cardview'
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import { BSON } from 'realm';
-import { Profile } from '../../models/realmModels';
+import { Profile, UserId } from '../../models/realmModels';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRealm } from '@realm/react';
 
 
@@ -26,44 +27,56 @@ export default function Chats({ navigation }) {
   const [users, setUsers] = useState('');
 
   const realm = useRealm();
+  const senderId = useSelector((state) => state.StoreUidReducer.userId);
 
-  const checkPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_CONTACTS
-      );
-      console.log('Permission status:', granted);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        getContacts();
-      } else {
-        Alert.alert(
-          'Permission Denied!',
-          'You need to give storage permission to get the contacts'
-        );
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+  // const checkPermission = async () => {
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+  //     );
+  //     console.log('Permission status:', granted);
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //      // getContacts();
+  //     } else {
+  //       Alert.alert(
+  //         'Permission Denied!',
+  //         'You need to give storage permission to get the contacts'
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // };
   useEffect(() => {
     //  checkPermission()
     fetchMessages();
-    getUserNumber()
+    storeUserIdRealm()
   }, [])
 
-  const getUserNumber = () => {
-    const people = realm.objects(Profile);
-    const usernames = people.map(person => person.username);
-    console.log('Usernames:', usernames);
-    // const phoneNumbers = users.map(item => item.phoneNumber);
-    // console.log(phoneNumbers)
-    // //  const filteredUnits = allUnits.filter(unit => unit.ItemCode === selectedItem.itemcode);
-    // if (usernames === phoneNumbers) {
-    //   console.log('same')
-    // }
-    // else {
-    //   console.log('not same')
-    // }
+  // const getUserNumber = () => {
+  //   const people = realm.objects(Profile);
+  //   const usernames = people.map(person => person.username);
+  //   console.log('Usernames:', usernames);
+  //   // const phoneNumbers = users.map(item => item.phoneNumber);
+  //   // console.log(phoneNumbers)
+  //   // //  const filteredUnits = allUnits.filter(unit => unit.ItemCode === selectedItem.itemcode);
+  //   // if (usernames === phoneNumbers) {
+  //   //   console.log('same')
+  //   // }
+  //   // else {
+  //   //   console.log('not same')
+  //   // }
+  // };
+  //storing the uid to realmdb that retrieved from redux
+  const storeUserIdRealm = async () => {
+
+
+    realm.write(() => {
+      realm.create(UserId, {
+
+        userid: senderId
+      });
+    });
   };
 
 
@@ -81,7 +94,7 @@ export default function Chats({ navigation }) {
     });
   };
 
-  console.log(users)
+
 
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
