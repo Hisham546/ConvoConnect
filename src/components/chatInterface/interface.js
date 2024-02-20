@@ -32,42 +32,52 @@ export default function Interface({ route, navigation }) {
   const [senderId, setSenderId] = useState('')
   const realm = useRealm();
 
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const ref = database().ref('chats').orderByChild('senderId').equalTo(senderId);
+        ref.on('value', (snapshot) => {
+          console.log(snapshot)
+          const messagesArray = [];
+          snapshot.forEach((childSnapshot) => {
+            const messageId = childSnapshot.key; // Get the message ID
+            
+            const message = { ...childSnapshot.val(), messageId }; // Include message ID in the message object
+            messagesArray.push(message);
+          });
+          setMessages(messagesArray);
+        });
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+    fetchMessages();
+  
+    // Cleanup function to detach the listener when the component unmounts
+    return () => {
+      database().ref('chats').off('value');
+    };
+  }, [senderId]);
 
- 
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     const ref = database().ref('chats');
-  //     ref.orderByChild('senderId').equalTo(senderId).on('value', (snapshot) => {
-  //       const messagesObject = snapshot.val();
-  //       if (messagesObject) {
-  //         // Convert the object of messages to an array
-  //         const messagesArray = Object.values(messagesObject);
-  //         setMessages(messagesArray);
-  //       } else {
-  //         setMessages([]);
-  //       }
-  //     });
-  //   };
-  //   fetchMessages();
-  // }, [senderId]);
+
 
   useEffect(() => {
 
-    getUserNumber()
+    getUserId()
   }, [])
 
-  const getUserNumber = () => {
+  const getUserId = () => {
     try {
-      const userIdObject  = realm.objects('UserId')[0];
+      const userIdObject = realm.objects('UserId')[0];
       if (userIdObject) {
         const userId = userIdObject.userId; // Access the userId property of the object
-        console.log("User ID:", userId);
+        // console.log("User ID......recieved:", userId);
         setSenderId(userId); // Assuming setSenderId is a state update function
       } else {
-        console.log("No UserId object found in Realm");
+        // console.log("No UserId object found in Realm");
       }
     } catch (error) {
-      console.error("Error fetching user number:", error);
+      //console.error("Error fetching user number:", error);
 
     }
   };
@@ -83,7 +93,8 @@ export default function Interface({ route, navigation }) {
       };
 
       // Add the data to the database
-      var ref = database().ref("chats").child(senderId).push();
+     // var ref = database().ref("chats").child(senderId).push();
+     var ref = database().ref("chats").push();
       ref.set(messageData);
       onChangeText('')
     } else {
@@ -120,6 +131,7 @@ export default function Interface({ route, navigation }) {
         <FlatList
           data={messages}
           renderItem={({ item }) =>
+
             <View style={styles.textMessageView}>
               <Text style={{ color: 'black' }}>{item.messageText}</Text>
             </View>
