@@ -35,24 +35,28 @@ export default function Interface({ route, navigation }) {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const ref = database().ref('chats').orderByChild('senderId').equalTo(senderId);
+        // const ref = database().ref('chats').child('senderId').equalTo(senderId);
+        const ref = database().ref('chats');
         ref.on('value', (snapshot) => {
-          console.log(snapshot)
+          console.log(snapshot.child(senderId).val(), '.......snapshot')
+          const snapData = snapshot
           const messagesArray = [];
-          snapshot.forEach((childSnapshot) => {
+          snapData.forEach((childSnapshot) => {
+            console.log(childSnapshot, '...........childsnapshot')
             const messageId = childSnapshot.key; // Get the message ID
-            
-            const message = { ...childSnapshot.val(), messageId }; // Include message ID in the message object
-            messagesArray.push(message);
+          
+            const message = childSnapshot; // Include message ID in the message object
+            //messagesArray.push(message);
+            setMessages(message);
           });
-          setMessages(messagesArray);
+          
         });
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
     fetchMessages();
-  
+
     // Cleanup function to detach the listener when the component unmounts
     return () => {
       database().ref('chats').off('value');
@@ -60,7 +64,7 @@ export default function Interface({ route, navigation }) {
   }, [senderId]);
 
 
-
+console.log((messages.senderId),'..............finaldata')
   useEffect(() => {
 
     getUserId()
@@ -93,8 +97,8 @@ export default function Interface({ route, navigation }) {
       };
 
       // Add the data to the database
-     // var ref = database().ref("chats").child(senderId).push();
-     var ref = database().ref("chats").push();
+      var ref = database().ref("chats").child(senderId).push();
+      //var ref = database().ref("chats").push();
       ref.set(messageData);
       onChangeText('')
     } else {
@@ -129,7 +133,7 @@ export default function Interface({ route, navigation }) {
 
 
         <FlatList
-          data={messages}
+          data={Object.values(messages)}
           renderItem={({ item }) =>
 
             <View style={styles.textMessageView}>
