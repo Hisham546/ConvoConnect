@@ -35,21 +35,17 @@ export default function Interface({ route, navigation }) {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        // const ref = database().ref('chats').child('senderId').equalTo(senderId);
         const ref = database().ref('chats');
         ref.on('value', (snapshot) => {
-          console.log(snapshot.child(senderId).val(), '.......snapshot')
-          const snapData = snapshot
+          const snapData = snapshot.val(); // Get the entire snapshot data
           const messagesArray = [];
-          snapData.forEach((childSnapshot) => {
-            console.log(childSnapshot, '...........childsnapshot')
-            const messageId = childSnapshot.key; // Get the message ID
+          snapshot.forEach((childSnapshot) => {
 
-            const message = childSnapshot; // Include message ID in the message object
-            //messagesArray.push(message);
-            setMessages(message);
+            const messageData = childSnapshot.val(); // Get the message data
+            const message = messageData; // Include message ID in the message object
+            messagesArray.push(message);
           });
-
+          setMessages(messagesArray); // Update the state after the loop
         });
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -58,11 +54,9 @@ export default function Interface({ route, navigation }) {
     fetchMessages();
 
     // Cleanup function to detach the listener when the component unmounts
-   
   }, [senderId]);
 
 
-  console.log(messages, '..............finaldata')
   useEffect(() => {
 
     getUserId()
@@ -104,8 +98,19 @@ export default function Interface({ route, navigation }) {
     }
   }
 
-
-
+  const chats = {
+    "-Nr9A2HPzFzYPpPBwwOq": {
+      "messageText": "Hey",
+      "senderId": "T6gQ6NkMYiZrlBAJYUmHHo8UYq12",
+      "timestamp": "Wed Feb 21 11:08:31 2024"
+    },
+    "-NrEHjOlxuVuqMWEpBc6": {
+      "messageText": "Testing",
+      "senderId": "T6gQ6NkMYiZrlBAJYUmHHo8UYq12",
+      "timestamp": "Thu Feb 22 11:00:13 2024"
+    }
+  };
+  
 
 
   return (
@@ -129,17 +134,19 @@ export default function Interface({ route, navigation }) {
       </View>
       <View style={styles.messageWrapperView}>
 
-
         <FlatList
-          data={Object.values(messages)}
-          renderItem={({ item }) =>
-
-            <View style={styles.textMessageView}>
-              <Text style={{ color: 'black' }}>{item.messageText}</Text>
-            </View>
-          }
-          keyExtractor={item => item.id}
+         data={Object.values(messages).sort((a, b) => a.timestamp.localeCompare(b.timestamp))} //object.values not  sorting values  for data from firebase
+          renderItem={({ item }) => {
+          console.log(item,'.......')
+            return (
+              <View style={styles.textMessageView}>
+                <Text style={{ color: 'black' }}>{item.messageText}</Text>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()} // Use index as the key
         />
+
       </View>
       <View style={styles.textInputContainer}>
         <TextInput
