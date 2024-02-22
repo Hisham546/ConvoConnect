@@ -18,17 +18,17 @@ import { BSON } from 'realm';
 import { UserId } from '../../models/realmModels';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRealm } from '@realm/react';
-
+import { firebase } from '@react-native-firebase/auth';
 
 
 export default function Chats({ navigation }) {
 
   const [contacts, setContacts] = useState([]);
   const [users, setUsers] = useState('');
-
+  const [savedUserId, setSavedUserId] = useState('')
   const realm = useRealm();
   const senderId = useSelector((state) => state.StoreUidReducer.userId);
-  console.log(senderId, '.....id')
+
   // const checkPermission = async () => {
   //   try {
   //     const granted = await PermissionsAndroid.request(
@@ -47,30 +47,18 @@ export default function Chats({ navigation }) {
   //     console.warn(err);
   //   }
   // };
+
+  useEffect(() => {
+    getUserId()
+    storeUserIdRealm()
+  }, [senderId])
+
   useEffect(() => {
     //  checkPermission()
     fetchUsers();
-
+   
   }, [])
 
-  useEffect(() => {
-
-    storeUserIdRealm()
-  }, [senderId])
-  // const getUserNumber = () => {
-  //   const people = realm.objects(Profile);
-  //   const usernames = people.map(person => person.username);
-  //   console.log('Usernames:', usernames);
-  //   // const phoneNumbers = users.map(item => item.phoneNumber);
-  //   // console.log(phoneNumbers)
-  //   // //  const filteredUnits = allUnits.filter(unit => unit.ItemCode === selectedItem.itemcode);
-  //   // if (usernames === phoneNumbers) {
-  //   //   console.log('same')
-  //   // }
-  //   // else {
-  //   //   console.log('not same')
-  //   // }
-  // };
   //storing the uid to realmdb that retrieved from redux
   const storeUserIdRealm = async () => {
     try {
@@ -84,8 +72,22 @@ export default function Chats({ navigation }) {
       console.error("Error storing UserId:", error);
     }
   };
-  
 
+  const getUserId = () => {
+    try {
+      const userIdObject = realm.objects('UserId')[0];
+      if (userIdObject) {
+        const userId = userIdObject.userId;
+
+        setSavedUserId(userId);
+      } else {
+        // console.log("No UserId object found in Realm");
+      }
+    } catch (error) {
+      //console.error("Error fetching user number:", error);
+
+    }
+  };
   const fetchUsers = async () => {
 
     const ref = database().ref('userdetails');
@@ -100,8 +102,7 @@ export default function Chats({ navigation }) {
     });
   };
 
-
-
+console.log(users)
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 
@@ -116,7 +117,10 @@ export default function Chats({ navigation }) {
               <View style={styles.userChatBox}>
                 {/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
                 <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} />
-                <Text style={styles.name}>{item.username}</Text>
+                <Text style={styles.name}>
+                  {item.username}
+                  {savedUserId === item.senderId ? ' (You)' : null}
+                </Text>
                 {/* <Text style={styles.name}>{item.phoneNumber}</Text> */}
 
               </View>

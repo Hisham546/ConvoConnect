@@ -20,6 +20,7 @@ import { firebase } from '@react-native-firebase/auth';
 import { storeUid } from '../../state/actions';
 import { useRealm } from '@realm/react';
 import { UserId } from '../../models/realmModels';
+import database from '@react-native-firebase/database';
 export default function Otp({ navigation, route }) {
 
   const mobileNo = useSelector((state) => state.chatReducer.phone);
@@ -37,7 +38,7 @@ export default function Otp({ navigation, route }) {
         setLoading(false);
         //await storeUserIdRealm(firebase.auth().currentUser.uid)
          dispatch(storeUid(firebase.auth().currentUser.uid))
-
+         updateToUserDetails(firebase.auth().currentUser.uid,mobileNo)
         navigation.navigate('Dashboard');
         removeLogin()
       }).catch((error) => {
@@ -79,8 +80,23 @@ export default function Otp({ navigation, route }) {
       });
     });
   };
-
-
+  const updateToUserDetails = (senderId, phoneNumber) => {
+    // Query the database to find the entry with the matching phoneNumber
+    var ref = database().ref("userdetails");
+    ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
+      .then(snapshot => {
+        // Loop through the snapshot to get the key of the entry
+        snapshot.forEach(childSnapshot => {
+          const key = childSnapshot.key;
+          // Update the existing entry with the senderId
+          ref.child(key).update({ senderId });
+        });
+      })
+      .catch(error => {
+        console.error("Error updating database:", error);
+      });
+  }
+  
   const onSubmit = () => {
     if (code.length === 6) {
       setLoading(true);

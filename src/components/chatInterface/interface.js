@@ -37,12 +37,12 @@ export default function Interface({ route, navigation }) {
       try {
         const ref = database().ref('chats');
         ref.on('value', (snapshot) => {
-         
+
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
 
             const messageData = childSnapshot.val()
-        
+
             messagesArray.push(messageData);
           });
           setMessages(messagesArray); // Update the state after the loop
@@ -89,7 +89,7 @@ export default function Interface({ route, navigation }) {
       };
 
       // Add the data to the database
-     // var ref = database().ref("chats").child(senderId).push();
+      // var ref = database().ref("chats").child(senderId).push();
       var ref = database().ref("chats").push();
       ref.set(messageData);
       onChangeText('')
@@ -123,8 +123,9 @@ export default function Interface({ route, navigation }) {
       <View style={styles.messageWrapperView}>
 
         <FlatList
-          data={messages} 
-          renderItem={({ item }) => {
+          data={messages}
+          renderItem={({ item }) => { 
+            
             const date = new Date(item.timestamp);
             let hours = date.getHours();
             const minutes = date.getMinutes();
@@ -134,8 +135,8 @@ export default function Interface({ route, navigation }) {
             const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
             return (
               <View style={styles.textMessageView}>
-                <Text style={{ color: 'black' }}>{item.messageText}</Text>
-                <Text style={{ color: 'black' }}>{formattedTime}</Text>
+                <Text style={{ color: 'black', fontSize: hp('1.55') }}>{item.messageText}</Text>
+                <Text style={{ color: 'black', fontSize: hp('1.35'), marginLeft: wp('7') }}>{formattedTime}</Text>
               </View>
             );
           }}
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   },
   textMessageView: {
     width: wp('24'),
-    minHeight: hp('4'),
+    minHeight: hp('4.2'),
     backgroundColor: '#F0F0F0',
     marginTop: hp('.80'),
     marginLeft: wp('3'),
