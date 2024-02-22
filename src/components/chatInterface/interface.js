@@ -44,12 +44,12 @@ export default function Interface({ route, navigation }) {
           snapData.forEach((childSnapshot) => {
             console.log(childSnapshot, '...........childsnapshot')
             const messageId = childSnapshot.key; // Get the message ID
-          
+
             const message = childSnapshot; // Include message ID in the message object
             //messagesArray.push(message);
             setMessages(message);
           });
-          
+
         });
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -58,13 +58,11 @@ export default function Interface({ route, navigation }) {
     fetchMessages();
 
     // Cleanup function to detach the listener when the component unmounts
-    return () => {
-      database().ref('chats').off('value');
-    };
+   
   }, [senderId]);
 
 
-console.log((messages.senderId),'..............finaldata')
+  console.log(messages, '..............finaldata')
   useEffect(() => {
 
     getUserId()
