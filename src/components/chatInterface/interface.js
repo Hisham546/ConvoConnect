@@ -37,12 +37,12 @@ export default function Interface({ route, navigation }) {
       try {
         const ref = database().ref('chats');
         ref.on('value', (snapshot) => {
-
+         
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
 
             const messageData = childSnapshot.val()
-
+        
             messagesArray.push(messageData);
           });
           setMessages(messagesArray); // Update the state after the loop
@@ -89,7 +89,7 @@ export default function Interface({ route, navigation }) {
       };
 
       // Add the data to the database
-      // var ref = database().ref("chats").child(senderId).push();
+     // var ref = database().ref("chats").child(senderId).push();
       var ref = database().ref("chats").push();
       ref.set(messageData);
       onChangeText('')
@@ -123,7 +123,7 @@ export default function Interface({ route, navigation }) {
       <View style={styles.messageWrapperView}>
 
         <FlatList
-          data={messages}
+          data={messages} 
           renderItem={({ item }) => {
             const date = new Date(item.timestamp);
             let hours = date.getHours();
@@ -132,7 +132,6 @@ export default function Interface({ route, navigation }) {
             hours %= 12;
             hours = hours || 12; // Handle midnight (0 hours)
             const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
-
             return (
               <View style={styles.textMessageView}>
                 <Text style={{ color: 'black' }}>{item.messageText}</Text>
