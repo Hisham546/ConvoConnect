@@ -37,13 +37,13 @@ export default function Interface({ route, navigation }) {
       try {
         const ref = database().ref('chats');
         ref.on('value', (snapshot) => {
-          const snapData = snapshot.val(); // Get the entire snapshot data
+
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
 
-            const messageData = childSnapshot.val(); // Get the message data
-            const message = messageData; // Include message ID in the message object
-            messagesArray.push(message);
+            const messageData = childSnapshot.val()
+
+            messagesArray.push(messageData);
           });
           setMessages(messagesArray); // Update the state after the loop
         });
@@ -89,8 +89,8 @@ export default function Interface({ route, navigation }) {
       };
 
       // Add the data to the database
-      var ref = database().ref("chats").child(senderId).push();
-      //var ref = database().ref("chats").push();
+      // var ref = database().ref("chats").child(senderId).push();
+      var ref = database().ref("chats").push();
       ref.set(messageData);
       onChangeText('')
     } else {
@@ -98,19 +98,7 @@ export default function Interface({ route, navigation }) {
     }
   }
 
-  const chats = {
-    "-Nr9A2HPzFzYPpPBwwOq": {
-      "messageText": "Hey",
-      "senderId": "T6gQ6NkMYiZrlBAJYUmHHo8UYq12",
-      "timestamp": "Wed Feb 21 11:08:31 2024"
-    },
-    "-NrEHjOlxuVuqMWEpBc6": {
-      "messageText": "Testing",
-      "senderId": "T6gQ6NkMYiZrlBAJYUmHHo8UYq12",
-      "timestamp": "Thu Feb 22 11:00:13 2024"
-    }
-  };
-  
+
 
 
   return (
@@ -135,12 +123,20 @@ export default function Interface({ route, navigation }) {
       <View style={styles.messageWrapperView}>
 
         <FlatList
-         data={Object.values(messages).sort((a, b) => a.timestamp.localeCompare(b.timestamp))} //object.values not  sorting values  for data from firebase
+          data={messages}
           renderItem={({ item }) => {
-          console.log(item,'.......')
+            const date = new Date(item.timestamp);
+            let hours = date.getHours();
+            const minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours %= 12;
+            hours = hours || 12; // Handle midnight (0 hours)
+            const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+
             return (
               <View style={styles.textMessageView}>
                 <Text style={{ color: 'black' }}>{item.messageText}</Text>
+                <Text style={{ color: 'black' }}>{formattedTime}</Text>
               </View>
             );
           }}
