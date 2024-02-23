@@ -93,6 +93,10 @@ export default function Settings({ navigation }) {
         <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'} style={styles.threeDotIcon} />
         <Text style={{ fontSize: hp('1.50'), color: 'black', marginLeft: wp('5') }}>Privacy</Text>
       </View>
+      <TouchableOpacity style={styles.settingsOptions}onPress={() => navigation.navigate('Signup')}>
+        <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'} style={styles.threeDotIcon} />
+        <Text style={{ fontSize: hp('1.50'), color: 'black', marginLeft: wp('5') }}>Log out</Text>
+      </TouchableOpacity>
 
     </View>
   )

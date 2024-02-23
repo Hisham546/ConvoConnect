@@ -18,7 +18,7 @@ const { width } = Dimensions.get("window");
 export default function Camera(navigation) {
 
   const openModal = useSelector((state) => state.chatReducer.openModal);
-
+console.log('called')
   const dispatch = useDispatch()
 
 
