@@ -56,7 +56,7 @@ export default function Chats({ navigation }) {
   useEffect(() => {
     //  checkPermission()
     fetchUsers();
-   
+
   }, [])
 
   //storing the uid to realmdb that retrieved from redux
@@ -72,7 +72,7 @@ export default function Chats({ navigation }) {
       console.error("Error storing UserId:", error);
     }
   };
-
+  //fetching uid
   const getUserId = () => {
     try {
       const userIdObject = realm.objects('UserId')[0];
@@ -102,7 +102,7 @@ export default function Chats({ navigation }) {
     });
   };
 
-console.log(users)
+  console.log(users)
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 
@@ -112,8 +112,8 @@ console.log(users)
         renderItem={({ item }) =>
           <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
             <CardView
-              cardElevation={2}
-              cardMaxElevation={2} style={styles.chatCard}>
+           
+               style={styles.chatCard}>
               <View style={styles.userChatBox}>
                 {/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
                 <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} />
@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
   chatCard: {
     width: wp('100'),
     height: hp('10'),
-    backgroundColor: 'white',
-    flexDirection: 'row'
+
+
   },
   tinyLogo: {
     height: 40,
@@ -177,10 +177,11 @@ const styles = StyleSheet.create({
 
   },
   userChatBox: {
-    width: wp('50'),
-    height: hp('8'),
+    width: wp('100'),
+    height: hp('7'),
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+
 
   },
   userChatBox2: {
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
   },
   name: {
     marginLeft: wp('5'),
-    marginBottom: hp('3'),
+    marginBottom: hp('2'),
     color: 'black',
     fontWeight: '500',
     fontSize: hp(1.80)
