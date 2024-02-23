@@ -9,7 +9,7 @@ import Otp from './src/components/login/otp'
 import Interface from './src/components/chatInterface/interface';
 import ProfileDetails from './src/components/chatInterface/profileDetails';
 import { MenuProvider } from 'react-native-popup-menu';
-
+import AddPhoto from './src/components/login/addPhoto';
 const Stack = createStackNavigator();
 
 
@@ -23,6 +23,10 @@ const App = () => {
                         options={{ headerShown: false }}
                         name="Signup"
                         component={Signup} />
+                          <Stack.Screen
+                        options={{ headerShown: false }}
+                        name="AddPhoto"
+                        component={AddPhoto} />
                     <Stack.Screen
                         options={{ headerShown: false }}
                         name="Otp"

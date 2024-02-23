@@ -224,8 +224,8 @@ export default function Signup({ navigation }) {
         <TextInput
           onFocus={() => onFocus("Name")}
           style={[styles.input, {
-            borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
-            borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
+            // borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
+            // borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
           }]}
           onChangeText={(value) => checkTextLength(value)}
           value={text}
@@ -330,9 +330,9 @@ const styles = StyleSheet.create({
   input: {
     width: wp('80%'),
     height: hp('7'),
-    borderRadius: 5,
+    borderRadius: 3,
     borderWidth: wp('.4'),
-    borderColor: '#128C7E',
+   borderColor: '#128C7E',
     color: 'black'
   },
   phoneNumberView: {

@@ -39,7 +39,7 @@ export default function Otp({ navigation, route }) {
         //await storeUserIdRealm(firebase.auth().currentUser.uid)
          dispatch(storeUid(firebase.auth().currentUser.uid))
          updateToUserDetails(firebase.auth().currentUser.uid,mobileNo)
-        navigation.navigate('Dashboard');
+        navigation.navigate('AddPhoto');
         removeLogin()
       }).catch((error) => {
         console.log(error)
