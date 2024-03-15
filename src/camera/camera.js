@@ -12,12 +12,13 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
 import { openModalPopup, updateProfileImage } from '../state/chatReducer';
-
+import database from '@react-native-firebase/database';
 const { width } = Dimensions.get("window");
 
 export default function Camera(navigation) {
 
   const openModal = useSelector((state) => state.chatReducer.openModal);
+  const mobileNo = useSelector((state) => state.chatReducer.phone);
 console.log('called')
   const dispatch = useDispatch()
 
@@ -30,6 +31,7 @@ console.log('called')
       cropping: true,
     }).then(image => {
       dispatch(updateProfileImage(image.path))
+     updateToUserDetails(image.path,mobileNo)
       dispatch(openModalPopup(false))
     });
   }
@@ -39,11 +41,28 @@ console.log('called')
       height: 400,
       cropping: true
     }).then(image => {
-
+      updateToUserDetails(image.path)
       dispatch(updateProfileImage(image.path))
       dispatch(openModalPopup(false))
     });
   }
+  const updateToUserDetails = (image, phoneNumber) => {
+    // Query the database to find the entry with the matching phoneNumber
+    var ref = database().ref("userdetails");
+    ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
+      .then(snapshot => {
+        // Loop through the snapshot to get the key of the entry
+        snapshot.forEach(childSnapshot => {
+          const key = childSnapshot.key;
+          // Update the existing entry with the senderId
+          ref.child(key).update({ image });
+        });
+      })
+      .catch(error => {
+        console.error("Error updating database:", error);
+      });
+  }
+  
   return (
 
 

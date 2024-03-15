@@ -107,33 +107,26 @@ export default function Chats({ navigation }) {
   return (
 
     <View style={styles.emptyView}>
-      <FlatList
-        data={users}
-        renderItem={({ item }) =>
-          <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
-            <CardView
-           
-               style={styles.chatCard}>
-              <View style={styles.userChatBox}>
-                {/* //                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} /> */}
-                <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: image }} />
-                <Text style={styles.name}>
-                  {item.username}
-                  {savedUserId === item.senderId ? ' (You)' : null}
-                </Text>
-                {/* <Text style={styles.name}>{item.phoneNumber}</Text> */}
-
-              </View>
-              {/* <View style={styles.userChatBox2}>
-                <Text style={{ fontSize: hp('1.50'), color: 'black', marginRight: wp('3') }}>{item.time}</Text>
-              </View> */}
-            </CardView>
-          </TouchableOpacity>}
-
-        keyExtractor={item => item.id}
-      />
-
-
+<FlatList
+  data={users}
+  renderItem={({ item }) => {
+    console.log(item.image); // Logging here
+    return (
+      <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
+        <CardView style={styles.chatCard}>
+          <View style={styles.userChatBox}>
+            <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: item.image }} />
+            <Text style={styles.name}>
+              {item.username}
+              {savedUserId === item.senderId ? ' (You)' : null}
+            </Text>
+          </View>
+        </CardView>
+      </TouchableOpacity>
+    );
+  }}
+   keyExtractor={item => item.senderId}
+/>
 
 
 
