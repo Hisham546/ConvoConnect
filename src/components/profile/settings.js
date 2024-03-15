@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { openModalPopup } from '../../state/chatReducer';
 import { PermissionsAndroid } from 'react-native';
 import { MMKV } from 'react-native-mmkv'
-
+import { removeDataFromMMKV } from '../../data/mmkvStorage';
 export default function Settings({ navigation }) {
 
   const storage = new MMKV() 
@@ -67,7 +67,10 @@ export default function Settings({ navigation }) {
     }
   };
 
-
+  const LogOut = async () => {
+    await removeDataFromMMKV()
+    navigation.navigate('Signup')
+  }
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
@@ -93,7 +96,7 @@ export default function Settings({ navigation }) {
         <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'} style={styles.threeDotIcon} />
         <Text style={{ fontSize: hp('1.50'), color: 'black', marginLeft: wp('5') }}>Privacy</Text>
       </View>
-      <TouchableOpacity style={styles.settingsOptions}onPress={() => navigation.navigate('Signup')}>
+      <TouchableOpacity style={styles.settingsOptions}onPress={() => LogOut()}>
         <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'} style={styles.threeDotIcon} />
         <Text style={{ fontSize: hp('1.50'), color: 'black', marginLeft: wp('5') }}>Log out</Text>
       </TouchableOpacity>

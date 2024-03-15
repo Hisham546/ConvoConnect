@@ -21,7 +21,8 @@ export async function getUserSessionFromMMKV() {
     }
 }
 
-export async function removeDataFromMMKV(key) { 
-    const storage = new MMKV()
-    MMKV.removeValueForKey(key);
+export async function removeDataFromMMKV() { 
+   
+    const storage = new MMKV();
+    storage.clearStore();
 }
