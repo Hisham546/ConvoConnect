@@ -1,7 +1,7 @@
 import { MMKV } from 'react-native-mmkv'
 // mmkv localstorage operations
 export async function storeUserSessionToMMKV(phoneNumber) {
-
+console.log('called mmkv')
     const storage = new MMKV()
     try {
         storage.set('userNumber', phoneNumber)
@@ -19,4 +19,9 @@ export async function getUserSessionFromMMKV() {
     if (number != undefined) {
         return true;
     }
+}
+
+export async function removeDataFromMMKV(key) { 
+    const storage = new MMKV()
+    MMKV.removeValueForKey(key);
 }

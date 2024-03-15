@@ -25,6 +25,7 @@ import { MMKV } from 'react-native-mmkv'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 
 import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
+import { Snapshot } from 'recoil';
 export default function Signup({ navigation }) {
 
 
@@ -125,21 +126,37 @@ export default function Signup({ navigation }) {
       }
     }
   };
-
-
-
-
-
-  const onNext = () => {
-    if (phoneNumber === '') {
-      Toast.show("Enter your phone number ", Toast.SHORT);
+  const checkingUser = async (phoneNumber) => {
+    var ref = database().ref("userdetails");
+    const snapshot = await ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value");
+    if (snapshot.exists()) {
+      return true;
     } else {
-      saveToDatabase(text)
-      Keyboard.dismiss();
-      setLoading(true);
+      return false;
+    }
+  }
 
-      dispatch(addingPhoneNumber(phoneNumber));
-      signInWithPhoneNumber('+' + country + phoneNumber);
+
+
+
+
+  const onNext = async (phoneNumber) => {
+    setLoading(true);
+    if (await checkingUser(phoneNumber) == true) {
+      await storeUserSessionToMMKV(phoneNumber)
+      setLoading(false);
+      navigation.navigate('Dashboard');
+    } else {
+      if (phoneNumber === '') {
+        Toast.show("Enter your phone number ", Toast.SHORT);
+      } else {
+        saveToDatabase(text)
+        Keyboard.dismiss();
+        setLoading(true);
+
+        dispatch(addingPhoneNumber(phoneNumber));
+        signInWithPhoneNumber('+' + country + phoneNumber);
+      }
     }
   }
 
@@ -187,7 +204,7 @@ export default function Signup({ navigation }) {
   const saveToDatabase = (username) => {
 
     var data = {
-       username,
+      username,
       phoneNumber,
       logintime: new Date().toUTCString()
     };
@@ -253,7 +270,7 @@ export default function Signup({ navigation }) {
           textContainerStyle={{ paddingVertical: 0 }}
         />
 
-        <TouchableOpacity style={styles.roundButton} onPress={() => onNext()}>
+        <TouchableOpacity style={styles.roundButton} onPress={() => onNext(phoneNumber)}>
           {loading === true ?
             <PacmanIndicator color='#fff' size={26} />
             :
@@ -332,7 +349,7 @@ const styles = StyleSheet.create({
     height: hp('7'),
     borderRadius: 3,
     borderWidth: wp('.4'),
-   borderColor: '#128C7E',
+    borderColor: '#128C7E',
     color: 'black'
   },
   phoneNumberView: {
