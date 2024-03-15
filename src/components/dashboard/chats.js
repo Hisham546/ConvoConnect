@@ -102,15 +102,16 @@ export default function Chats({ navigation }) {
     });
   };
 
-  console.log(users)
+
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 
     <View style={styles.emptyView}>
 <FlatList
+ style={styles.flatList}
   data={users}
   renderItem={({ item }) => {
-    console.log(item.image); // Logging here
+
     return (
       <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
         <CardView style={styles.chatCard}>
@@ -159,6 +160,7 @@ const styles = StyleSheet.create({
   chatCard: {
     width: wp('100'),
     height: hp('10'),
+    backgroundColor:'white'
 
 
   },
@@ -191,6 +193,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: hp(1.80)
 
-  }
+  },
+  // flatList: {
+  //   flex: 1,
+  //   backgroundColor: 'white',
+  //   // Other styles...
+  // },
 
 })
