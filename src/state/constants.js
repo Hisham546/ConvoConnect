@@ -1,1 +1,3 @@
 export const STORE_USERID = 'STORE_USERID';
+
+export const STORE_USERNAME = 'STORE_USERNAME';

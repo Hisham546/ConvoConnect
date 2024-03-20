@@ -26,30 +26,11 @@ export default function Settings({ navigation }) {
   const realm = useRealm();
   const openModal = useSelector((state) => state.chatReducer.openModal);
   const profileImage = useSelector((state) => state.chatReducer.profileImage);
+  const UserName = useSelector((state) => state.StoreUidReducer.userName);
   const dispatch = useDispatch()
   const [accountName, setAccountName] = useState('');
+console.log(UserName,'............from  current user')
 
-  useEffect(() => {
-    // database()
-    //   .ref('username')
-    //   .once('value')
-    //   .then(snapshot => {
-    //     const data = snapshot.val(); // Retrieve the data from the snapshot
-    //     const textValues = Object.values(data).map(item => item.text); // Extract the "text" values
-    //     console.log('text values:', textValues);
-    //     setAccountName(textValues)
-
-    //   });
-    function getUserName() {
-      const userId = storage.getString('userName')
-      //  console.log(number, 'token generated')
-      if (userId != undefined) {
-        setAccountName(userId)
-      }
-    }
-    getUserName()
-    getUserSessionFromMMKV()
-  }, []);
 
 
   //--To check the user granted the necessary permissions or not
@@ -109,8 +90,8 @@ export default function Settings({ navigation }) {
           <Image resizeMode="cover" style={styles.tinyLogo} source={profileImage ? { uri: profileImage } : require('../../assets/profile.jpg')} />
         </TouchableOpacity>
         <View style={{ height: hp('13'), width: wp('30'), justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: hp('1.60'), color: 'black' }}>{accountName}</Text>
-          <Text style={{ fontSize: hp('1.50'), color: 'black', marginRight: wp('5'), marginTop: hp('.50') }}>About</Text>
+          <Text style={{ fontSize: hp('1.80'), color: 'black',fontWeight:'500' }}>{UserName}</Text>
+          {/* <Text style={{ fontSize: hp('1.50'), color: 'black', marginRight: wp('5'), marginTop: hp('.50') }}>About</Text> */}
         </View>
       </View>
       <View style={styles.settingsOptions}>

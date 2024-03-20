@@ -27,6 +27,7 @@ export default function Chats({ navigation }) {
   const [users, setUsers] = useState('');
   const [savedUserId, setSavedUserId] = useState('')
   const realm = useRealm();
+
   const senderId = useSelector((state) => state.StoreUidReducer.userId);
 
   // const checkPermission = async () => {
@@ -107,27 +108,27 @@ export default function Chats({ navigation }) {
   return (
 
     <View style={styles.emptyView}>
-<FlatList
- style={styles.flatList}
-  data={users}
-  renderItem={({ item }) => {
+      <FlatList
+        style={styles.flatList}
+        data={users}
+        renderItem={({ item }) => {
 
-    return (
-      <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
-        <CardView style={styles.chatCard}>
-          <View style={styles.userChatBox}>
-            <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: item.image }} />
-            <Text style={styles.name}>
-              {item.username}
-              {savedUserId === item.senderId ? ' (You)' : null}
-            </Text>
-          </View>
-        </CardView>
-      </TouchableOpacity>
-    );
-  }}
-   keyExtractor={item => item.senderId}
-/>
+          return (
+            <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('Interface', { data: item })}>
+              <CardView style={styles.chatCard}>
+                <View style={styles.userChatBox}>
+                  <Image resizeMode="cover" style={styles.tinyLogo} source={{ uri: item.image }} />
+                  <Text style={styles.name}>
+                    {item.username}
+                    {savedUserId === item.senderId ? ' (You)' : null}
+                  </Text>
+                </View>
+              </CardView>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={item => item.senderId}
+      />
 
 
 
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   chatCard: {
     width: wp('100'),
     height: hp('10'),
-    backgroundColor:'white'
+    backgroundColor: 'white'
 
 
   },

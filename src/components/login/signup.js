@@ -23,9 +23,9 @@ import { Profile } from '../../models/realmModels';
 import { useRealm } from '@realm/react';
 import { MMKV } from 'react-native-mmkv'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-
+import { storeUserName } from '../../state/actions';
 import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
-import { Snapshot } from 'recoil';
+
 export default function Signup({ navigation }) {
 
 
@@ -44,9 +44,6 @@ export default function Signup({ navigation }) {
   //   profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
   // });
   const [userName, setUserName] = useState();
-  const [number, onChangeNumber] = React.useState('');
-  const [userDetails, setUserDetails] = React.useState('');
-  const [focusControl, setfocusControl] = React.useState(null);
   const phoneInput = useRef(null);
   const [country, setCountry] = useState(['91']);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -67,17 +64,7 @@ export default function Signup({ navigation }) {
     checkUserSession();
   }, []);
 
-    // checking the user commeted because the realm db data is not wiping
-//     useEffect(() => {
-//       function getUserToken() {
-//         const people = realm.objects(Profile);
-//           console.log(people, 'token generated')
-//         if (people != undefined) {
-//           navigation.navigate('Dashboard')
-//         }
-//       }
-//       getUserToken()
-//     }, []);
+
 
 
   // const signIn = async () => {
@@ -105,7 +92,7 @@ export default function Signup({ navigation }) {
   // };
   async function signInWithPhoneNumber(number) {
 
-   // storeUserDetailsRealm(number)
+    // storeUserDetailsRealm(number)
     storeUserSessionToMMKV(number)
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
@@ -152,35 +139,33 @@ export default function Signup({ navigation }) {
 
 
 
-
-  const onNext = async (phoneNumber) => {
+  const onNext = async () => {
     setLoading(true);
-    if (await checkingUser(phoneNumber) == true) {
-      await storeUserSessionToMMKV(phoneNumber)
-      setPhoneNumber('')
-      setText('')
+    if (await checkingUser(phoneNumber) === true) {
+      await storeUserSessionToMMKV(phoneNumber);
+      dispatch(storeUserName(userName)); // Dispatching userName from state
+      setPhoneNumber('');
+      setUserName('');
       setLoading(false);
       navigation.navigate('Dashboard');
     } else {
       if (phoneNumber === '') {
         Toast.show("Enter your phone number ", Toast.SHORT);
         setLoading(false);
-
-      }else if(userName === ''){
+      } else if (userName === '') {
         Toast.show("Enter your user name ", Toast.SHORT);
         setLoading(false);
-      }
-       else {
-        saveToDatabase(userName)
+      } else {
+     saveToDatabase(userName);
         Keyboard.dismiss();
         setLoading(true);
-
+  
         dispatch(addingPhoneNumber(phoneNumber));
         signInWithPhoneNumber('+' + country + phoneNumber);
       }
     }
-  }
-
+  };
+  
   const removeLogin = () => {
     navigation.dispatch(state => {
       const routes = state.routes.filter(r => r.name !== 'Otp');
@@ -212,7 +197,7 @@ export default function Signup({ navigation }) {
   };
 
   const saveToDatabase = (username) => {
-
+    dispatch(storeUserName(username))
     var data = {
       username,
       phoneNumber,
@@ -223,21 +208,21 @@ export default function Signup({ navigation }) {
     ref.push(data);
 
   }
-  //need some changes here
-  const checkTextLength = (username) => {
+  // //need some changes here
+  // const checkTextLength = (username) => {
 
-    setText(username)
-    if (text != '') {
-      if (phoneNumber.length === 10) {
+  //   setUserName(username)
+  //   if (username != '') {
+  //     if (phoneNumber.length === 10) {
 
-      }
-    }
-    else {
-      //   Toast.show('Enter 6 digits.',Toast.SHORT)
+  //     }
+  //   }
+  //   else {
+  //     //   Toast.show('Enter 6 digits.',Toast.SHORT)
 
-    }
+  //   }
 
-  }
+  // }
   return (
     <View style={styles.container}>
       <View style={styles.upperView}>
@@ -249,12 +234,12 @@ export default function Signup({ navigation }) {
 
 
         <TextInput
-          onFocus={() => onFocus("Name")}
+          // onFocus={() => onFocus("Name")}
           style={[styles.input, {
             // borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
             // borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
           }]}
-          onChangeText={(value) => checkTextLength(value)}
+           onChangeText={(value) => setUserName(value)}
           value={userName}
           placeholderTextColor={'gray'}
           placeholder={"Enter your username"}
@@ -280,7 +265,7 @@ export default function Signup({ navigation }) {
           textContainerStyle={{ paddingVertical: 0 }}
         />
 
-        <TouchableOpacity style={styles.roundButton} onPress={() => onNext(phoneNumber)}>
+        <TouchableOpacity style={styles.roundButton} onPress={() => onNext()}>
           {loading === true ?
             <PacmanIndicator color='#fff' size={26} />
             :

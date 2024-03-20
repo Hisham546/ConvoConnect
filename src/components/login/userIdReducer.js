@@ -1,9 +1,9 @@
-import { STORE_USERID } from "../../state/constants";
+import { STORE_USERID, STORE_USERNAME } from "../../state/constants";
 // import { storeUid } from "../../state/actions";
 const initialState = {
 
-    userId: ''
-
+    userId: '',
+    userName: ''
 
 }
 
@@ -20,6 +20,13 @@ const StoreUidReducer = (state = initialState, action) => {
 
         default:
             return state;
+
+        case STORE_USERNAME:
+
+            return {
+                ...state,
+                userName: action.payload
+            }
     }
 };
 

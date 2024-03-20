@@ -1,4 +1,4 @@
-import { STORE_USERID } from "./constants";
+import { STORE_USERID,STORE_USERNAME } from "./constants";
 
 export const storeUid = (data) => {
 
@@ -8,3 +8,13 @@ export const storeUid = (data) => {
       payload: data,
     };
   };
+
+  
+export const storeUserName = (data) => {
+
+  return {
+    type: STORE_USERNAME,
+
+    payload: data,
+  };
+};
