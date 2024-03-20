@@ -21,18 +21,29 @@ export async function getUserSessionFromMMKV() {
     const storage = new MMKV()
 
     const number = storage.getString('userNumber')
-    console.log(number, '.....getUserSessionFromMMKV.')
+   // console.log(number, '.....getUserSessionFromMMKV.')
     if (number != undefined) {
         return true;
     }
 }
+
+export async function getNumberFromMMKV() {
+    const storage = new MMKV()
+
+    const number = storage.getString('userNumber')
+   // console.log(number, '.....getUserSessionFromMMKV.')
+    if (number != undefined) {
+        return number;
+    }
+}
+
 
 export async function removeDataFromMMKV(Key) {
 
     const storage = new MMKV();
     try {
 
-        const userRemoved = await storage.delete(Key);
+        const userRemoved = storage.delete(Key);
         if (userRemoved == undefined) {
             return true
         } else {

@@ -1,5 +1,5 @@
 import ImagePicker from 'react-native-image-crop-picker';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   View,
@@ -13,14 +13,25 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector, useDispatch } from "react-redux";
 import { openModalPopup, updateProfileImage } from '../state/chatReducer';
 import database from '@react-native-firebase/database';
+import { getNumberFromMMKV } from '../data/mmkvStorage';
 const { width } = Dimensions.get("window");
 
 export default function Camera(navigation) {
 
   const openModal = useSelector((state) => state.chatReducer.openModal);
-  const mobileNo = useSelector((state) => state.chatReducer.phone);
+ // const mobileNo = useSelector((state) => state.chatReducer.phone);
   const profileImage = useSelector((state) => state.chatReducer.profileImage);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const dispatch = useDispatch()
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const isUserSessionSaved = await getNumberFromMMKV();
+      console.log(isUserSessionSaved,'..............got'),
+        setPhoneNumber(isUserSessionSaved)
+
+    };
+    checkUserSession();
+  }, []);
 
 
 
@@ -31,7 +42,7 @@ export default function Camera(navigation) {
       cropping: true,
     }).then(image => {
       dispatch(updateProfileImage(image.path))
-      updateToUserDetails(image.path, mobileNo)
+      updateToUserDetails(image.path, phoneNumber)
       dispatch(openModalPopup(false))
     });
   }
@@ -42,28 +53,29 @@ export default function Camera(navigation) {
       cropping: true
     }).then(image => {
       dispatch(updateProfileImage(image.path))
-      updateToUserDetails(image.path, mobileNo)
+      updateToUserDetails(image.path, phoneNumber)
       dispatch(openModalPopup(false))
     });
   }
+
   const updateToUserDetails = (image, phoneNumber) => {
- 
-      // Query the database to find the entry with the matching phoneNumber
-      var ref = database().ref("userdetails");
-      ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
-        .then(snapshot => {
-          // Loop through the snapshot to get the key of the entry
-          snapshot.forEach(childSnapshot => {
-            const key = childSnapshot.key;
-            console.log(key,'.............')
-            // Update the existing entry with the senderId
-            ref.child(key).update({ image });
-          });
-        })
-        .catch(error => {
-          console.error("Error updating database:", error);
+
+    // Query the database to find the entry with the matching phoneNumber
+    var ref = database().ref("userdetails");
+    ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
+      .then(snapshot => {
+        // Loop through the snapshot to get the key of the entry
+        snapshot.forEach(childSnapshot => {
+          const key = childSnapshot.key;
+          console.log(key, '.............')
+          // Update the existing entry with the senderId
+          ref.child(key).update({ image });
         });
-    
+      })
+      .catch(error => {
+        console.error("Error updating database:", error);
+      });
+
   }
 
   return (

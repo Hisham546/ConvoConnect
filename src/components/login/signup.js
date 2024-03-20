@@ -55,7 +55,7 @@ export default function Signup({ navigation }) {
   useEffect(() => {
     const checkUserSession = async () => {
       const isUserSessionSaved = await getUserSessionFromMMKV();
-
+      
       if (isUserSessionSaved) {
         navigation.navigate('Dashboard');
       }
