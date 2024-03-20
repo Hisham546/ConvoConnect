@@ -7,7 +7,7 @@ import { MMKV } from 'react-native-mmkv'
 
 
 export async function storeUserSessionToMMKV(phoneNumber) {
-    console.log('called mmkv')
+  //  console.log('called mmkv')
     const storage = new MMKV()
     try {
         storage.set('userNumber', phoneNumber)
@@ -31,7 +31,7 @@ export async function getNumberFromMMKV() {
     const storage = new MMKV()
 
     const number = storage.getString('userNumber')
-   // console.log(number, '.....getUserSessionFromMMKV.')
+
     if (number != undefined) {
         return number;
     }
@@ -52,4 +52,31 @@ export async function removeDataFromMMKV(Key) {
     } catch (error) {
        // console.log(error, '.........removeItem error')
     }
+}
+
+
+export async function storeUserIdMMKV(userid) {
+ console.log(userid,'.........inmmkv')
+    const storage = new MMKV()
+    try {
+        storage.set('userid',  userid.toString())
+
+    } catch (error) {
+
+    }
+}
+//user id pattern have issues
+export async function fetchUserIdMMKV() {
+    const storage = new MMKV();
+    const userId = storage.getString('userid');
+
+    console.log('Retrieved user ID:', userId);
+
+    // if (userId !== undefined && typeof userId === 'string') {
+    //     return userId;
+    // } else {
+    //     console.log('Invalid user ID format:', userId);
+    //     return null; // or handle the case where the user ID is not a valid string
+    // }
+
 }

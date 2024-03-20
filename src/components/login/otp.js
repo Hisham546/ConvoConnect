@@ -21,6 +21,7 @@ import { storeUid } from '../../state/actions';
 import { useRealm } from '@realm/react';
 import { UserId } from '../../models/realmModels';
 import database from '@react-native-firebase/database';
+import { storeUserIdMMKV } from '../../data/mmkvStorage';
 export default function Otp({ navigation, route }) {
 
   const mobileNo = useSelector((state) => state.chatReducer.phone);
@@ -36,7 +37,7 @@ export default function Otp({ navigation, route }) {
       await confirm.confirm(code).then(async () => {
 
         setLoading(false);
-        //await storeUserIdRealm(firebase.auth().currentUser.uid)
+        await storeUserIdMMKV(firebase.auth().currentUser.uid)
          dispatch(storeUid(firebase.auth().currentUser.uid))
          updateToUserDetails(firebase.auth().currentUser.uid,mobileNo)
         navigation.navigate('Dashboard');
@@ -93,7 +94,7 @@ export default function Otp({ navigation, route }) {
         });
       })
       .catch(error => {
-        console.error("Error updating database:", error);
+       // console.error("Error updating database:", error);
       });
   }
   

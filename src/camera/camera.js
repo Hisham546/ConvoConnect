@@ -19,14 +19,14 @@ const { width } = Dimensions.get("window");
 export default function Camera(navigation) {
 
   const openModal = useSelector((state) => state.chatReducer.openModal);
- // const mobileNo = useSelector((state) => state.chatReducer.phone);
+  // const mobileNo = useSelector((state) => state.chatReducer.phone);
   const profileImage = useSelector((state) => state.chatReducer.profileImage);
   const [phoneNumber, setPhoneNumber] = useState('');
   const dispatch = useDispatch()
   useEffect(() => {
     const checkUserSession = async () => {
       const isUserSessionSaved = await getNumberFromMMKV();
-      console.log(isUserSessionSaved,'..............got'),
+      console.log(isUserSessionSaved, '..............got'),
         setPhoneNumber(isUserSessionSaved)
 
     };
@@ -46,7 +46,7 @@ export default function Camera(navigation) {
       dispatch(openModalPopup(false))
     });
   }
-  const chooseGallery = (cropping) => {
+  const chooseGallery = () => {
     ImagePicker.openPicker({
       width: 300,
       height: 400,
@@ -67,13 +67,13 @@ export default function Camera(navigation) {
         // Loop through the snapshot to get the key of the entry
         snapshot.forEach(childSnapshot => {
           const key = childSnapshot.key;
-          console.log(key, '.............')
+          //console.log(key, '.............')
           // Update the existing entry with the senderId
           ref.child(key).update({ image });
         });
       })
       .catch(error => {
-        console.error("Error updating database:", error);
+       // console.error("Error updating database:", error);
       });
 
   }

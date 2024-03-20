@@ -16,7 +16,7 @@ import Toast from 'react-native-toast-message';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { UserId } from '../../models/realmModels';
-
+import { fetchUserIdMMKV } from '../../data/mmkvStorage';
 import { useRealm } from '@realm/react';
 
 
@@ -59,26 +59,30 @@ export default function Interface({ route, navigation }) {
 
   useEffect(() => {
 
-    getUserId()
+  //const fetchId =
+  fetchUserIdMMKV()
+  //console.log(fetchId,'.........fetchid')
+   //setSenderId(fetchId )
   }, [])
 
-  const getUserId = () => {
-    try {
-      const userIdObject = realm.objects('UserId')[0];
-      if (userIdObject) {
-        const userId = userIdObject.userId; // Access the userId property of the object
-        // console.log("User ID......recieved:", userId);
-        setSenderId(userId); // Assuming setSenderId is a state update function
-      } else {
-        // console.log("No UserId object found in Realm");
-      }
-    } catch (error) {
-      //console.error("Error fetching user number:", error);
+  // const getUserId = () => {
+  //   try {
+  //     const userIdObject = realm.objects('UserId')[0];
+  //     if (userIdObject) {
+  //       const userId = userIdObject.userId; // Access the userId property of the object
+  //       // console.log("User ID......recieved:", userId);
+  //       setSenderId(userId); // Assuming setSenderId is a state update function
+  //     } else {
+  //       // console.log("No UserId object found in Realm");
+  //     }
+  //   } catch (error) {
+  //     //console.error("Error fetching user number:", error);
 
-    }
-  };
-
-  const sendMessage = () => {
+  //   }
+  // };
+//console.log(senderId,'..........senderid received from mmkv')
+  const sendMessage = () => { 
+    Keyboard.dismiss()
     if (text != '') {
       // Create a new data object
       var messageData = {
@@ -111,7 +115,10 @@ export default function Interface({ route, navigation }) {
           <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={() => navigation.navigate('ProfileDetails', { user })}>
-          <Image resizeMode="cover" style={styles.tinyLogo} source={require('../../assets/profile.jpg')} />
+          <Image resizeMode="cover" style={styles.tinyLogo} source={user ? { uri: user.image } :require('../../assets/profile.jpg')} />
+
+       
+
           <Text style={styles.settingsHeader}>{user.username}</Text>
           <View style={styles.iconsHolder}>
             <MaterialIcon name={'video'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
@@ -208,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     paddingLeft: wp('2%'),
     marginLeft: wp('3'),
-    bottomOffset: 0,
+
 
 
   },

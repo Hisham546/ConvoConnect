@@ -31,7 +31,7 @@ export default function ProfileDetails({ route, navigation: { goBack }, navigati
                 <TouchableOpacity onPress={() => goBack()}>
                     <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
                 </TouchableOpacity>
-                <Image resizeMode="cover" style={styles.profileLogo} source={require('../../assets/profile.jpg')} />
+                <Image resizeMode="cover" style={styles.profileLogo} source={user ? { uri: user.image } :require('../../assets/profile.jpg')} />
                 <MaterialIcon name={'dots-vertical'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
 
 
