@@ -43,7 +43,7 @@ export default function Signup({ navigation }) {
   //   openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
   //   profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
   // });
-  const [text, setText] = useState();
+  const [userName, setUserName] = useState();
   const [number, onChangeNumber] = React.useState('');
   const [userDetails, setUserDetails] = React.useState('');
   const [focusControl, setfocusControl] = React.useState(null);
@@ -66,6 +66,19 @@ export default function Signup({ navigation }) {
 
     checkUserSession();
   }, []);
+
+    // checking the user commeted because the realm db data is not wiping
+//     useEffect(() => {
+//       function getUserToken() {
+//         const people = realm.objects(Profile);
+//           console.log(people, 'token generated')
+//         if (people != undefined) {
+//           navigation.navigate('Dashboard')
+//         }
+//       }
+//       getUserToken()
+//     }, []);
+
 
   // const signIn = async () => {
   //   try {
@@ -92,7 +105,7 @@ export default function Signup({ navigation }) {
   // };
   async function signInWithPhoneNumber(number) {
 
-    storeUserDetailsRealm(number)
+   // storeUserDetailsRealm(number)
     storeUserSessionToMMKV(number)
     try {
       const confirmation = await auth().signInWithPhoneNumber(number);
@@ -144,13 +157,21 @@ export default function Signup({ navigation }) {
     setLoading(true);
     if (await checkingUser(phoneNumber) == true) {
       await storeUserSessionToMMKV(phoneNumber)
+      setPhoneNumber('')
+      setText('')
       setLoading(false);
       navigation.navigate('Dashboard');
     } else {
       if (phoneNumber === '') {
         Toast.show("Enter your phone number ", Toast.SHORT);
-      } else {
-        saveToDatabase(text)
+        setLoading(false);
+
+      }else if(userName === ''){
+        Toast.show("Enter your user name ", Toast.SHORT);
+        setLoading(false);
+      }
+       else {
+        saveToDatabase(userName)
         Keyboard.dismiss();
         setLoading(true);
 
@@ -184,17 +205,6 @@ export default function Signup({ navigation }) {
     });
   };
 
-  // checking the user commeted because the realm db data is not wiping 
-  // useEffect(() => {
-  //   function getUserToken() {
-  //     const people = realm.objects(Profile);
-  //       console.log(people, 'token generated')
-  //     if (people != undefined) {
-  //       navigation.navigate('Dashboard')
-  //     }
-  //   }
-  //   getUserToken()
-  // }, []);
 
 
   const onFocus = (control) => {
@@ -245,7 +255,7 @@ export default function Signup({ navigation }) {
             // borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
           }]}
           onChangeText={(value) => checkTextLength(value)}
-          value={text}
+          value={userName}
           placeholderTextColor={'gray'}
           placeholder={"Enter your username"}
         />

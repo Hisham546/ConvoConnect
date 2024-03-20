@@ -124,8 +124,8 @@ export default function Interface({ route, navigation }) {
 
         <FlatList
           data={messages}
-          renderItem={({ item }) => { 
-            
+          renderItem={({ item }) => {
+
             const date = new Date(item.timestamp);
             let hours = date.getHours();
             const minutes = date.getMinutes();

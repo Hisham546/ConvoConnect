@@ -15,11 +15,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { openModalPopup } from '../../state/chatReducer';
 import { PermissionsAndroid } from 'react-native';
 import { MMKV } from 'react-native-mmkv'
-import { removeDataFromMMKV } from '../../data/mmkvStorage';
+import { removeDataFromMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
+import { useRealm } from '@realm/react';
+import { CommonActions } from '@react-navigation/native';
+import { BSON } from 'realm';
+import { Profile } from '../../models/realmModels';
 export default function Settings({ navigation }) {
 
-  const storage = new MMKV() 
-
+  const storage = new MMKV()
+  const realm = useRealm();
   const openModal = useSelector((state) => state.chatReducer.openModal);
   const profileImage = useSelector((state) => state.chatReducer.profileImage);
   const dispatch = useDispatch()
@@ -38,12 +42,13 @@ export default function Settings({ navigation }) {
     //   });
     function getUserName() {
       const userId = storage.getString('userName')
-    //  console.log(number, 'token generated')
+      //  console.log(number, 'token generated')
       if (userId != undefined) {
         setAccountName(userId)
       }
     }
     getUserName()
+    getUserSessionFromMMKV()
   }, []);
 
 
@@ -66,11 +71,31 @@ export default function Settings({ navigation }) {
       console.warn(err);
     }
   };
+  // const WipeUser = async() => {
+  // try{
+  //   await realm.write(() => {
+  //      realm.delete(Profile);
+  //    });
+  //    }
+  //    catch (error) {
+  //      console.error("Error logging out:", error);
+  //    }
+  //  };
+
 
   const LogOut = async () => {
-    await removeDataFromMMKV()
-    navigation.navigate('Signup')
-  }
+    try {
+      if (await removeDataFromMMKV('userNumber') == true) {
+        navigation.navigate('Signup');
+      } else {
+        console.log('something wrong')
+      }
+
+    } catch (error) {
+      console.error("Error logging out:", error);
+
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
@@ -96,7 +121,7 @@ export default function Settings({ navigation }) {
         <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'} style={styles.threeDotIcon} />
         <Text style={{ fontSize: hp('1.50'), color: 'black', marginLeft: wp('5') }}>Privacy</Text>
       </View>
-      <TouchableOpacity style={styles.settingsOptions}onPress={() => LogOut()}>
+      <TouchableOpacity style={styles.settingsOptions} onPress={() => LogOut()}>
         <MaterialIcon name={'security'} size={hp('3%')} color={'#128c7e'} style={styles.threeDotIcon} />
         <Text style={{ fontSize: hp('1.50'), color: 'black', marginLeft: wp('5') }}>Log out</Text>
       </TouchableOpacity>
