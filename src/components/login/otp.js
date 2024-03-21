@@ -38,7 +38,7 @@ export default function Otp({ navigation, route }) {
 
         setLoading(false);
         await storeUserIdMMKV(firebase.auth().currentUser.uid)
-         dispatch(storeUid(firebase.auth().currentUser.uid))
+         //dispatch(storeUid(firebase.auth().currentUser.uid))
          updateToUserDetails(firebase.auth().currentUser.uid,mobileNo)
         navigation.navigate('Dashboard');
         removeLogin()

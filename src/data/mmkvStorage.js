@@ -56,7 +56,7 @@ export async function removeDataFromMMKV(Key) {
 
 
 export async function storeUserIdMMKV(userid) {
- console.log(userid,'.........inmmkv')
+ console.log(userid,'.........userid stored to mmkv')
     const storage = new MMKV()
     try {
         storage.set('userid',  userid.toString())
@@ -72,11 +72,6 @@ export async function fetchUserIdMMKV() {
 
     console.log('Retrieved user ID:', userId);
 
-    // if (userId !== undefined && typeof userId === 'string') {
-    //     return userId;
-    // } else {
-    //     console.log('Invalid user ID format:', userId);
-    //     return null; // or handle the case where the user ID is not a valid string
-    // }
+  return userId
 
 }

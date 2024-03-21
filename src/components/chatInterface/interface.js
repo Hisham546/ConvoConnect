@@ -30,6 +30,7 @@ export default function Interface({ route, navigation }) {
   const [messages, setMessages] = useState([]);
 
   const [senderId, setSenderId] = useState('')
+  const [userid,setUserId]=useState(null)
   const realm = useRealm();
 
   useEffect(() => {
@@ -59,10 +60,11 @@ export default function Interface({ route, navigation }) {
 
   useEffect(() => {
 
-  //const fetchId =
-  fetchUserIdMMKV()
-  //console.log(fetchId,'.........fetchid')
-   //setSenderId(fetchId )
+ const fetchId =
+  fetchUserIdMMKV().then(fetchedId => {
+
+    setSenderId(fetchedId)
+  });
   }, [])
 
   // const getUserId = () => {
@@ -81,28 +83,29 @@ export default function Interface({ route, navigation }) {
   //   }
   // };
 //console.log(senderId,'..........senderid received from mmkv')
-  const sendMessage = () => { 
-    Keyboard.dismiss()
-    if (text != '') {
-      // Create a new data object
-      var messageData = {
-        messageText: text,
-        senderId: senderId,
-        timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-
-      };
-
-      // Add the data to the database
-      // var ref = database().ref("chats").child(senderId).push();
-      var ref = database().ref("chats").push();
-      ref.set(messageData);
-      onChangeText('')
-    } else {
-
+useEffect(() => {
+  const fetchMessages = async () => {
+    try {
+      const ref = database().ref('chats').orderByChild('senderId').equalTo(senderId);
+      ref.on('value', (snapshot) => {
+        const messagesArray = [];
+        snapshot.forEach((childSnapshot) => {
+          const messageData = childSnapshot.val()
+          messagesArray.push(messageData);
+        });
+        setMessages(messagesArray); // Update the state after the loop
+      });
+    } catch (error) {
+      console.error("Error fetching messages:", error);
     }
-  }
+  };
+  fetchMessages();
+
+  // Cleanup function to detach the listener when the component unmounts
+}, [senderId]);
 
 
+console.log(user)
 
 
   return (
