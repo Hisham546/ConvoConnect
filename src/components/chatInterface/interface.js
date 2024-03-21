@@ -30,7 +30,7 @@ export default function Interface({ route, navigation }) {
   const [messages, setMessages] = useState([]);
 
   const [senderId, setSenderId] = useState('')
-  const [userid,setUserId]=useState(null)
+  const [recievrId,setRecieverId]=useState('')
   const realm = useRealm();
 
   useEffect(() => {
@@ -60,52 +60,38 @@ export default function Interface({ route, navigation }) {
 
   useEffect(() => {
 
- const fetchId =
+
   fetchUserIdMMKV().then(fetchedId => {
 
     setSenderId(fetchedId)
+    setRecieverId(user.senderId)
   });
   }, [])
 
-  // const getUserId = () => {
-  //   try {
-  //     const userIdObject = realm.objects('UserId')[0];
-  //     if (userIdObject) {
-  //       const userId = userIdObject.userId; // Access the userId property of the object
-  //       // console.log("User ID......recieved:", userId);
-  //       setSenderId(userId); // Assuming setSenderId is a state update function
-  //     } else {
-  //       // console.log("No UserId object found in Realm");
-  //     }
-  //   } catch (error) {
-  //     //console.error("Error fetching user number:", error);
 
-  //   }
-  // };
-//console.log(senderId,'..........senderid received from mmkv')
-useEffect(() => {
-  const fetchMessages = async () => {
-    try {
-      const ref = database().ref('chats').orderByChild('senderId').equalTo(senderId);
-      ref.on('value', (snapshot) => {
-        const messagesArray = [];
-        snapshot.forEach((childSnapshot) => {
-          const messageData = childSnapshot.val()
-          messagesArray.push(messageData);
-        });
-        setMessages(messagesArray); // Update the state after the loop
-      });
-    } catch (error) {
-      console.error("Error fetching messages:", error);
+  const sendMessage = () => { 
+    Keyboard.dismiss()
+    if (text != '') {
+      // Create a new data object
+      var messageData = {
+        messageText: text,
+        senderId: senderId,
+        recieverid:recievrId, //the id that fetched from reciever data
+        timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+
+      };
+
+      // Add the data to the database
+      // var ref = database().ref("chats").child(senderId).push();
+      var ref = database().ref("chats").push();
+      ref.set(messageData);
+      onChangeText('')
+    } else {
+
     }
-  };
-  fetchMessages();
-
-  // Cleanup function to detach the listener when the component unmounts
-}, [senderId]);
+  }
 
 
-console.log(user)
 
 
   return (
