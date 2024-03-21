@@ -28,22 +28,21 @@ export default function Interface({ route, navigation }) {
   const [title, setTitle] = useState(route.params.data.title)
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
-
+ const [messageTriggered,setMessageTriggered]=useState(false)
   const [senderId, setSenderId] = useState('')
   const [recievrId,setRecieverId]=useState('')
   const realm = useRealm();
-
+  
   useEffect(() => {
     const fetchMessages = async () => {
+      console.log('fetch function called')
       try {
-        const ref = database().ref('chats');
+        const ref = database().ref('chats').orderByChild('recieverid').equalTo(recievrId);
         ref.on('value', (snapshot) => {
-
+          console.log(snapshot,'.......snapshsot')
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
-
             const messageData = childSnapshot.val()
-
             messagesArray.push(messageData);
           });
           setMessages(messagesArray); // Update the state after the loop
@@ -55,8 +54,8 @@ export default function Interface({ route, navigation }) {
     fetchMessages();
 
     // Cleanup function to detach the listener when the component unmounts
-  }, [senderId]);
-
+  }, [messageTriggered]);
+  
 
   useEffect(() => {
 
@@ -72,6 +71,7 @@ export default function Interface({ route, navigation }) {
   const sendMessage = () => { 
     Keyboard.dismiss()
     if (text != '') {
+      setMessageTriggered(true)
       // Create a new data object
       var messageData = {
         messageText: text,
