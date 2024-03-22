@@ -32,7 +32,7 @@ export default function Interface({ route, navigation }) {
   const [senderId, setSenderId] = useState('')
   const [recieverId, setRecieverId] = useState('')
   const reduxeMessages = useSelector((state) => state.StoreMessageReducer.storeMessages);
-  console.log(reduxeMessages, '...........recieved redux messages')
+
   const realm = useRealm();
   const dispatch = useDispatch();
 
@@ -45,6 +45,7 @@ export default function Interface({ route, navigation }) {
 
       try {
         const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId);
+        console.log(ref,'............ref')
         ref.once('value', (snapshot) => {
           console.log(snapshot, '.......snapshsot')
           const messagesArray = [];
@@ -87,7 +88,7 @@ export default function Interface({ route, navigation }) {
       var messageData = {
         messageText: text,
         senderId: senderId,
-        recieverid: recievrId, //the id that fetched from reciever data
+        recieverid: recieverId, //the id that fetched from reciever data
         timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
 
       };
