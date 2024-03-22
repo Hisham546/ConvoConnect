@@ -27,7 +27,7 @@ export default function Interface({ route, navigation }) {
 
   const [title, setTitle] = useState(route.params.data.title)
   const [text, onChangeText] = React.useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState('');
 
   const [senderId, setSenderId] = useState('')
   const [recieverId, setRecieverId] = useState('')
@@ -42,31 +42,33 @@ export default function Interface({ route, navigation }) {
 
   useEffect(() => {
     const fetchMessages = async () => {
-
       try {
         const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId);
-        console.log(ref,'............ref')
-        ref.once('value', (snapshot) => {
-          console.log(snapshot, '.......snapshsot')
+        
+        // Attach the listener and store the reference
+        const listener = ref.on('value', (snapshot) => {
+          console.log(snapshot, '.......snapshot');
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
-            const messageData = childSnapshot.val()
+            const messageData = childSnapshot.val();
             messagesArray.push(messageData);
           });
           setMessages(messagesArray); // Update the state after the loop
-          dispatch(storeFirebaseMessages(messagesArray))
+          dispatch(storeFirebaseMessages(messagesArray));
         });
+  
+        // Cleanup function to detach the listener when the component unmounts
+        return () => {
+          ref.off('value', listener);
+        };
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
-      return () => {
-        ref.off('value'); // Detach listener when component unmounts
-      };
     };
+  
     fetchMessages();
-
-    // Cleanup function to detach the listener when the component unmounts
-  }, []);
+  }, [recieverId]); // Make sure to include recieverId in the dependency array
+  
 
 
   useEffect(() => {
@@ -131,7 +133,7 @@ export default function Interface({ route, navigation }) {
       <View style={styles.messageWrapperView}>
 
         <FlatList
-          data={reduxeMessages}
+          data={messages.length > 0 ? messages : reduxeMessages}
           renderItem={({ item }) => {
 
             const date = new Date(item.timestamp);
