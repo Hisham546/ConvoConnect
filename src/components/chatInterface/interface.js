@@ -18,34 +18,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UserId } from '../../models/realmModels';
 import { fetchUserIdMMKV } from '../../data/mmkvStorage';
 import { useRealm } from '@realm/react';
-
+import { storeFirebaseMessages } from '../../state/actions';
 
 
 export default function Interface({ route, navigation }) {
 
   const [user, setUser] = useState(route.params.data)
-  //const [image] = route.params.image
+
   const [title, setTitle] = useState(route.params.data.title)
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState([]);
- const [messageTriggered,setMessageTriggered]=useState(false)
+
   const [senderId, setSenderId] = useState('')
-  const [recievrId,setRecieverId]=useState('')
+  const [recieverId, setRecieverId] = useState('')
+  const reduxeMessages = useSelector((state) => state.StoreMessageReducer.storeMessages);
+  console.log(reduxeMessages, '...........recieved redux messages')
   const realm = useRealm();
-  
+  const dispatch = useDispatch();
+
+
+
+
+
   useEffect(() => {
     const fetchMessages = async () => {
-      console.log('fetch function called')
+
       try {
-        const ref = database().ref('chats').orderByChild('recieverid').equalTo(recievrId);
+        const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId);
         ref.once('value', (snapshot) => {
-          console.log(snapshot,'.......snapshsot')
+          console.log(snapshot, '.......snapshsot')
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
             const messageData = childSnapshot.val()
             messagesArray.push(messageData);
           });
           setMessages(messagesArray); // Update the state after the loop
+          dispatch(storeFirebaseMessages(messagesArray))
         });
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -57,29 +65,29 @@ export default function Interface({ route, navigation }) {
     fetchMessages();
 
     // Cleanup function to detach the listener when the component unmounts
-  }, [messageTriggered]);
-  
+  }, []);
+
 
   useEffect(() => {
 
 
-  fetchUserIdMMKV().then(fetchedId => {
+    fetchUserIdMMKV().then(fetchedId => {
 
-    setSenderId(fetchedId)
-    setRecieverId(user.senderId)
-  });
+      setSenderId(fetchedId)
+      setRecieverId(user.senderId)
+    });
   }, [])
 
 
-  const sendMessage = () => { 
+  const sendMessage = () => {
     Keyboard.dismiss()
     if (text != '') {
-      setMessageTriggered(true)
+
       // Create a new data object
       var messageData = {
         messageText: text,
         senderId: senderId,
-        recieverid:recievrId, //the id that fetched from reciever data
+        recieverid: recievrId, //the id that fetched from reciever data
         timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
 
       };
@@ -107,9 +115,9 @@ export default function Interface({ route, navigation }) {
           <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={() => navigation.navigate('ProfileDetails', { user })}>
-          <Image resizeMode="cover" style={styles.tinyLogo} source={user ? { uri: user.image } :require('../../assets/profile.jpg')} />
+          <Image resizeMode="cover" style={styles.tinyLogo} source={user ? { uri: user.image } : require('../../assets/profile.jpg')} />
 
-       
+
 
           <Text style={styles.settingsHeader}>{user.username}</Text>
           <View style={styles.iconsHolder}>
@@ -122,7 +130,7 @@ export default function Interface({ route, navigation }) {
       <View style={styles.messageWrapperView}>
 
         <FlatList
-          data={messages}
+          data={reduxeMessages}
           renderItem={({ item }) => {
 
             const date = new Date(item.timestamp);

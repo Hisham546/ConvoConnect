@@ -2,7 +2,7 @@ import { STORE_MESSAGES_FROM_FIREBASE } from "./constants";
 
 const initialState = {
 
-    storeMessages: '',
+    storeMessages: [],
 
 }
 
