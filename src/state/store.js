@@ -1,12 +1,14 @@
-import { configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import chatReducer from './chatReducer';
 import StoreUidReducer from '../components/login/userIdReducer';
+import StoreMessageReducer from './storeMessageReducer';
 
 
 const store = configureStore({
-    reducer : {
+    reducer: {
         chatReducer: chatReducer,
-        StoreUidReducer:StoreUidReducer,
+        StoreUidReducer: StoreUidReducer,
+        StoreMessageReducer: StoreMessageReducer,
     }
 });
 

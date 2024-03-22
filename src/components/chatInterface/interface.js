@@ -38,7 +38,7 @@ export default function Interface({ route, navigation }) {
       console.log('fetch function called')
       try {
         const ref = database().ref('chats').orderByChild('recieverid').equalTo(recievrId);
-        ref.on('value', (snapshot) => {
+        ref.once('value', (snapshot) => {
           console.log(snapshot,'.......snapshsot')
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
@@ -50,6 +50,9 @@ export default function Interface({ route, navigation }) {
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
+      return () => {
+        ref.off('value'); // Detach listener when component unmounts
+      };
     };
     fetchMessages();
 
