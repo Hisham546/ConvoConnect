@@ -83,7 +83,8 @@ export default function Signup({ navigation }) {
           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
           authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-        if (enabled) {
+        if (enabled) { 
+          getFCMToken()
           // console.log('Authorization status:', authStatus);
         } else {
           //   console.log('Permission for Firebase messaging not granted.');
@@ -95,7 +96,14 @@ export default function Signup({ navigation }) {
       console.error('Error occurred while requesting permission:', error);
     }
   }
-
+  const getFCMToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      console.log('FCM token:', token);
+    } catch (error) {
+      console.error('Error getting FCM token:', error);
+    }
+  };
 
   // const signIn = async () => {
   //   try {

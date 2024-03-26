@@ -20,7 +20,7 @@ import { fetchUserIdMMKV } from '../../data/mmkvStorage';
 import { useRealm } from '@realm/react';
 import { storeFirebaseMessages } from '../../state/actions';
 import firestore from '@react-native-firebase/firestore';
-
+import messaging from '@react-native-firebase/messaging';
 export default function Interface({ route, navigation }) {
 
   const [user] = useState(route.params.data)
@@ -38,19 +38,23 @@ export default function Interface({ route, navigation }) {
 
 
   useEffect(() => {
-
-
+   
     fetchUserIdMMKV().then(fetchedId => {
 
       setSenderId(fetchedId)
       setRecieverId(user.senderId) //senderid of reciver will get when the sender opens the recievers chat
+
+
+     
+
     });
   }, [])
 
 
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchMessages = async () => { 
+
       try {
         const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId)
 
@@ -147,6 +151,24 @@ export default function Interface({ route, navigation }) {
   // }
 
 
+  const sendPushNotification = async (recipientToken) => {
+    // Construct the message payload
+    const message = {
+        data: {
+            title: 'New Message',
+            body: 'You have received a new message',
+        },
+        token: recipientToken, // The FCM token of the recipient
+    };
+
+    // Send the message
+    try {
+        await messaging().send(message);
+        console.log('Push notification sent successfully');
+    } catch (error) {
+        console.error('Error sending push notification:', error);
+    }
+};
   return (
 
     <KeyboardAvoidingView
