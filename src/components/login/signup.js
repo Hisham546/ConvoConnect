@@ -28,6 +28,7 @@ import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvS
 import messaging from '@react-native-firebase/messaging';
 import { PermissionsAndroid } from 'react-native';
 import { storeUserIdMMKV } from '../../data/mmkvStorage';
+import { storeFCMToMMKV } from '../../data/mmkvStorage';
 export default function Signup({ navigation }) {
 
 
@@ -99,6 +100,7 @@ export default function Signup({ navigation }) {
   const getFCMToken = async () => {
     try {
       const token = await messaging().getToken();
+      storeFCMToMMKV(token)
       console.log('FCM token:', token);
     } catch (error) {
       console.error('Error getting FCM token:', error);

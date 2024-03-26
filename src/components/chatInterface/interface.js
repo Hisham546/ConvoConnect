@@ -21,6 +21,7 @@ import { useRealm } from '@realm/react';
 import { storeFirebaseMessages } from '../../state/actions';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
+import { getFCMFromMMKV } from '../../data/mmkvStorage';
 export default function Interface({ route, navigation }) {
 
   const [user] = useState(route.params.data)
@@ -29,8 +30,9 @@ export default function Interface({ route, navigation }) {
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState('');
 
-  const [senderId, setSenderId] = useState('')
-  const [recieverId, setRecieverId] = useState('')
+  const [senderId, setSenderId] = useState('');
+  const [recieverId, setRecieverId] = useState('');
+  const [fcmToken, setFcmToken] = useState('');
   const reduxeMessages = useSelector((state) => state.StoreMessageReducer.storeMessages);
 
   const dispatch = useDispatch();
@@ -38,14 +40,16 @@ export default function Interface({ route, navigation }) {
 
 
   useEffect(() => {
-   
+    setRecieverId(user.senderId) //senderid of reciver will get when the sender opens the recievers chat
+
     fetchUserIdMMKV().then(fetchedId => {
 
       setSenderId(fetchedId)
-      setRecieverId(user.senderId) //senderid of reciver will get when the sender opens the recievers chat
 
+    });
 
-     
+    getFCMFromMMKV().then(fcmtoken => {
+      setFcmToken(fcmtoken)
 
     });
   }, [])
@@ -53,14 +57,14 @@ export default function Interface({ route, navigation }) {
 
 
   useEffect(() => {
-    const fetchMessages = async () => { 
+    const fetchMessages = async () => {
 
       try {
         const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId)
 
         // Attach the listener and store the reference
         const listener = ref.on('value', (snapshot) => {
-          console.log(snapshot, '.......snapshot');
+       
           const messagesArray = [];
           snapshot.forEach((childSnapshot) => {
             const messageData = childSnapshot.val();
@@ -75,13 +79,14 @@ export default function Interface({ route, navigation }) {
           ref.off('value', listener);
         };
       } catch (error) {
-        console.error("Error fetching messages:", error);
+        //console.error("Error fetching messages:", error);
       }
     };
 
     fetchMessages();
   }, [recieverId]); // Make sure to include recieverId in the dependency array
-   console.log('..........senderid', senderId, '...............reciverid', recieverId)
+
+//  console.log('..........senderid', senderId, '...............reciverid', recieverId)
   // useEffect(() => {
   //   const fetchMessages = async () => {
   //     try {
@@ -104,30 +109,36 @@ export default function Interface({ route, navigation }) {
 
 
 
-
-
   const sendMessage = () => {
-    Keyboard.dismiss()
-    if (text != '') {
+    Keyboard.dismiss();
+    if (text !== '') {
 
       // Create a new data object
       var messageData = {
         messageText: text,
         senderId: senderId,
-        recieverid: recieverId, //the id that fetched from reciever data
+        receiverId: recieverId, // Corrected field name
         timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-
       };
 
       // Add the data to the database
-      // var ref = database().ref("chats").child(senderId).push();
       var ref = database().ref("chats").push();
-      ref.set(messageData);
-      onChangeText('')
+      ref.set(messageData)
+        .then(() => {
+          sendPushNotification()
+          console.log('Message sent successfully');
+        
+          onChangeText('');
+        })
+        .catch((error) => {
+        //  console.error('Error sending message:', error);
+          // Handle error if needed
+        });
     } else {
-
+      // Handle case where text is empty
     }
-  }
+  };
+
 
   // const sendMessage = async () => {
   //   console.log('senderid....', senderId)
@@ -151,24 +162,26 @@ export default function Interface({ route, navigation }) {
   // }
 
 
-  const sendPushNotification = async (recipientToken) => {
+  const sendPushNotification = async () => {
     // Construct the message payload
+    console.log(fcmToken,'........got fcm token')
     const message = {
-        data: {
-            title: 'New Message',
-            body: 'You have received a new message',
-        },
-        token: recipientToken, // The FCM token of the recipient
+      data: {
+        title: 'New Message',
+        body: 'You have received a new message',
+      },
+      token: fcmToken, // The FCM token of the recipient
     };
 
     // Send the message
     try {
-        await messaging().send(message);
-        console.log('Push notification sent successfully');
+      await messaging().send(message);
+      console.log('Push notification sent successfully');
     } catch (error) {
-        console.error('Error sending push notification:', error);
+      console.error('Error sending push notification:', error);
     }
-};
+  };
+
   return (
 
     <KeyboardAvoidingView

@@ -73,3 +73,26 @@ export async function fetchUserIdMMKV() {
   return userId
 
 }
+
+
+
+export async function storeFCMToMMKV(Fcmtoken) {
+    //  console.log('called mmkv')
+      const storage = new MMKV()
+      try {
+          storage.set('fcmtoken', Fcmtoken)
+  
+      } catch (error) {
+  
+      }
+  }
+  
+  export async function getFCMFromMMKV() {
+      const storage = new MMKV()
+  
+      const fcmtoken = storage.getString('fcmtoken')
+     // console.log(number, '.....getUserSessionFromMMKV.')
+      if (fcmtoken != undefined) {
+          return fcmtoken;
+      }
+  }
