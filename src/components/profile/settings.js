@@ -29,7 +29,7 @@ export default function Settings({ navigation }) {
   const UserName = useSelector((state) => state.StoreUidReducer.userName);
   const dispatch = useDispatch()
   const [accountName, setAccountName] = useState('');
-console.log(UserName,'............from  current user')
+  console.log(UserName, '............from  current user')
 
 
 
@@ -65,8 +65,9 @@ console.log(UserName,'............from  current user')
 
 
   const LogOut = async () => {
+    const keysToDelete = ['userNumber', 'userid'];
     try {
-      if (await removeDataFromMMKV('userNumber') == true) {
+      if (await removeDataFromMMKV(keysToDelete) == true) {
         navigation.navigate('Signup');
       } else {
         console.log('something wrong')
@@ -90,7 +91,7 @@ console.log(UserName,'............from  current user')
           <Image resizeMode="cover" style={styles.tinyLogo} source={profileImage ? { uri: profileImage } : require('../../assets/profile.jpg')} />
         </TouchableOpacity>
         <View style={{ height: hp('13'), width: wp('30'), justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: hp('1.80'), color: 'black',fontWeight:'500' }}>{UserName}</Text>
+          <Text style={{ fontSize: hp('1.80'), color: 'black', fontWeight: '500' }}>{UserName}</Text>
           {/* <Text style={{ fontSize: hp('1.50'), color: 'black', marginRight: wp('5'), marginTop: hp('.50') }}>About</Text> */}
         </View>
       </View>

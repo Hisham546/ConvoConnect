@@ -23,9 +23,9 @@ import firestore from '@react-native-firebase/firestore';
 
 export default function Interface({ route, navigation }) {
 
-  const [user, setUser] = useState(route.params.data)
+  const [user] = useState(route.params.data)
 
-  const [title, setTitle] = useState(route.params.data.title)
+
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState('');
 
@@ -33,64 +33,8 @@ export default function Interface({ route, navigation }) {
   const [recieverId, setRecieverId] = useState('')
   const reduxeMessages = useSelector((state) => state.StoreMessageReducer.storeMessages);
 
-  const realm = useRealm();
   const dispatch = useDispatch();
 
-
-
-
-
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     try {
-  //       const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId)
-
-  //       // Attach the listener and store the reference
-  //       const listener = ref.on('value', (snapshot) => {
-  //         console.log(snapshot, '.......snapshot');
-  //         const messagesArray = [];
-  //         snapshot.forEach((childSnapshot) => {
-  //           const messageData = childSnapshot.val();
-  //           messagesArray.push(messageData);
-  //         });
-  //         setMessages(messagesArray); // Update the state after the loop
-  //         dispatch(storeFirebaseMessages(messagesArray));
-  //       });
-
-  //       // Cleanup function to detach the listener when the component unmounts
-  //       return () => {
-  //         ref.off('value', listener);
-  //       };
-  //     } catch (error) {
-  //       console.error("Error fetching messages:", error);
-  //     }
-  //   };
-
-  //   fetchMessages();
-  // }, [recieverId]); // Make sure to include recieverId in the dependency array
-
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        console.log(recieverId, '.......recieverId', senderId, '.........senderId')
-        const snapshot = await firestore()
-          .collection('chats')
-          .where('recieverid', '==', recieverId)
-          .where('senderId', '==', senderId)
-          .get();
-        console.log(snapshot, '......snap')
-        const messagesArray = snapshot.docs.map(doc => doc.data());
-        console.log(messagesArray)
-        setMessages(messagesArray);
-        dispatch(storeFirebaseMessages(messagesArray));
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    };
-
-    fetchMessages();
-  }, [recieverId, senderId, text]);
 
 
   useEffect(() => {
@@ -99,92 +43,106 @@ export default function Interface({ route, navigation }) {
     fetchUserIdMMKV().then(fetchedId => {
 
       setSenderId(fetchedId)
-      setRecieverId(user.senderId)
+      setRecieverId(user.senderId) //senderid of reciver will get when the sender opens the recievers chat
     });
   }, [])
 
 
-  // const sendMessage = () => {
-  //   Keyboard.dismiss()
-  //   if (text != '') {
 
-  //     // Create a new data object
-  //     var messageData = {
-  //       messageText: text,
-  //       senderId: senderId,
-  //       recieverid: recieverId, //the id that fetched from reciever data
-  //       timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const ref = database().ref('chats').orderByChild('recieverid').equalTo(recieverId)
 
-  //     };
+        // Attach the listener and store the reference
+        const listener = ref.on('value', (snapshot) => {
+          console.log(snapshot, '.......snapshot');
+          const messagesArray = [];
+          snapshot.forEach((childSnapshot) => {
+            const messageData = childSnapshot.val();
+            messagesArray.push(messageData);
+          });
+          setMessages(messagesArray); // Update the state after the loop
+          dispatch(storeFirebaseMessages(messagesArray));
+        });
 
-  //     // Add the data to the database
-  //     // var ref = database().ref("chats").child(senderId).push();
-  //     var ref = database().ref("chats").push();
-  //     ref.set(messageData);
-  //     onChangeText('')
-  //   } else {
+        // Cleanup function to detach the listener when the component unmounts
+        return () => {
+          ref.off('value', listener);
+        };
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
 
-  //   }
-  // }
+    fetchMessages();
+  }, [recieverId]); // Make sure to include recieverId in the dependency array
+   console.log('..........senderid', senderId, '...............reciverid', recieverId)
+  // useEffect(() => {
+  //   const fetchMessages = async () => {
+  //     try {
+  //       const snapshot = await firestore()
+  //         .collection('chats')
+  //         .where('receiverId', '==', recieverId)
+  //         .where('senderId', '==', senderId)
+  //         .get();
 
-  const sendMessage = async () => {
-    console.log('called')
+  //       const messagesArray = snapshot.docs.map(doc => doc.data());
+  //       setMessages(messagesArray);
+  //       dispatch(storeFirebaseMessages(messagesArray));
+  //     } catch (error) {
+  //       console.error("Error fetching messages:", error);
+  //     }
+  //   };
+
+  //   fetchMessages();
+  // }, [recieverId, senderId, text]);
+
+
+
+
+
+  const sendMessage = () => {
     Keyboard.dismiss()
     if (text != '') {
-      await firestore().collection('chats').doc()
-        .set({
-          messageText: text,
-          senderId: senderId,
-          recieverid: recieverId, //the id that fetched from reciever data
-          timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
 
+      // Create a new data object
+      var messageData = {
+        messageText: text,
+        senderId: senderId,
+        recieverid: recieverId, //the id that fetched from reciever data
+        timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
 
-        })
-        .then(() => {
-          onChangeText('')
+      };
 
-        })
+      // Add the data to the database
+      // var ref = database().ref("chats").child(senderId).push();
+      var ref = database().ref("chats").push();
+      ref.set(messageData);
+      onChangeText('')
+    } else {
+
     }
-    else {
-
-
-    }
-
-
   }
 
-  // const saveData = async () => {
-
-  //   if (itemName != '') { 
-
-  //   dispatch(progressBarLoading(true))
-  //     notifyMessage('please wait')
-  //     await firestore().collection('Products').doc()
+  // const sendMessage = async () => {
+  //   console.log('senderid....', senderId)
+  //   Keyboard.dismiss()
+  //   if (text != '') {
+  //     await firestore().collection('chats').doc()
   //       .set({
-  //         stockId: stockId,
-  //         itemName: itemName,
-  //         itemCode: itemCode,
-  //         categoryId: categoryId,
-  //         categoryName: categoryName,
-  //         brandId: brandId,
-  //         brandName: brandName,
-  //         openingStock: openingStock,
-  //         currentStock: currentStock,
-  //         purchasePrice: purchasePrice,
-  //         retailPrice: retailPrice,
-  //         wholesalePrice: wholesalePrice,
-  //         mrp: mrp,
+  //         messageText: text,
+  //         senderId: senderId,
+  //         recieverId: recieverId, //the id that fetched from reciever data
+  //         timestamp: new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+
 
   //       })
   //       .then(() => {
-  //         dispatch(progressBarLoading(false))
-  //         notifyMessage('data has been saved')
-  //         dispatch(loadFirebaseData(true))
-  //         resetForm()
-  //       });
-  //   } else {
-  //     notifyMessage('Cannot save without adding any data')
+  //         onChangeText('')
+  //       })
   //   }
+
 
   // }
 

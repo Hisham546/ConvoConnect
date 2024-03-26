@@ -38,19 +38,17 @@ export async function getNumberFromMMKV() {
 }
 
 
-export async function removeDataFromMMKV(Key) {
-
+export async function removeDataFromMMKV(keys) {
     const storage = new MMKV();
     try {
-
-        const userRemoved = storage.delete(Key);
-        if (userRemoved == undefined) {
-            return true
-        } else {
-            return false
-        }
+        keys.forEach(key => {
+            storage.delete(key);
+        });
+        return true;
     } catch (error) {
-       // console.log(error, '.........removeItem error')
+        // Handle error if needed
+        console.error(error);
+        return false;
     }
 }
 

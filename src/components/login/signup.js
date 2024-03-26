@@ -25,7 +25,9 @@ import { MMKV } from 'react-native-mmkv'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { storeUserName } from '../../state/actions';
 import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
-
+import messaging from '@react-native-firebase/messaging';
+import { PermissionsAndroid } from 'react-native';
+import { storeUserIdMMKV } from '../../data/mmkvStorage';
 export default function Signup({ navigation }) {
 
 
@@ -55,16 +57,44 @@ export default function Signup({ navigation }) {
   useEffect(() => {
     const checkUserSession = async () => {
       const isUserSessionSaved = await getUserSessionFromMMKV();
-      
+
       if (isUserSessionSaved) {
         navigation.navigate('Dashboard');
       }
     };
 
     checkUserSession();
+    requestUserPermission();
   }, []);
 
 
+
+  async function requestUserPermission() {
+    try {
+      // Request permission for notifications (Android)
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATION
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // Permission granted, proceed to request permission for Firebase messaging
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+          // console.log('Authorization status:', authStatus);
+        } else {
+          //   console.log('Permission for Firebase messaging not granted.');
+        }
+      } else {
+        // console.log('Permission for notifications (Android) not granted.');
+      }
+    } catch (error) {
+      console.error('Error occurred while requesting permission:', error);
+    }
+  }
 
 
   // const signIn = async () => {
@@ -127,8 +157,19 @@ export default function Signup({ navigation }) {
     }
   };
   const checkingUser = async (phoneNumber) => {
+
     var ref = database().ref("userdetails");
     const snapshot = await ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value");
+    const userData = snapshot.val();
+    if (userData) {
+    
+      const senderId = Object.values(userData)[0].senderId;
+      await storeUserIdMMKV(senderId)
+    
+    } else {
+      // User not found
+      return null;
+    }
     if (snapshot.exists()) {
       return true;
     } else {
@@ -156,16 +197,16 @@ export default function Signup({ navigation }) {
         Toast.show("Enter your user name ", Toast.SHORT);
         setLoading(false);
       } else {
-     saveToDatabase(userName);
+        saveToDatabase(userName);
         Keyboard.dismiss();
         setLoading(true);
-  
+
         dispatch(addingPhoneNumber(phoneNumber));
         signInWithPhoneNumber('+' + country + phoneNumber);
       }
     }
   };
-  
+
   const removeLogin = () => {
     navigation.dispatch(state => {
       const routes = state.routes.filter(r => r.name !== 'Otp');
@@ -239,7 +280,7 @@ export default function Signup({ navigation }) {
             // borderBottomWidth: focusControl == "Name" ? 1 : 0.2,
             // borderBottomColor: focusControl == "Name" ? 'gray' : 'black'
           }]}
-           onChangeText={(value) => setUserName(value)}
+          onChangeText={(value) => setUserName(value)}
           value={userName}
           placeholderTextColor={'gray'}
           placeholder={"Enter your username"}
