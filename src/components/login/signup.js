@@ -23,29 +23,18 @@ import { Profile } from '../../models/realmModels';
 import { useRealm } from '@realm/react';
 import { MMKV } from 'react-native-mmkv'
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-import { storeUserName } from '../../state/actions';
-import { storeUserSessionToMMKV, getUserSessionFromMMKV } from '../../data/mmkvStorage';
+import { storeUserData } from '../../state/actions';
+import { storeUserSessionToMMKV, getUserSessionFromMMKV, getNumberFromMMKV } from '../../data/mmkvStorage';
 import messaging from '@react-native-firebase/messaging';
 import { PermissionsAndroid } from 'react-native';
 import { storeUserIdMMKV } from '../../data/mmkvStorage';
 import { storeFCMToMMKV } from '../../data/mmkvStorage';
+import { LoadUserData } from '../../operations/loadUserDetails';
 export default function Signup({ navigation }) {
 
 
 
 
-  // GoogleSignin.configure({
-  //   scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
-  //   webClientId: '715629424810-qhcg34emjc8ejfd7ejbtrq82d18586bo.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-  //   offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  //   hostedDomain: '', // specifies a hosted domain restriction
-  //   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-  //   accountName: '', // [Android] specifies an account name on the device that should be used
-  //   iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-  //   googleServicePlistPath: '', // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. GoogleService-Info-Staging
-  //   openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
-  //   profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
-  // });
   const [userName, setUserName] = useState();
   const phoneInput = useRef(null);
   const [country, setCountry] = useState(['91']);
@@ -58,8 +47,11 @@ export default function Signup({ navigation }) {
   useEffect(() => {
     const checkUserSession = async () => {
       const isUserSessionSaved = await getUserSessionFromMMKV();
-
+      const phoneNumber = await getNumberFromMMKV()
+      const userData = await LoadUserData(phoneNumber)
+      dispatch(storeUserData(userData))
       if (isUserSessionSaved) {
+
         navigation.navigate('Dashboard');
       }
     };
@@ -84,7 +76,7 @@ export default function Signup({ navigation }) {
           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
           authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-        if (enabled) { 
+        if (enabled) {
           getFCMToken()
           // console.log('Authorization status:', authStatus);
         } else {
@@ -107,29 +99,7 @@ export default function Signup({ navigation }) {
     }
   };
 
-  // const signIn = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices();
 
-  //     const userInfo = await GoogleSignin.signIn();
-
-  //     setUserDetails(userInfo)
-  //     console.log(userDetails)
-  //   } catch (error) {
-  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-
-  //       // user cancelled the login flow
-  //     } else if (error.code === statusCodes.IN_PROGRESS) {
-
-  //       // operation (e.g. sign in) is in progress already
-  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-
-  //       // play services not available or outdated
-  //     } else {
-  //       // some other error happeneded
-  //     }
-  //   }
-  // };
   async function signInWithPhoneNumber(number) {
 
     // storeUserDetailsRealm(number)
@@ -172,10 +142,10 @@ export default function Signup({ navigation }) {
     const snapshot = await ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value");
     const userData = snapshot.val();
     if (userData) {
-    
+
       const senderId = Object.values(userData)[0].senderId;
       await storeUserIdMMKV(senderId)
-    
+
     } else {
       // User not found
       return null;
@@ -242,10 +212,6 @@ export default function Signup({ navigation }) {
   };
 
 
-
-  const onFocus = (control) => {
-    setfocusControl(control)
-  };
 
   const saveToDatabase = (username) => {
     dispatch(storeUserName(username))

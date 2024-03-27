@@ -64,8 +64,12 @@ export default function Camera(navigation) {
     var ref = database().ref("userdetails");
     ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
       .then(snapshot => {
+       
         // Loop through the snapshot to get the key of the entry
         snapshot.forEach(childSnapshot => {
+          const userData = childSnapshot.val();
+          const username = userData.username; // Get the username
+        console.log(username);
           const key = childSnapshot.key;
           //console.log(key, '.............')
           // Update the existing entry with the senderId

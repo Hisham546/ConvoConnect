@@ -50,8 +50,8 @@ export default function Chats({ navigation }) {
   // };
 
   useEffect(() => {
-    getUserId()
-    storeUserIdRealm()
+   // getUserId()
+   // storeUserIdRealm()
   }, [senderId])
 
   useEffect(() => {
@@ -73,22 +73,22 @@ export default function Chats({ navigation }) {
       console.error("Error storing UserId:", error);
     }
   };
-  //fetching uid
-  const getUserId = () => {
-    try {
-      const userIdObject = realm.objects('UserId')[0];
-      if (userIdObject) {
-        const userId = userIdObject.userId;
+  // //fetching uid
+  // const getUserId = () => {
+  //   try {
+  //     const userIdObject = realm.objects('UserId')[0];
+  //     if (userIdObject) {
+  //       const userId = userIdObject.userId;
 
-        setSavedUserId(userId);
-      } else {
-        // console.log("No UserId object found in Realm");
-      }
-    } catch (error) {
-      //console.error("Error fetching user number:", error);
+  //       setSavedUserId(userId);
+  //     } else {
+  //       // console.log("No UserId object found in Realm");
+  //     }
+  //   } catch (error) {
+  //     //console.error("Error fetching user number:", error);
 
-    }
-  };
+  //   }
+  // };
   const fetchUsers = async () => {
 
     const ref = database().ref('userdetails');
@@ -103,7 +103,7 @@ export default function Chats({ navigation }) {
     });
   };
 
-
+//console.log(users)
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 

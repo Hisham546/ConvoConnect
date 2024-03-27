@@ -25,8 +25,10 @@ export default function Settings({ navigation }) {
   const storage = new MMKV()
   const realm = useRealm();
   const openModal = useSelector((state) => state.chatReducer.openModal);
-  const profileImage = useSelector((state) => state.chatReducer.profileImage);
-  const UserName = useSelector((state) => state.StoreUidReducer.userName);
+ 
+  const UserName = useSelector((state) => state.StoreUidReducer.userData ? state.StoreUidReducer.userData.username : null);
+  const UserImage = useSelector((state) => state.StoreUidReducer.userData ? state.StoreUidReducer.userData.image : null);
+  
   const dispatch = useDispatch()
   const [accountName, setAccountName] = useState('');
   console.log(UserName, '............from  current user')
@@ -88,7 +90,7 @@ export default function Settings({ navigation }) {
       </View>
       <View style={styles.profileContainer}>
         <TouchableOpacity activeOpacity={1} onPress={() => checkCameraPermission()}>
-          <Image resizeMode="cover" style={styles.tinyLogo} source={profileImage ? { uri: profileImage } : require('../../assets/profile.jpg')} />
+          <Image resizeMode="cover" style={styles.tinyLogo} source={UserImage ? { uri: UserImage } : require('../../assets/profile.jpg')} />
         </TouchableOpacity>
         <View style={{ height: hp('13'), width: wp('30'), justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontSize: hp('1.80'), color: 'black', fontWeight: '500' }}>{UserName}</Text>

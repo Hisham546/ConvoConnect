@@ -1,4 +1,4 @@
-import { STORE_USERID, STORE_USERNAME, STORE_MESSAGES_FROM_FIREBASE } from "./constants";
+import { STORE_USERID, STORE_MESSAGES_FROM_FIREBASE,STORE_USERDATA } from "./constants";
 
 export const storeUid = (data) => {
 
@@ -10,10 +10,11 @@ export const storeUid = (data) => {
 };
 
 
-export const storeUserName = (data) => {
+
+export const storeUserData = (data) => {
 
   return {
-    type: STORE_USERNAME,
+    type: STORE_USERDATA,
 
     payload: data,
   };
