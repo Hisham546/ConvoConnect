@@ -91,9 +91,9 @@ export default function Dashboard({ navigation }) {
         screenOptions={{
           tabBarActiveTintColor: 'gray',
           tabBarInactiveTintColor: 'gray',
-          tabBarPressColor: 'green',
+          tabBarPressColor: 'gray',
           tabBarIndicatorStyle: {
-            backgroundColor: 'green',
+            backgroundColor: 'gray',
             height: 2
           },
           tabBarScrollEnabled: true,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#128C7E',
+    backgroundColor: 'gray',
   },
   topViewContainer: {
     width: wp('100'),

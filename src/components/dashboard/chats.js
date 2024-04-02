@@ -103,7 +103,7 @@ export default function Chats({ navigation }) {
     });
   };
 
-//console.log(users)
+
   const image = 'https://legacy.reactjs.org/logo-og.png';
   return (
 

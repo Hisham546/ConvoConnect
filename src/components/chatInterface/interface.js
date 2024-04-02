@@ -164,7 +164,7 @@ export default function Interface({ route, navigation }) {
 
   const sendPushNotification = async () => {
     // Construct the message payload
-    console.log(fcmToken,'........got fcm token')
+  //  console.log(fcmToken,'........got fcm token')
     const message = {
       data: {
         title: 'New Message',
@@ -192,8 +192,12 @@ export default function Interface({ route, navigation }) {
           <MaterialIcon name={'arrow-left'} size={hp('3%')} color={'white'} style={styles.threeDotIcon} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={1} style={styles.userHeader} onPress={() => navigation.navigate('ProfileDetails', { user })}>
-          <Image resizeMode="cover" style={styles.tinyLogo} source={user ? { uri: user.image } : require('../../assets/profile.jpg')} />
-
+        <Image
+  resizeMode="cover"
+  style={styles.tinyLogo}
+  source={user ? { uri: user.image } : require('../../assets/profile.jpg')}
+  onError={(error) => console.error('Error loading image:', error)}
+/>
 
 
           <Text style={styles.settingsHeader}>{user.username}</Text>

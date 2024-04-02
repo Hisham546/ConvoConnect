@@ -31,7 +31,7 @@ export default function Settings({ navigation }) {
   
   const dispatch = useDispatch()
   const [accountName, setAccountName] = useState('');
-  console.log(UserName, '............from  current user')
+ 
 
 
 
@@ -72,11 +72,11 @@ export default function Settings({ navigation }) {
       if (await removeDataFromMMKV(keysToDelete) == true) {
         navigation.navigate('Signup');
       } else {
-        console.log('something wrong')
+       // console.log('something wrong')
       }
 
     } catch (error) {
-      console.error("Error logging out:", error);
+     // console.error("Error logging out:", error);
 
     }
   };

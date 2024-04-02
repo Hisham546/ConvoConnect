@@ -5,7 +5,7 @@ import {
   View,
   Image,
   Text, Modal, Dimensions,
-  StyleSheet, TouchableOpacity,
+  StyleSheet, TouchableOpacity, Platform
 }
   from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
@@ -15,7 +15,8 @@ import { openModalPopup, updateProfileImage } from '../state/chatReducer';
 import database from '@react-native-firebase/database';
 import { getNumberFromMMKV } from '../data/mmkvStorage';
 const { width } = Dimensions.get("window");
-
+import { utils } from '@react-native-firebase/app';
+import storage from '@react-native-firebase/storage';
 export default function Camera(navigation) {
 
   const openModal = useSelector((state) => state.chatReducer.openModal);
@@ -26,8 +27,8 @@ export default function Camera(navigation) {
   useEffect(() => {
     const checkUserSession = async () => {
       const isUserSessionSaved = await getNumberFromMMKV();
-      console.log(isUserSessionSaved, '..............got'),
-        setPhoneNumber(isUserSessionSaved)
+
+      setPhoneNumber(isUserSessionSaved)
 
     };
     checkUserSession();
@@ -35,14 +36,17 @@ export default function Camera(navigation) {
 
 
 
-  const chooseImage = (cropping) => {
+  const chooseImage = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
       cropping: true,
     }).then(image => {
-      dispatch(updateProfileImage(image.path))
-      updateToUserDetails(image.path, phoneNumber)
+   // console.log(image.path)
+      //dispatch(updateProfileImage(image.path))
+      // updateToUserDetails(image.path, phoneNumber)
+      //console.log(image)
+     uploadImageToFirebase(image)
       dispatch(openModalPopup(false))
     });
   }
@@ -52,34 +56,52 @@ export default function Camera(navigation) {
       height: 400,
       cropping: true
     }).then(image => {
-      dispatch(updateProfileImage(image.path))
-      updateToUserDetails(image.path, phoneNumber)
+      //console.log(image.path)
+      uploadImageToFirebase(image)
+      //dispatch(updateProfileImage(image.path))
+      //  updateToUserDetails(image.path, phoneNumber)
       dispatch(openModalPopup(false))
     });
   }
 
-  const updateToUserDetails = (image, phoneNumber) => {
+  // const updateToUserDetails = (image, phoneNumber) => {
 
-    // Query the database to find the entry with the matching phoneNumber
-    var ref = database().ref("userdetails");
-    ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
-      .then(snapshot => {
-       
-        // Loop through the snapshot to get the key of the entry
-        snapshot.forEach(childSnapshot => {
-          const userData = childSnapshot.val();
-          const username = userData.username; // Get the username
-        console.log(username);
-          const key = childSnapshot.key;
-          //console.log(key, '.............')
-          // Update the existing entry with the senderId
-          ref.child(key).update({ image });
-        });
-      })
-      .catch(error => {
-       // console.error("Error updating database:", error);
-      });
+  //   // Query the database to find the entry with the matching phoneNumber
+  //   var ref = database().ref("userdetails");
+  //   ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
+  //     .then(snapshot => {
 
+  //       // Loop through the snapshot to get the key of the entry
+  //       snapshot.forEach(childSnapshot => {
+  //         const userData = childSnapshot.val();
+  //         const username = userData.username; // Get the username
+
+  //         const key = childSnapshot.key;
+  //         //console.log(key, '.............')
+  //         // Update the existing entry with the senderId
+  //         ref.child(key).update({ image });
+  //       });
+  //     })
+  //     .catch(error => {
+  //       // console.error("Error updating database:", error);
+  //     });
+
+  // }
+
+  const uploadImageToFirebase = async (image) => {
+    const reference = storage().ref('/images');
+    console.log(reference,'.........re')
+    try {
+      // Extract the filename from the image path
+      const filename = image.path.substring(image.path.lastIndexOf('/') + 1);
+      console.log(filename,'......filename')
+      const pathToFile = `${utils.FilePath.DOCUMENT_DIRECTORY}/${filename}`;
+      console.log('pathToFile:', pathToFile);
+      await reference.putFile(pathToFile);
+      console.log('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   }
 
   return (
@@ -94,10 +116,10 @@ export default function Camera(navigation) {
         <View style={styles.modalView}>
           <View style={styles.mainView}>
             <View style={{ width: wp('100'), flexDirection: 'row', justifyContent: 'space-around', height: hp('7') }}>
-              <Text style={{ fontFamily: 'Manrope-Bold', fontSize: hp('2.10'), color: 'black', marginTop: hp('2.50'), marginRight: wp('43.50') }}> Add Photo</Text>
+              <Text style={{ fontFamily: 'Manrope-Bold', fontSize: hp('2.10'), color: 'gray', marginTop: hp('2.50'), marginRight: wp('43.50') }}> Add Photo</Text>
               <TouchableOpacity activeOpacity={1} style={styles.closeButton}
                 onPress={() => dispatch(openModalPopup(false))}>
-                <MaterialIcon name={'close-circle-outline'} size={hp('3%')} color={'black'} style={styles.threeDotIcon} />
+                <MaterialIcon name={'close-circle-outline'} size={hp('2.80%')} color={'gray'} style={styles.threeDotIcon} />
               </TouchableOpacity>
             </View>
             <View style={{ width: wp('100'), height: hp('17'), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
@@ -105,7 +127,7 @@ export default function Camera(navigation) {
 
                 <TouchableOpacity onPress={() => chooseImage()} style={{
                   width: 50, height: 50,
-                  borderRadius: 25, borderColor: '#9DC08B', justifyContent: 'center', alignItems: 'center', borderWidth: wp('.3')
+                  borderRadius: 25, borderColor: 'gray', justifyContent: 'center', alignItems: 'center', borderWidth: wp('.3')
                 }}>
                   <MaterialIcon name={'camera-enhance-outline'} size={hp('3%')} color={'gray'} />
                 </TouchableOpacity>
@@ -115,7 +137,7 @@ export default function Camera(navigation) {
               <View style={styles.iconView}>
                 <TouchableOpacity onPress={() => chooseGallery()} style={{
                   width: 50, height: 50,
-                  borderRadius: 25, borderColor: '#9DC08B', justifyContent: 'center', alignItems: 'center', borderWidth: wp('.3')
+                  borderRadius: 25, borderColor: 'gray', justifyContent: 'center', alignItems: 'center', borderWidth: wp('.3')
                 }}>
                   <MaterialIcon name={'image'} size={hp('3%')} color={'gray'} />
                 </TouchableOpacity>

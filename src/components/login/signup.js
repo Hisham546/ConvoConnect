@@ -43,24 +43,29 @@ export default function Signup({ navigation }) {
 
   const realm = useRealm();
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     const checkUserSession = async () => {
-      const isUserSessionSaved = await getUserSessionFromMMKV();
-      const phoneNumber = await getNumberFromMMKV()
-      const userData = await LoadUserData(phoneNumber)
-      dispatch(storeUserData(userData))
-      if (isUserSessionSaved) {
+      // Fetch user session and phone number simultaneously
+      const [isUserSessionSaved, phoneNumber] = await Promise.all([
+        getUserSessionFromMMKV(),
+        getNumberFromMMKV()
+      ]);
 
+      // Load user data while waiting for user session and phone number
+      const userData = await LoadUserData(phoneNumber);
+      dispatch(storeUserData(userData));
+
+      if (isUserSessionSaved) {
         navigation.navigate('Dashboard');
       }
     };
 
     checkUserSession();
-    requestUserPermission();
   }, []);
 
 
+  //    requestUserPermission();
 
   async function requestUserPermission() {
     try {
@@ -164,7 +169,8 @@ export default function Signup({ navigation }) {
     setLoading(true);
     if (await checkingUser(phoneNumber) === true) {
       await storeUserSessionToMMKV(phoneNumber);
-      dispatch(storeUserName(userName)); // Dispatching userName from state
+      const userData = await LoadUserData(phoneNumber)
+      dispatch(storeUserData(userData))
       setPhoneNumber('');
       setUserName('');
       setLoading(false);
@@ -200,21 +206,21 @@ export default function Signup({ navigation }) {
   ;
 
 
-  const storeUserDetailsRealm = (number) => {
+  // const storeUserDetailsRealm = (number) => {
 
 
-    realm.write(() => {
-      realm.create(Profile, {
-        _id: new BSON.ObjectId(),
-        username: number,
-      });
-    });
-  };
+  //   realm.write(() => {
+  //     realm.create(Profile, {
+  //       _id: new BSON.ObjectId(),
+  //       username: number,
+  //     });
+  //   });
+  // };
 
 
 
-  const saveToDatabase = (username) => {
-    dispatch(storeUserName(username))
+  const saveToDatabase = async (username) => {
+
     var data = {
       username,
       phoneNumber,
@@ -222,7 +228,12 @@ export default function Signup({ navigation }) {
     };
     // Send the data to the database
     var ref = database().ref("userdetails");
-    ref.push(data);
+    ref.push(data)
+      .then(async () => {
+        const userData = await LoadUserData(phoneNumber)
+        dispatch(storeUserData(userData))
+
+      })
 
   }
   // //need some changes here
