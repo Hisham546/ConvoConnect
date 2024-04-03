@@ -42,11 +42,11 @@ export default function Camera(navigation) {
       height: 400,
       cropping: true,
     }).then(image => {
-   // console.log(image.path)
+
       //dispatch(updateProfileImage(image.path))
-      // updateToUserDetails(image.path, phoneNumber)
+      updateToUserDetails(image.path.substring(image.path.lastIndexOf('/') + 1), phoneNumber)
       //console.log(image)
-     uploadImageToFirebase(image)
+      //uploadImageToFirebase(image)
       dispatch(openModalPopup(false))
     });
   }
@@ -57,52 +57,52 @@ export default function Camera(navigation) {
       cropping: true
     }).then(image => {
       //console.log(image.path)
-      uploadImageToFirebase(image)
+      //uploadImageToFirebase(image)
       //dispatch(updateProfileImage(image.path))
-      //  updateToUserDetails(image.path, phoneNumber)
+      updateToUserDetails(image.path.substring(image.path.lastIndexOf('/') + 1), phoneNumber)
       dispatch(openModalPopup(false))
     });
   }
 
-  // const updateToUserDetails = (image, phoneNumber) => {
+  const updateToUserDetails = (image, phoneNumber) => {
+    console.log(image)
+    // Query the database to find the entry with the matching phoneNumber
+    var ref = database().ref("userdetails");
+    ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
+      .then(snapshot => {
 
-  //   // Query the database to find the entry with the matching phoneNumber
-  //   var ref = database().ref("userdetails");
-  //   ref.orderByChild("phoneNumber").equalTo(phoneNumber).once("value")
-  //     .then(snapshot => {
+        // Loop through the snapshot to get the key of the entry
+        snapshot.forEach(childSnapshot => {
+          const userData = childSnapshot.val();
+          const username = userData.username; // Get the username
 
-  //       // Loop through the snapshot to get the key of the entry
-  //       snapshot.forEach(childSnapshot => {
-  //         const userData = childSnapshot.val();
-  //         const username = userData.username; // Get the username
+          const key = childSnapshot.key;
+          //console.log(key, '.............')
+          // Update the existing entry with the senderId
+          ref.child(key).update({ image });
+        });
+      })
+      .catch(error => {
+        // console.error("Error updating database:", error);
+      });
 
-  //         const key = childSnapshot.key;
-  //         //console.log(key, '.............')
-  //         // Update the existing entry with the senderId
-  //         ref.child(key).update({ image });
-  //       });
-  //     })
-  //     .catch(error => {
-  //       // console.error("Error updating database:", error);
-  //     });
-
-  // }
-
-  const uploadImageToFirebase = async (image) => {
-    const reference = storage().ref('/images');
-    console.log(reference,'.........re')
-    try {
-      // Extract the filename from the image path
-      const filename = image.path.substring(image.path.lastIndexOf('/') + 1);
-      console.log(filename,'......filename')
-      const pathToFile = `${utils.FilePath.DOCUMENT_DIRECTORY}/${filename}`;
-      console.log('pathToFile:', pathToFile);
-      await reference.putFile(pathToFile);
-      console.log('Image uploaded successfully!');
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
   }
+
+  // const uploadImageToFirebase = async (image) => {
+  //   const reference = storage().ref('images');
+
+  //   try {
+  //     // Extract the filename from the image path
+  //     const filename = image.path.substring(image.path.lastIndexOf('/') + 1);
+  //     console.log(filename,'......filename')
+  //     const pathToFile = `${utils.FilePath.PICTURES_DIRECTORY}/${filename}`;
+  //     console.log('pathToFile:', pathToFile);
+  //     await reference.putFile(pathToFile);
+  //     console.log('Image uploaded successfully!');
+  //   } catch (error) {
+  //     console.error('Error uploading image:', error);
+  //   }
+  // }
 
   return (
 

@@ -22,11 +22,12 @@ import { storeFirebaseMessages } from '../../state/actions';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import { getFCMFromMMKV } from '../../data/mmkvStorage';
+import {NativeModules} from 'react-native';
 export default function Interface({ route, navigation }) {
 
   const [user] = useState(route.params.data)
 
-
+  console.log(user)
   const [text, onChangeText] = React.useState('');
   const [messages, setMessages] = useState('');
 
@@ -36,7 +37,7 @@ export default function Interface({ route, navigation }) {
   const reduxeMessages = useSelector((state) => state.StoreMessageReducer.storeMessages);
 
   const dispatch = useDispatch();
-
+const {CalendarModule} = NativeModules;
 
 
   useEffect(() => {
@@ -54,7 +55,9 @@ export default function Interface({ route, navigation }) {
     });
   }, [])
 
-
+const calender = () => {
+  CalendarModule.createCalendarEvent('testName', 'testLocation');
+};
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -242,7 +245,7 @@ export default function Interface({ route, navigation }) {
 
 
         />
-        <TouchableOpacity onPress={() => sendMessage()} style={styles.sendButton}>
+        <TouchableOpacity onPress={() => calender()} style={styles.sendButton}>
           <MaterialIcon name={'send'} size={hp('2.50%')} color={'white'} />
         </TouchableOpacity>
       </View>
