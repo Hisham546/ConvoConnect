@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#128C7E',
   },
   topViewContainer: {
     width: wp('100'),
