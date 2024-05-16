@@ -27,7 +27,9 @@ export default function Welcome({ navigation }: { navigation: any })  {
                         buttonText={"Get Started"}
                         backgroundColor="white"
                         textStyle={styles.buttonTextStyle}
-                    /></View>
+                    />
+                    
+                    </View>
 
             </View>
 

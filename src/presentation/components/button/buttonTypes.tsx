@@ -4,6 +4,9 @@ export  interface ButtonProps{
     buttonText:string,
     backgroundColor:string,
     textStyle:TextStyle,
-    onPress(): void
+    onPress(): void,
+    iconName?:string
+    iconColor?:string
+    marginBottom ?:number
     
 }
