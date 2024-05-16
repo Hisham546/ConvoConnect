@@ -2,16 +2,36 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/Manrope-Bold.ttf",
-      "sha1": "3297f28b686587cd09e3e893f154cdcb4574b88c"
+      "path": "src/assets/fonts/Poppins-Bold.ttf",
+      "sha1": "b9b65c039a1f10a5cb5e0726c6e7e18e98a8e517"
     },
     {
-      "path": "src/assets/fonts/Manrope-Medium.ttf",
-      "sha1": "0de45b029f9eb832225f3f48ed21972db1635e9b"
+      "path": "src/assets/fonts/Poppins-Medium.ttf",
+      "sha1": "af7058373acbcf383dd114b8f9bbfb9faafd79eb"
     },
     {
-      "path": "src/assets/fonts/Manrope-Regular.ttf",
-      "sha1": "7c3fedd86d61b1c575eded690b922c77f9c09a4a"
+      "path": "src/assets/fonts/Poppins-Regular.ttf",
+      "sha1": "01d319c533f62ea29f03b5df8adfd4d93d2d2a38"
+    },
+    {
+      "path": "src/assets/fonts/Raleway-Black.ttf",
+      "sha1": "6d79683d6f2ded5ff592cee98521010400a297e5"
+    },
+    {
+      "path": "src/assets/fonts/Raleway-Bold.ttf",
+      "sha1": "4ab381ecd77519206ff3eaf8ad7653cb825b4496"
+    },
+    {
+      "path": "src/assets/fonts/Raleway-Light.ttf",
+      "sha1": "df6bea2956c0a2471aef790b6a5458f0822cd898"
+    },
+    {
+      "path": "src/assets/fonts/Raleway-Medium.ttf",
+      "sha1": "a3919800d5e4e950c84d162ce1b0abd8010f1650"
+    },
+    {
+      "path": "src/assets/fonts/Raleway-Regular.ttf",
+      "sha1": "a31c64db393ad78109933b35c69e0d45ba3b61b6"
     }
   ]
 }

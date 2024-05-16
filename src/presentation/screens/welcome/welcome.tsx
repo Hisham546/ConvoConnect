@@ -3,14 +3,30 @@ import { View, Text, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 
-
+import { Button } from "../../components/button/button";
 
 
 export default function Welcome() {
 
     return (
         <View style={styles.mainContainer}>
-            <Text>welcomesdssssssssssssss</Text>
+            <View style={styles.topView}></View>
+            <View style={styles.footerView}>
+                <View style={styles.descriptionView}>
+                <View style={styles.descriptionBox}>
+                    <Text style={styles.decriptionText}>Stay connected </Text>
+                    <Text style={styles.decriptionText}>with your friends  </Text>
+                    <Text style={styles.decriptionText}>and families </Text>
+                    </View>
+                </View>
+                <View style={styles.buttonParentView}>
+                    <Button
+                        buttonText={"Get Started"}
+                        backgroundColor="white"
+                        textStyle={styles.buttonTextStyle}
+                    /></View>
+
+            </View>
 
         </View>
 

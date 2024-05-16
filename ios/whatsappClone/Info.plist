@@ -53,9 +53,14 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Manrope-Bold.ttf</string>
-		<string>Manrope-Medium.ttf</string>
-		<string>Manrope-Regular.ttf</string>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-Medium.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+		<string>Raleway-Black.ttf</string>
+		<string>Raleway-Bold.ttf</string>
+		<string>Raleway-Light.ttf</string>
+		<string>Raleway-Medium.ttf</string>
+		<string>Raleway-Regular.ttf</string>
 	</array>
 </dict>
 </plist>
