@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     topView: {
-
         width: deviceWidth,
         height: deviceHeight * 0.50,
 
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
     buttonParentView: {
         width: deviceWidth,
         height: deviceHeight * 0.25,
-
         justifyContent: 'center',
         alignItems: 'center'
 
@@ -45,24 +43,21 @@ const styles = StyleSheet.create({
     descriptionBox: {
         width: deviceWidth * 0.80,
         height: deviceHeight * 0.20,
-
-        alignItems: 'center'
+        alignItems: 'flex-start',
+        marginLeft: '5%'
 
     },
     decriptionText: {
-
         color: 'black',
         fontSize: fontSize.h2,
         fontStyle: 'normal',
-  
-        fontFamily:'Poppins-Bold'
+        fontFamily: 'Poppins-Bold'
     },
     buttonTextStyle: {
-
         color: 'black',
         fontSize: fontSize.p,
         fontStyle: 'normal',
-        fontWeight: '500'
+        fontFamily: 'Poppins-Medium'
 
     }
 })

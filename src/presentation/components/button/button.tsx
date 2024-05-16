@@ -7,13 +7,16 @@ export const Button: React.FC<ButtonProps> = (props) => {
     const {
         buttonText,
         backgroundColor,
-        textStyle
+        textStyle,
+        onPress
     } = props
 
     return (
 
 
-        <TouchableOpacity style={[styles.buttonContainer, { backgroundColor }]}>
+        <TouchableOpacity  activeOpacity={0.75}  
+        onPress={onPress}
+          style={[styles.buttonContainer, { backgroundColor }]}>
             <Text style={textStyle}>{buttonText}</Text>
         </TouchableOpacity>
 

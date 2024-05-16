@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ViewStyle, TextStyle, StyleProp, KeyboardTypeOp
 export  interface ButtonProps{
     buttonText:string,
     backgroundColor:string,
-    textStyle:TextStyle
+    textStyle:TextStyle,
+    onPress(): void
     
 }
