@@ -10,7 +10,7 @@ export default function Welcome() {
 
     return (
         <View style={styles.mainContainer}>
-            <Text>welcome</Text>
+            <Text>welcomesdssssssssssssss</Text>
 
         </View>
 
