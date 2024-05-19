@@ -6,7 +6,7 @@ import { Button } from "../../../components/button/button";
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 export default function SignUpPage({ navigation }: { navigation: any }) {
-    
+
     const [userName, setUserName] = useState();
     const phoneInput = useRef(null);
     const [country, setCountry] = useState('91');
@@ -18,6 +18,10 @@ export default function SignUpPage({ navigation }: { navigation: any }) {
         <View style={styles.mainContainer}>
             <View style={styles.topView}></View>
             <View style={styles.footerView}>
+                <View style={styles.textBox}>
+                    <Text style={styles.firstH1Text}>Enter Your Mobile Number</Text>
+                    <Text style={styles.secondH1Text}>We will send you a confirmation code</Text>
+                </View>
                 <PhoneInput
                     ref={phoneInput}
                     defaultValue={phoneNumber}
@@ -26,7 +30,7 @@ export default function SignUpPage({ navigation }: { navigation: any }) {
                     codeTextStyle={styles.codeTextStyle}
                     textInputStyle={styles.textInputStyle}
                     placeholder=" Enter Phone Number"
-              
+
 
                     countryPickerProps={{ withAlphaFilter: true }}
                     containerStyle={styles.phoneNumberView}
@@ -40,7 +44,7 @@ export default function SignUpPage({ navigation }: { navigation: any }) {
                 />
                 <Button
                     onPress={() => {
-                        navigation.navigate('SignUpOptions')
+                        navigation.navigate('Verification')
                     }}
                     buttonText={"Get Otp"}
                     backgroundColor="white"

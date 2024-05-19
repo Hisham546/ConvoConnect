@@ -87,6 +87,27 @@ const styles = StyleSheet.create({
         fontSize:fontSize.p,
         color:'black',
         fontFamily: 'Poppins-Medium'
+    },
+    enterPin:{
+
+      width:deviceWidth * 0.80,
+      height:deviceHeight * 0.06,
+
+    },
+    underlineStyleBase:{
+        // width: deviceWidth * 0.08,
+        // height: deviceHeight * 0.45,
+        // borderWidth: 0,
+        // borderBottomWidth: 5,
+        // borderBottomColor: "gray",
+        // color: 'red'
+        backgroundColor:'#4793AF',
+        borderRadius:10,
+        borderColor:'#4793AF'
+
+    },
+    underlineStyleHighLighted:{
+         color:'red'
     }
 
 
