@@ -13,18 +13,16 @@ const deviceHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
 
 
-buttonContainer:{
+    buttonContainer: {
+        height: deviceHeight * 0.06,
+       // borderRadius: 30,
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        flexDirection: 'row'
 
-    width :deviceWidth * 0.60,
-    height:deviceHeight*0.06,
-    borderRadius:30,
-    justifyContent:'space-evenly',
-    alignItems:'center',
-    flexDirection:'row'
+        // backgroundColor:'red'
 
-    // backgroundColor:'red'
-
-}
+    }
 
 })
 export default styles

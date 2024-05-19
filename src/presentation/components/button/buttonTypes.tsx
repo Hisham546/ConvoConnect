@@ -5,8 +5,10 @@ export  interface ButtonProps{
     backgroundColor:string,
     textStyle:TextStyle,
     onPress(): void,
-    iconName?:string
-    iconColor?:string
-    marginBottom ?:number
+    iconName?:string,
+    iconColor?:string,
+    marginBottom ?:number,
+    width?:number,
+    borderRadius?:number
     
 }

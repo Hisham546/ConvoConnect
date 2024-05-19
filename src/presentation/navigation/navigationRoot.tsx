@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Welcome from '../screens/welcome/welcome';
 import SignUpOptions from '../screens/signupOptions/signupOptions';
-
+import SignUpPage from '../screens/signupOptions/signupPage/signupPage';
 const Stack = createStackNavigator();
 
 const NavigationRoot = () => {
@@ -20,6 +20,11 @@ const NavigationRoot = () => {
                     options={{ headerShown: false }}
                     name="SignUpOptions"
                     component={SignUpOptions}
+                />
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="SignUpPage"
+                    component={SignUpPage}
                 />
 
 

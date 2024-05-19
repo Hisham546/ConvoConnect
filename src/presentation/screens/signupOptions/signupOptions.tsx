@@ -14,7 +14,7 @@ export default function SignUpOptions({ navigation }: { navigation: any }) {
             <View style={styles.footerView}>
                 <Button
                     onPress={() => {
-                        navigation.navigate('SignUpOptions')
+                        navigation.navigate('SignUpPage')
                     }}
                     buttonText={"Continue with phone number"}
                     backgroundColor="white"
