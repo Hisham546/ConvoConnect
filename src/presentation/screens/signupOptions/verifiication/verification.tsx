@@ -3,17 +3,46 @@ import { View, Text, TouchableOpacity, Dimensions, Keyboard } from "react-native
 import styles from "./styles";
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Button } from "../../../components/button/button";
+import { verifyCode } from "../../../../services/api/firebase/auth";
+
+import { useToast } from "../../../components/toast/toast";
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-export default function Verification({ navigation }: { navigation: any }) {
+export default function Verification({ navigation, route }: { navigation: any, route: any }) {
 
-    // const [confirm, setConfirm] = useState(route.params.confirm);
+    const [confirm, setConfirm] = useState(route.params.confirm);
 
-    // const [code, setCode] = useState(route.params.confirm.code ? route.params.confirm.code : '');
-    const [confirm, setConfirm] = useState();
+    const [code, setCode] = useState(route.params.confirm.code ? route.params.confirm.code : '');
+    const [loading, setLoading] = useState(false);
 
-    const [code, setCode] = useState('');
+    async function verifyOtp() {
+        try {
+            setLoading(true);
+            const verified = await verifyCode(confirm, code)
+            console.log(verified, '........')
+            if (verified == true) {
+                setLoading(false);
+
+                navigation.navigate('Home')
+
+
+            } else {
+                setLoading(false);
+                useToast({ message: 'please check your pin' });
+            }
+
+        } catch (error) {
+
+            setLoading(false);
+            //  console.error(error);
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            useToast({ message: errorMessage });
+        }
+
+
+    }
+
     return (
 
         <View style={styles.mainContainer}>
@@ -35,13 +64,15 @@ export default function Verification({ navigation }: { navigation: any }) {
                 />
                 <Button
                     onPress={() => {
-                        navigation.navigate('Home')
+                        verifyOtp()
+
                     }}
                     buttonText={"Verify"}
                     backgroundColor="white"
                     textStyle={styles.buttonTextStyle}
                     width={deviceWidth * 0.65}
                     borderRadius={15}
+                    loading={loading}
 
                 />
 

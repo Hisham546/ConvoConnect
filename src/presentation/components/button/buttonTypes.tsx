@@ -9,6 +9,7 @@ export  interface ButtonProps{
     iconColor?:string,
     marginBottom ?:number,
     width?:number,
-    borderRadius?:number
+    borderRadius?:number,
+    loading?:boolean
     
 }

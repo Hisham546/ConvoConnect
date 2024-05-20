@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import styles from "./styles";
 import PhoneInput from "react-native-phone-number-input";
 import { Button } from "../../../components/button/button";
+import { signInWithPhoneNumber } from "../../../../services/api/firebase/auth";
+import { useToast } from "../../../components/toast/toast";
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 export default function SignUpPage({ navigation }: { navigation: any }) {
@@ -12,6 +14,26 @@ export default function SignUpPage({ navigation }: { navigation: any }) {
     const [country, setCountry] = useState('91');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [loading, setLoading] = useState(false);
+
+
+
+    async function initiateOtp() {
+
+        try {
+            setLoading(true);
+            const confirmation = await signInWithPhoneNumber('+' + country + phoneNumber)
+
+            setLoading(false)
+            navigation.navigate('Verification', { confirm: confirmation });
+        } catch (error) {
+
+            setLoading(false);
+            //  console.error(error);
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            useToast({ message: errorMessage });
+        }
+
+    }
 
     return (
 
@@ -44,13 +66,15 @@ export default function SignUpPage({ navigation }: { navigation: any }) {
                 />
                 <Button
                     onPress={() => {
-                        navigation.navigate('Verification')
+                       initiateOtp()
+                       //navigation.navigate('Verification')
                     }}
                     buttonText={"Get Otp"}
                     backgroundColor="white"
                     textStyle={styles.buttonTextStyle}
                     width={deviceWidth * 0.65}
                     borderRadius={15}
+                    loading={loading}
 
                 />
 
